@@ -1,0 +1,21 @@
+{
+  "name": "api",
+  "version": "1.0.50",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "^1.4.1",
+    "drizzle-orm": "^0.45.1",
+    "elysia": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.3",
+    "bun-types": "latest",
+    "drizzle-kit": "^0.31.9",
+    "typescript": "^5.9.3"
+  },
+  "module": "src/index.js"
+}
