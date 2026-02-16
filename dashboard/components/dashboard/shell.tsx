@@ -7,6 +7,7 @@ import { Activity, BarChart3, CreditCard, KeyRound, LayoutDashboard, LogOut, Spa
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { ThemeToggle } from "@/components/theme-toggle";
 import {
   Sidebar,
   SidebarContent,
@@ -114,10 +115,13 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>
-      <SidebarInset className="bg-[radial-gradient(circle_at_top,_#ecfeff_0%,_#f1f5f9_45%,_#e2e8f0_100%)]">
+      <SidebarInset className="bg-[radial-gradient(circle_at_top,_#ecfeff_0%,_#f1f5f9_45%,_#e2e8f0_100%)] dark:bg-[radial-gradient(circle_at_top,_#0f172a_0%,_#111827_45%,_#020617_100%)]">
         <header className="sticky top-0 z-10 flex h-14 items-center gap-2 border-b bg-background/80 px-4 backdrop-blur-sm">
           <SidebarTrigger />
           <Badge variant="secondary">{pathname.replace("/", "") || "overview"}</Badge>
+          <div className="ml-auto">
+            <ThemeToggle />
+          </div>
         </header>
         <div className="p-4 md:p-6">{children}</div>
       </SidebarInset>

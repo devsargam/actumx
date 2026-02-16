@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { apiRequest } from "@/lib/api";
 import { saveSessionToken } from "@/lib/session";
 
@@ -38,8 +39,11 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top,_#f8fafc_0%,_#e2e8f0_40%,_#cbd5e1_100%)] p-6 md:p-10">
-      <div className="mx-auto max-w-2xl">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top,_#f8fafc_0%,_#e2e8f0_40%,_#cbd5e1_100%)] p-6 md:p-10 dark:bg-[radial-gradient(circle_at_top,_#0f172a_0%,_#111827_45%,_#020617_100%)]">
+      <div className="mx-auto flex max-w-2xl flex-col gap-4">
+        <div className="flex justify-end">
+          <ThemeToggle />
+        </div>
         <Card>
           <CardHeader>
             <CardTitle>x402 Control Plane</CardTitle>
