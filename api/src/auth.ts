@@ -1,10 +1,8 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 
+import { env } from "./config/env";
 import { authDb, authSchema } from "./db/auth-client";
-
-const baseURL = process.env.BETTER_AUTH_URL ?? "http://localhost:3001";
-const dashboardOrigin = process.env.DASHBOARD_ORIGIN ?? "http://localhost:3000";
 
 export const auth = betterAuth({
   database: drizzleAdapter(authDb, {
@@ -12,12 +10,10 @@ export const auth = betterAuth({
     schema: authSchema,
     camelCase: true,
   }),
-  baseURL,
+  baseURL: env.BETTER_AUTH_URL,
   basePath: "/api",
-  trustedOrigins: [baseURL, dashboardOrigin],
-  secret:
-    process.env.BETTER_AUTH_SECRET ??
-    "dev-only-better-auth-secret-change-me-32-plus-characters",
+  trustedOrigins: [env.BETTER_AUTH_URL, env.DASHBOARD_ORIGIN],
+  secret: env.BETTER_AUTH_SECRET,
   emailAndPassword: {
     enabled: true,
   },

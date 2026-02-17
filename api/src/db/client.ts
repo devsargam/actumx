@@ -1,19 +1,11 @@
-import { mkdirSync } from "node:fs";
-import { join } from "node:path";
-import { Database } from "bun:sqlite";
-import { drizzle } from "drizzle-orm/bun-sqlite";
+import { Pool } from "pg";
+import { drizzle } from "drizzle-orm/node-postgres";
 
+import { env } from "../config/env";
 import * as schema from "./schema";
 
-const dbDirectory = join(process.cwd(), "data");
-mkdirSync(dbDirectory, { recursive: true });
-
-const sqlite = new Database(join(dbDirectory, "x402.sqlite"), {
-  create: true,
-  strict: true,
+const pool = new Pool({
+  connectionString: env.DATABASE_URL,
 });
 
-sqlite.exec("PRAGMA foreign_keys = ON;");
-
-export const db = drizzle(sqlite, { schema });
-export { sqlite };
+export const db = drizzle(pool, { schema });

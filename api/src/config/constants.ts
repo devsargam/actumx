@@ -1,4 +1,6 @@
-export const APP_PORT = Number(process.env.PORT ?? 3001);
+import { env } from "./env";
+
+export const APP_PORT = env.PORT;
 
 export const SESSION_TTL_DAYS = 30;
 

@@ -1,6 +1,7 @@
 import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
 
+import { env } from "./config/env";
 import { openapiPlugin } from "./plugins/openapi";
 import { auth } from "./auth";
 import { billingModule } from "./modules/billing";
@@ -12,7 +13,7 @@ import { healthModule } from "./modules/health";
 export const app = new Elysia({ name: "x402.api" })
   .use(
     cors({
-      origin: process.env.DASHBOARD_ORIGIN ?? "http://localhost:3000",
+      origin: env.DASHBOARD_ORIGIN,
       credentials: true,
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization", "x-api-key", "x-payment-id", "x-payment-proof"],
