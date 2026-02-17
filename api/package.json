@@ -4,7 +4,9 @@
   "scripts": {
     "dev": "bun run --watch src/index.ts",
     "start": "bun run src/index.ts",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "db:auth:generate": "drizzle-kit generate --config=drizzle.auth.config.ts",
+    "db:auth:migrate": "drizzle-kit migrate --config=drizzle.auth.config.ts"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.4.1",

@@ -1,21 +1,17 @@
 import { betterAuth } from "better-auth";
-import { Pool } from "pg";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
 
-const authDatabaseURL = process.env.BETTER_AUTH_DATABASE_URL;
-
-if (!authDatabaseURL) {
-  throw new Error("BETTER_AUTH_DATABASE_URL is required");
-}
-
-const pool = new Pool({
-  connectionString: authDatabaseURL,
-});
+import { authDb, authSchema } from "./db/auth-client";
 
 const baseURL = process.env.BETTER_AUTH_URL ?? "http://localhost:3001";
 const dashboardOrigin = process.env.DASHBOARD_ORIGIN ?? "http://localhost:3000";
 
 export const auth = betterAuth({
-  database: pool,
+  database: drizzleAdapter(authDb, {
+    provider: "pg",
+    schema: authSchema,
+    camelCase: true,
+  }),
   baseURL,
   basePath: "/api",
   trustedOrigins: [baseURL, dashboardOrigin],
