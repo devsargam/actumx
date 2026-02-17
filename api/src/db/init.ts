@@ -2,54 +2,6 @@ import { sqlite } from "./client";
 
 export function initializeDatabase(): void {
   sqlite.exec(`
-    CREATE TABLE IF NOT EXISTS user (
-      id TEXT PRIMARY KEY,
-      name TEXT NOT NULL,
-      email TEXT NOT NULL UNIQUE,
-      emailVerified INTEGER NOT NULL DEFAULT 0,
-      image TEXT,
-      createdAt TEXT NOT NULL,
-      updatedAt TEXT NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS session (
-      id TEXT PRIMARY KEY,
-      expiresAt TEXT NOT NULL,
-      token TEXT NOT NULL UNIQUE,
-      createdAt TEXT NOT NULL,
-      updatedAt TEXT NOT NULL,
-      ipAddress TEXT,
-      userAgent TEXT,
-      userId TEXT NOT NULL,
-      FOREIGN KEY (userId) REFERENCES user(id) ON DELETE CASCADE
-    );
-
-    CREATE TABLE IF NOT EXISTS account (
-      id TEXT PRIMARY KEY,
-      accountId TEXT NOT NULL,
-      providerId TEXT NOT NULL,
-      userId TEXT NOT NULL,
-      accessToken TEXT,
-      refreshToken TEXT,
-      idToken TEXT,
-      accessTokenExpiresAt TEXT,
-      refreshTokenExpiresAt TEXT,
-      scope TEXT,
-      password TEXT,
-      createdAt TEXT NOT NULL,
-      updatedAt TEXT NOT NULL,
-      FOREIGN KEY (userId) REFERENCES user(id) ON DELETE CASCADE
-    );
-
-    CREATE TABLE IF NOT EXISTS verification (
-      id TEXT PRIMARY KEY,
-      identifier TEXT NOT NULL,
-      value TEXT NOT NULL,
-      expiresAt TEXT NOT NULL,
-      createdAt TEXT NOT NULL,
-      updatedAt TEXT NOT NULL
-    );
-
     CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
       email TEXT NOT NULL UNIQUE,
@@ -135,9 +87,6 @@ export function initializeDatabase(): void {
       FOREIGN KEY (x402_transaction_id) REFERENCES x402_transactions(id)
     );
 
-    CREATE INDEX IF NOT EXISTS idx_session_userId ON session(userId);
-    CREATE INDEX IF NOT EXISTS idx_account_userId ON account(userId);
-    CREATE INDEX IF NOT EXISTS idx_verification_identifier ON verification(identifier);
     CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id);
     CREATE INDEX IF NOT EXISTS idx_api_keys_user_id ON api_keys(user_id);
     CREATE INDEX IF NOT EXISTS idx_payment_intents_user_id ON payment_intents(user_id);
