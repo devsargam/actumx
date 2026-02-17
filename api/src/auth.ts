@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 
 import { db } from "./db/client";
+import * as schema from "./db/schema";
 
 const baseURL = process.env.BETTER_AUTH_URL ?? "http://localhost:3001";
 const dashboardOrigin = process.env.DASHBOARD_ORIGIN ?? "http://localhost:3000";
@@ -9,6 +10,7 @@ const dashboardOrigin = process.env.DASHBOARD_ORIGIN ?? "http://localhost:3000";
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "sqlite",
+    schema,
   }),
   baseURL,
   basePath: "/api",
