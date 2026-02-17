@@ -1,4 +1,8 @@
+import { eq } from "drizzle-orm";
+
 import { auth } from "../auth";
+import { db } from "../db/client";
+import { user } from "../db/auth-schema";
 
 export type AuthenticatedUser = {
   user: {
@@ -27,6 +31,16 @@ export abstract class AuthContextService {
     const session = await auth.api.getSession({ headers: request.headers });
 
     if (!session?.user || !session.session) {
+      return null;
+    }
+
+    const [existingUser] = await db
+      .select({ id: user.id })
+      .from(user)
+      .where(eq(user.id, session.user.id))
+      .limit(1);
+
+    if (!existingUser) {
       return null;
     }
 
