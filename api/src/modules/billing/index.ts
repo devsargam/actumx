@@ -3,7 +3,10 @@ import { Elysia } from "elysia";
 import { BillingModel } from "./model";
 import { BillingService } from "./service";
 
-export const billingModule = new Elysia({ name: "module.billing", prefix: "/v1/billing" })
+export const billingModule = new Elysia({
+  name: "module.billing",
+  prefix: "/v1/billing",
+})
   .get("/summary", async ({ request, set }) => {
     const result = await BillingService.summary(request);
     set.status = result.statusCode;
@@ -16,7 +19,7 @@ export const billingModule = new Elysia({ name: "module.billing", prefix: "/v1/b
       set.status = result.statusCode;
       return result.body;
     },
-    { body: BillingModel.topUpBody }
+    { body: BillingModel.topUpBody },
   )
   .get("/payment-intents", async ({ request, set }) => {
     const result = await BillingService.paymentIntents(request);
