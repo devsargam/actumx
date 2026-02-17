@@ -2,29 +2,23 @@
 
 import { useEffect, useState } from "react";
 
-import { useDashboardAuth } from "@/components/dashboard/auth-context";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { apiRequest, formatMoney, formatTimestamp, type Transaction } from "@/lib/api";
 
 export default function TransactionsPage() {
-  const { token } = useDashboardAuth();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   useEffect(() => {
-    if (!token) {
-      return;
-    }
-
     const run = async () => {
-      const response = await apiRequest<{ transactions: Transaction[] }>("/v1/transactions", { token });
+      const response = await apiRequest<{ transactions: Transaction[] }>("/v1/transactions");
       if (response.status < 400) {
         setTransactions(response.data.transactions);
       }
     };
 
     void run();
-  }, [token]);
+  }, []);
 
   return (
     <div className="space-y-4">

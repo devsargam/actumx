@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { useDashboardAuth } from "@/components/dashboard/auth-context";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,7 +10,6 @@ import { apiRequest, formatTimestamp, type ApiKeyRecord } from "@/lib/api";
 import { setRawKey } from "@/lib/raw-keys";
 
 export default function ApiKeysPage() {
-  const { token } = useDashboardAuth();
   const [name, setName] = useState("Production Key");
   const [status, setStatus] = useState("Ready");
   const [latestKey, setLatestKey] = useState<string | null>(null);
@@ -20,29 +18,20 @@ export default function ApiKeysPage() {
   const activeCount = useMemo(() => keys.filter((key) => !key.revokedAt).length, [keys]);
 
   const loadKeys = useCallback(async () => {
-    if (!token) {
-      return;
-    }
-
-    const response = await apiRequest<{ keys: ApiKeyRecord[] }>("/v1/api-keys", { token });
+    const response = await apiRequest<{ keys: ApiKeyRecord[] }>("/v1/api-keys");
     if (response.status < 400) {
       setKeys(response.data.keys);
     }
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     void loadKeys();
   }, [loadKeys]);
 
   async function handleCreateKey() {
-    if (!token) {
-      return;
-    }
-
     setStatus("Creating API key...");
     const response = await apiRequest<{ apiKeyId?: string; apiKey?: string; error?: string }>("/v1/api-keys", {
       method: "POST",
-      token,
       body: { name },
     });
 
@@ -58,12 +47,8 @@ export default function ApiKeysPage() {
   }
 
   async function handleRevokeKey(id: string) {
-    if (!token) {
-      return;
-    }
-
     setStatus("Revoking key...");
-    await apiRequest(`/v1/api-keys/${id}`, { method: "DELETE", token });
+    await apiRequest(`/v1/api-keys/${id}`, { method: "DELETE" });
     setStatus("API key revoked");
     await loadKeys();
   }

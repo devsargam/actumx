@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { useDashboardAuth } from "@/components/dashboard/auth-context";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,35 +9,25 @@ import { Input } from "@/components/ui/input";
 import { apiRequest, formatMoney, formatTimestamp, type PaymentIntent } from "@/lib/api";
 
 export default function BillingPage() {
-  const { token } = useDashboardAuth();
   const [amount, setAmount] = useState("1000");
   const [status, setStatus] = useState("Ready");
   const [intents, setIntents] = useState<PaymentIntent[]>([]);
 
   const loadIntents = useCallback(async () => {
-    if (!token) {
-      return;
-    }
-
-    const response = await apiRequest<{ intents: PaymentIntent[] }>("/v1/billing/payment-intents", { token });
+    const response = await apiRequest<{ intents: PaymentIntent[] }>("/v1/billing/payment-intents");
     if (response.status < 400) {
       setIntents(response.data.intents);
     }
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     void loadIntents();
   }, [loadIntents]);
 
   async function handleTopUp() {
-    if (!token) {
-      return;
-    }
-
     setStatus("Creating top-up...");
     const response = await apiRequest<{ error?: string }>("/v1/billing/top-up", {
       method: "POST",
-      token,
       body: { amountCents: Number(amount) },
     });
 

@@ -2,28 +2,22 @@
 
 import { useEffect, useState } from "react";
 
-import { useDashboardAuth } from "@/components/dashboard/auth-context";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { apiRequest, formatMoney, type BillingSummary } from "@/lib/api";
 
 export default function OverviewPage() {
-  const { token } = useDashboardAuth();
   const [summary, setSummary] = useState<BillingSummary | null>(null);
 
   useEffect(() => {
-    if (!token) {
-      return;
-    }
-
     const run = async () => {
-      const response = await apiRequest<BillingSummary>("/v1/billing/summary", { token });
+      const response = await apiRequest<BillingSummary>("/v1/billing/summary");
       if (response.status < 400) {
         setSummary(response.data);
       }
     };
 
     void run();
-  }, [token]);
+  }, []);
 
   return (
     <div className="space-y-4">

@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import { useDashboardAuth } from "@/components/dashboard/auth-context";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,26 +9,21 @@ import { apiRequest, type ApiKeyRecord } from "@/lib/api";
 import { getRawKeys } from "@/lib/raw-keys";
 
 export default function SimulatorPage() {
-  const { token } = useDashboardAuth();
   const [topic, setTopic] = useState("x402");
   const [selectedApiKeyId, setSelectedApiKeyId] = useState("");
   const [keys, setKeys] = useState<ApiKeyRecord[]>([]);
   const [output, setOutput] = useState("No simulation run yet.");
 
   useEffect(() => {
-    if (!token) {
-      return;
-    }
-
     const run = async () => {
-      const response = await apiRequest<{ keys: ApiKeyRecord[] }>("/v1/api-keys", { token });
+      const response = await apiRequest<{ keys: ApiKeyRecord[] }>("/v1/api-keys");
       if (response.status < 400) {
         setKeys(response.data.keys);
       }
     };
 
     void run();
-  }, [token]);
+  }, []);
 
   const activeKeys = useMemo(() => keys.filter((key) => !key.revokedAt), [keys]);
 

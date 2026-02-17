@@ -1,30 +1,14 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import { DashboardAuthProvider, useDashboardAuth } from "@/components/dashboard/auth-context";
-import { DashboardShell } from "@/components/dashboard/shell";
+import { DashboardLayoutClient } from "@/components/dashboard/layout-client";
+import { getServerSession } from "@/lib/server-auth";
 
-function ProtectedShell({ children }: { children: React.ReactNode }) {
-  const { loading, token } = useDashboardAuth();
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const session = await getServerSession();
 
-  if (loading) {
-    return (
-      <main className="flex min-h-screen items-center justify-center">
-        <p className="text-muted-foreground text-sm">Loading dashboard...</p>
-      </main>
-    );
+  if (!session?.user) {
+    redirect("/login");
   }
 
-  if (!token) {
-    return null;
-  }
-
-  return <DashboardShell>{children}</DashboardShell>;
-}
-
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <DashboardAuthProvider>
-      <ProtectedShell>{children}</ProtectedShell>
-    </DashboardAuthProvider>
-  );
+  return <DashboardLayoutClient initialUser={session.user}>{children}</DashboardLayoutClient>;
 }

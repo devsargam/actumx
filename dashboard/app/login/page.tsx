@@ -3,37 +3,53 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { apiRequest } from "@/lib/api";
-import { saveSessionToken } from "@/lib/session";
+import { API_BASE_URL } from "@/lib/api";
 
 export default function LoginPage() {
   const router = useRouter();
   const [authMode, setAuthMode] = useState<"login" | "register">("register");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
   const [status, setStatus] = useState("Ready");
 
   async function handleAuth() {
     setStatus("Authenticating...");
 
-    const endpoint = authMode === "register" ? "/v1/auth/register" : "/v1/auth/login";
-    const body = authMode === "register" ? { email, name } : { email };
+    const endpoint = authMode === "register" ? "/auth/api/sign-up/email" : "/auth/api/sign-in/email";
+    const body =
+      authMode === "register"
+        ? {
+            email,
+            name,
+            password,
+          }
+        : {
+            email,
+            password,
+          };
 
-    const result = await apiRequest<{ token?: string; error?: string }>(endpoint, {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: "POST",
-      body,
+      credentials: "include",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(body),
     });
 
-    if (result.status >= 400 || !result.data.token) {
-      setStatus(`Auth failed: ${result.data.error ?? "unknown error"}`);
+    if (!response.ok) {
+      const data = (await response.json().catch(() => ({ message: "Authentication failed" }))) as {
+        message?: string;
+      };
+      setStatus(`Auth failed: ${data.message ?? "unknown error"}`);
       return;
     }
 
-    saveSessionToken(result.data.token);
     setStatus("Authenticated");
     router.replace("/overview");
   }
@@ -57,10 +73,7 @@ export default function LoginPage() {
               >
                 Register
               </Button>
-              <Button
-                variant={authMode === "login" ? "default" : "outline"}
-                onClick={() => setAuthMode("login")}
-              >
+              <Button variant={authMode === "login" ? "default" : "outline"} onClick={() => setAuthMode("login")}>
                 Login
               </Button>
             </div>
@@ -68,6 +81,12 @@ export default function LoginPage() {
             {authMode === "register" ? (
               <Input value={name} onChange={(event) => setName(event.target.value)} placeholder="Name" />
             ) : null}
+            <Input
+              value={password}
+              type="password"
+              onChange={(event) => setPassword(event.target.value)}
+              placeholder="Password"
+            />
             <Button className="w-full" onClick={() => void handleAuth()}>
               Continue
             </Button>

@@ -2,28 +2,22 @@
 
 import { useEffect, useState } from "react";
 
-import { useDashboardAuth } from "@/components/dashboard/auth-context";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { apiRequest, formatMoney, formatTimestamp, type UsageEvent } from "@/lib/api";
 
 export default function UsagePage() {
-  const { token } = useDashboardAuth();
   const [events, setEvents] = useState<UsageEvent[]>([]);
 
   useEffect(() => {
-    if (!token) {
-      return;
-    }
-
     const run = async () => {
-      const response = await apiRequest<{ events: UsageEvent[] }>("/v1/usage", { token });
+      const response = await apiRequest<{ events: UsageEvent[] }>("/v1/usage");
       if (response.status < 400) {
         setEvents(response.data.events);
       }
     };
 
     void run();
-  }, [token]);
+  }, []);
 
   return (
     <div className="space-y-4">

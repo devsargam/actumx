@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3001";
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3001";
 
 export type User = {
   id: string;
@@ -64,16 +64,15 @@ export async function apiRequest<T>(
   path: string,
   options?: {
     method?: "GET" | "POST" | "DELETE";
-    token?: string;
     body?: unknown;
     headers?: Record<string, string>;
   }
 ): Promise<ApiResponse<T>> {
   const response = await fetch(`${API_BASE_URL}${path}`, {
     method: options?.method ?? "GET",
+    credentials: "include",
     headers: {
       "content-type": "application/json",
-      ...(options?.token ? { authorization: `Bearer ${options.token}` } : {}),
       ...(options?.headers ?? {}),
     },
     body: options?.body ? JSON.stringify(options.body) : undefined,
