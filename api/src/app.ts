@@ -1,6 +1,7 @@
 import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
 
+import { openapiPlugin } from "./plugins/openapi";
 import { authModule } from "./modules/auth";
 import { billingModule } from "./modules/billing";
 import { apiKeysModule } from "./modules/api-keys";
@@ -10,6 +11,7 @@ import { healthModule } from "./modules/health";
 
 export const app = new Elysia({ name: "x402.api" })
   .use(cors())
+  .use(openapiPlugin)
   .use(healthModule)
   .use(authModule)
   .use(billingModule)
