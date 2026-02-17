@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 type ThemeMode = "light" | "dark";
@@ -14,7 +13,7 @@ function applyTheme(mode: ThemeMode): void {
   document.documentElement.classList.toggle("dark", mode === "dark");
 }
 
-export function ThemeToggle({ showIndicator = true }: { showIndicator?: boolean }) {
+export function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
   const [theme, setTheme] = useState<ThemeMode>("light");
 
@@ -38,15 +37,10 @@ export function ThemeToggle({ showIndicator = true }: { showIndicator?: boolean 
   const currentTheme = mounted ? theme : "light";
 
   return (
-    <div className="flex items-center gap-2">
-      {showIndicator ? (
-        <Badge variant="outline" className="capitalize">
-          {currentTheme}
-        </Badge>
-      ) : null}
-      <Button type="button" variant="outline" size="sm" onClick={toggleTheme}>
+    <div className="flex items-center">
+      <Button type="button" variant="outline" size="icon-sm" onClick={toggleTheme}>
         {currentTheme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
-        <span>{currentTheme === "dark" ? "Light" : "Dark"} Mode</span>
+        <span className="sr-only">Toggle theme</span>
       </Button>
     </div>
   );
