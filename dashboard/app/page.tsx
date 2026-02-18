@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-zinc-100 text-zinc-900 dark:bg-black dark:text-zinc-100">
-      <div className="mx-auto max-w-6xl px-4 py-6 md:px-8">
+      <div className="mx-auto max-w-6xl px-1 py-1 md:py-8 md:px-8">
         <div className="rounded-md border border-zinc-200 bg-white dark:border-zinc-800/90 dark:bg-zinc-950">
           <div className="border-b border-zinc-200 py-2 text-center text-[10px] tracking-[0.22em] text-zinc-500 uppercase dark:border-zinc-900">
             x402 payment relay for agent tools
