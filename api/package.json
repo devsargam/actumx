@@ -6,7 +6,8 @@
     "start": "bun run src/index.ts",
     "check": "tsc --noEmit",
     "db:generate": "drizzle-kit generate --config=drizzle.config.ts",
-    "db:migrate": "drizzle-kit migrate --config=drizzle.config.ts"
+    "db:migrate": "drizzle-kit migrate --config=drizzle.config.ts",
+    "db:reset": "bun run src/scripts/reset-db.ts --force && bun run db:migrate"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.4.1",
