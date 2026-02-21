@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Activity, BarChart3, CreditCard, KeyRound, LayoutDashboard, LogOut, Sparkles } from "lucide-react";
+import { Activity, BarChart3, CreditCard, KeyRound, LayoutDashboard, LogOut, Sparkles, Wallet } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -37,6 +37,7 @@ const navItems: NavItem[] = [
   { href: "/overview", label: "Overview", icon: LayoutDashboard },
   { href: "/billing", label: "Billing", icon: CreditCard },
   { href: "/api-keys", label: "API Keys", icon: KeyRound },
+  { href: "/agents", label: "Agents", icon: Wallet },
   { href: "/transactions", label: "Transactions", icon: BarChart3 },
   { href: "/usage", label: "Usage", icon: Activity },
   { href: "/simulator", label: "Simulator", icon: Sparkles },

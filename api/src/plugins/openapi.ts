@@ -14,6 +14,7 @@ export const openapiPlugin = openapi({
       { name: "Auth", description: "Authentication and session endpoints" },
       { name: "Billing", description: "Credit top-up and balance endpoints" },
       { name: "API Keys", description: "API key lifecycle endpoints" },
+      { name: "Agents", description: "Agent wallet lifecycle and balance endpoints" },
       { name: "Activity", description: "Transaction and usage history endpoints" },
       { name: "x402", description: "x402 settlement and protected paid endpoints" },
     ],

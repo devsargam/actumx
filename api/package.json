@@ -12,6 +12,7 @@
   "dependencies": {
     "@elysiajs/cors": "^1.4.1",
     "@elysiajs/openapi": "^1.4.14",
+    "@solana/web3.js": "^1.98.4",
     "better-auth": "^1.4.18",
     "drizzle-orm": "^0.45.1",
     "elysia": "latest",

@@ -6,6 +6,7 @@ import { openapiPlugin } from "./plugins/openapi";
 import { auth } from "./auth";
 import { billingModule } from "./modules/billing";
 import { apiKeysModule } from "./modules/api-keys";
+import { agentsModule } from "./modules/agents";
 import { activityModule } from "./modules/activity";
 import { x402Module } from "./modules/x402";
 import { healthModule } from "./modules/health";
@@ -24,5 +25,6 @@ export const app = new Elysia({ name: "x402.api" })
   .use(healthModule)
   .use(billingModule)
   .use(apiKeysModule)
+  .use(agentsModule)
   .use(activityModule)
   .use(x402Module);

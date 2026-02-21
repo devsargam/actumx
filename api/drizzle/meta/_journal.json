@@ -8,6 +8,13 @@
       "when": 1771334822185,
       "tag": "0000_curious_mesmero",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1771685365738,
+      "tag": "0001_crazy_valeria_richards",
+      "breakpoints": true
     }
   ]
 }

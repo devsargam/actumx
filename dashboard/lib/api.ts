@@ -55,6 +55,16 @@ export type PaymentIntent = {
   createdAt: string;
 };
 
+export type AgentRecord = {
+  id: string;
+  name: string;
+  publicKey: string;
+  createdAt: string;
+  balanceLamports: number | null;
+  balanceSol: number | null;
+  error: string | null;
+};
+
 export type ApiResponse<T> = {
   status: number;
   data: T;

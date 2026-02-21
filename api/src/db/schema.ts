@@ -70,3 +70,14 @@ export const usageEvents = pgTable("usage_events", {
 }, (table) => ({
   usageEventsUserIdIdx: index("idx_usage_events_user_id").on(table.userId),
 }));
+
+export const agents = pgTable("agents", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  publicKey: text("public_key").notNull().unique(),
+  privateKey: text("private_key").notNull(),
+  createdAt: text("created_at").notNull(),
+}, (table) => ({
+  agentsUserIdIdx: index("idx_agents_user_id").on(table.userId),
+}));
