@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { apiRequest, formatTimestamp, type ApiKeyRecord } from "@/lib/api";
-import { setRawKey } from "@/lib/raw-keys";
 
 export default function ApiKeysPage() {
   const [name, setName] = useState("Production Key");
@@ -40,7 +39,6 @@ export default function ApiKeysPage() {
       return;
     }
 
-    setRawKey(response.data.apiKeyId, response.data.apiKey);
     setLatestKey(response.data.apiKey);
     setStatus("API key created");
     await loadKeys();

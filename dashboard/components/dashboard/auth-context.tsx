@@ -4,7 +4,6 @@ import { createContext, useCallback, useContext, useEffect, useState } from "rea
 import { useRouter } from "next/navigation";
 
 import { apiRequest } from "@/lib/api";
-import { clearRawKeys } from "@/lib/raw-keys";
 
 type SessionUser = {
   id: string;
@@ -34,7 +33,6 @@ export function DashboardAuthProvider({
 
   const logout = useCallback(async () => {
     await apiRequest("/auth/api/sign-out", { method: "POST" });
-    clearRawKeys();
     setUser(null);
     router.replace("/login");
   }, [router]);
@@ -44,7 +42,6 @@ export function DashboardAuthProvider({
     const meResult = await apiRequest<{ user?: SessionUser; error?: string }>("/auth/api/get-session");
 
     if (meResult.status >= 400 || !meResult.data.user) {
-      clearRawKeys();
       setUser(null);
       setLoading(false);
       router.replace("/login");

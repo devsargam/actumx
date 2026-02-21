@@ -1,51 +1,29 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { apiRequest, type ApiKeyRecord } from "@/lib/api";
-import { getRawKeys } from "@/lib/raw-keys";
+import { apiRequest } from "@/lib/api";
 
 export default function SimulatorPage() {
   const [topic, setTopic] = useState("x402");
-  const [selectedApiKeyId, setSelectedApiKeyId] = useState("");
-  const [keys, setKeys] = useState<ApiKeyRecord[]>([]);
+  const [rawKey, setRawKey] = useState("");
   const [output, setOutput] = useState("No simulation run yet.");
 
-  useEffect(() => {
-    const run = async () => {
-      const response = await apiRequest<{ keys: ApiKeyRecord[] }>("/v1/api-keys");
-      if (response.status < 400) {
-        setKeys(response.data.keys);
-      }
-    };
-
-    void run();
-  }, []);
-
-  const activeKeys = useMemo(() => keys.filter((key) => !key.revokedAt), [keys]);
-
-  useEffect(() => {
-    if (!selectedApiKeyId && activeKeys[0]) {
-      setSelectedApiKeyId(activeKeys[0].id);
-    }
-  }, [selectedApiKeyId, activeKeys]);
-
   async function runSimulation() {
-    const rawKeyMap = getRawKeys();
-    const rawKey = rawKeyMap[selectedApiKeyId];
-
-    if (!rawKey) {
-      setOutput("No raw key found for selected API key. Create a fresh key in API Keys page.");
+    if (!rawKey.trim()) {
+      setOutput("Paste a raw API key from the API Keys page.");
       return;
     }
+    const keyForRun = rawKey.trim();
+    setRawKey("");
 
     const challenge = await apiRequest<{ x402?: { paymentId: string }; error?: string }>(
       `/v1/protected/quote?topic=${encodeURIComponent(topic)}`,
       {
-        headers: { "x-api-key": rawKey },
+        headers: { "x-api-key": keyForRun },
       }
     );
 
@@ -59,7 +37,7 @@ export default function SimulatorPage() {
     const settle = await apiRequest<{ receiptId?: string; error?: string }>("/v1/x402/settle", {
       method: "POST",
       body: { paymentId },
-      headers: { "x-api-key": rawKey },
+      headers: { "x-api-key": keyForRun },
     });
 
     if (settle.status >= 400 || !settle.data.receiptId) {
@@ -71,7 +49,7 @@ export default function SimulatorPage() {
       `/v1/protected/quote?topic=${encodeURIComponent(topic)}`,
       {
         headers: {
-          "x-api-key": rawKey,
+          "x-api-key": keyForRun,
           "x-payment-id": paymentId,
           "x-payment-proof": settle.data.receiptId,
         },
@@ -93,25 +71,20 @@ export default function SimulatorPage() {
       <Card>
         <CardHeader>
           <CardTitle>x402 Simulator</CardTitle>
-          <CardDescription>Run challenge, settle, and paid retry in one flow.</CardDescription>
+          <CardDescription>Run challenge, settle, and paid retry in one flow. Raw key is never stored.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="grid gap-2 md:grid-cols-3">
+          <div className="grid gap-2 md:grid-cols-2">
             <Input value={topic} onChange={(event) => setTopic(event.target.value)} placeholder="Topic" />
-            <select
-              className="bg-input/30 border-input h-9 rounded-4xl border px-3 text-sm"
-              value={selectedApiKeyId}
-              onChange={(event) => setSelectedApiKeyId(event.target.value)}
-            >
-              <option value="">Select API key</option>
-              {activeKeys.map((key) => (
-                <option key={key.id} value={key.id}>
-                  {key.name} ({key.keyPrefix}...)
-                </option>
-              ))}
-            </select>
-            <Button onClick={() => void runSimulation()}>Run Simulation</Button>
+            <Input
+              value={rawKey}
+              onChange={(event) => setRawKey(event.target.value)}
+              placeholder="Paste raw API key"
+              type="password"
+              autoComplete="off"
+            />
           </div>
+          <Button onClick={() => void runSimulation()}>Run Simulation</Button>
           <div className="rounded-xl border p-3 font-mono text-xs">{output}</div>
         </CardContent>
       </Card>
