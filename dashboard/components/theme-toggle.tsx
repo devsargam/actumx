@@ -11,6 +11,7 @@ const THEME_STORAGE_KEY = "x402-theme-mode";
 
 function applyTheme(mode: ThemeMode): void {
   document.documentElement.classList.toggle("dark", mode === "dark");
+  document.documentElement.style.colorScheme = mode;
 }
 
 export function ThemeToggle() {
