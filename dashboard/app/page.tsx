@@ -2251,7 +2251,9 @@ export default function HomePage() {
                 <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.847h-7.406l-5.8-7.584-6.64 7.584H.47l8.6-9.83L0 1.154h7.594l5.243 6.932 6.064-6.933Zm-1.29 19.494h2.04L6.486 3.24H4.298l13.313 17.407Z" />
               </svg>
             </a>
-            <button className="nav-btn text-blue-key">Launch App</button>
+            <Link href="/login" className="nav-btn text-blue-key">
+              Launch App
+            </Link>
           </div>
         </nav>
         {contactOpen && (
@@ -2654,13 +2656,13 @@ export default function HomePage() {
           </div>
           <ul className="footer-links">
             <li>
-              <a href="#">Docs</a>
+              <Link href="/docs">Docs</Link>
             </li>
             <li>
-              <a href="#">Protocol</a>
+              <Link href="/protocol">Protocol</Link>
             </li>
             <li>
-              <a href="#">Status</a>
+              <Link href="/status">Status</Link>
             </li>
           </ul>
           <div className="footer-copy">© 2026 ACTUMX. ALL RIGHTS RESERVED.</div>
