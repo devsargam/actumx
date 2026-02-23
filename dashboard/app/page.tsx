@@ -134,7 +134,7 @@ export default function HomePage() {
 
   return (
     <>
-      <style jsx global>{`
+      <style>{`
         :root {
           --bg: #020408;
           --bg2: #03060f;
