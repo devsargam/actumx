@@ -1,5 +1,5 @@
-import { desc, eq } from "drizzle-orm";
-import { Keypair } from "@solana/web3.js";
+import { and, desc, eq } from "drizzle-orm";
+import { clusterApiUrl, Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 
 import { db } from "../../db/client";
 import { agents } from "../../db/schema";
@@ -72,5 +72,64 @@ export abstract class AgentsService {
         warning: "Store this private key now. It is shown only once.",
       },
     };
+  }
+
+  static async fundDevnet(request: Request, agentId: string, payload: AgentsModel.FundDevnetBody) {
+    const auth = await AuthContextService.getAuthenticatedUser(request);
+    if (!auth) {
+      return { statusCode: 401, body: { error: "unauthorized" } };
+    }
+
+    const [agent] = await db
+      .select({
+        id: agents.id,
+        publicKey: agents.publicKey,
+      })
+      .from(agents)
+      .where(and(eq(agents.id, agentId), eq(agents.userId, auth.user.id)))
+      .limit(1);
+
+    if (!agent) {
+      return { statusCode: 404, body: { error: "agent not found" } };
+    }
+
+    try {
+      const amountSol = payload.amountSol ?? 1;
+      const lamports = Math.floor(amountSol * LAMPORTS_PER_SOL);
+      const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+      const publicKey = new PublicKey(agent.publicKey);
+
+      const signature = await connection.requestAirdrop(publicKey, lamports);
+      const latestBlockhash = await connection.getLatestBlockhash();
+      await connection.confirmTransaction(
+        {
+          signature,
+          blockhash: latestBlockhash.blockhash,
+          lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        },
+        "confirmed"
+      );
+
+      const balance = await SolanaBalanceService.getBalance(agent.publicKey);
+
+      return {
+        statusCode: 200,
+        body: {
+          agentId: agent.id,
+          network: "solana-devnet",
+          amountSol,
+          signature,
+          explorerUrl: `https://explorer.solana.com/tx/${signature}?cluster=devnet`,
+          publicKey: agent.publicKey,
+          ...balance,
+        },
+      };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "failed to fund agent on devnet";
+      return {
+        statusCode: 400,
+        body: { error: message },
+      };
+    }
   }
 }

@@ -17,4 +17,13 @@ export const agentsModule = new Elysia({ name: "module.agents", prefix: "/v1/age
       return result.body;
     },
     { body: AgentsModel.createAgentBody }
+  )
+  .post(
+    "/:agentId/fund-devnet",
+    async ({ request, params, body, set }) => {
+      const result = await AgentsService.fundDevnet(request, params.agentId, body);
+      set.status = result.statusCode;
+      return result.body;
+    },
+    { body: AgentsModel.fundDevnetBody }
   );
