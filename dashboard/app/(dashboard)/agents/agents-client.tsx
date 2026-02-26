@@ -133,7 +133,7 @@ export function AgentsClient({ initialAgents }: { initialAgents: AgentRecord[] }
           </div>
 
           <div className="flex justify-end">
-            <Button className="bg-blue-500 text-white hover:bg-blue-600" onClick={() => void handleCreateAgent()}>
+            <Button onClick={() => void handleCreateAgent()}>
               Create Agent
             </Button>
           </div>
