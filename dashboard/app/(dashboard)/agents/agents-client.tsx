@@ -182,7 +182,7 @@ export function AgentsClient({ initialAgents }: { initialAgents: AgentRecord[] }
               <AlertDialogCancel asChild>
                 <Button variant="secondary">Cancel</Button>
               </AlertDialogCancel>
-              <Button onClick={() => void handleCreateAgent()}>Create Agent</Button>
+              <Button variant="outline" onClick={() => void handleCreateAgent()}>Create Agent</Button>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
@@ -203,9 +203,7 @@ export function AgentsClient({ initialAgents }: { initialAgents: AgentRecord[] }
                       <p className="text-sm text-muted-foreground">{relativeFromNow(agent.createdAt)}</p>
                     </div>
                   </div>
-                  <button className="text-muted-foreground hover:text-foreground" aria-label="Agent actions">
-                    <Ellipsis className="size-4" />
-                  </button>
+                  <Ellipsis className="size-4 text-muted-foreground" />
                 </div>
 
                 <p className="mt-8 font-mono text-3xl">{formatSolAmount(agent.balanceSol)} <span className="font-sans text-xl text-muted-foreground">SOL</span></p>

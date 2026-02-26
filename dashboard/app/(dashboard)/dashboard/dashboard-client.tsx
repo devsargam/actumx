@@ -222,10 +222,10 @@ export function DashboardClient({ initialAgents }: { initialAgents: AgentRecord[
       <Card>
         <CardHeader className="flex flex-row items-center justify-between gap-4">
           <CardTitle>Recent Transactions</CardTitle>
-          <button className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+          <Link href="/transactions" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
             View All
             <ChevronRight className="size-4" />
-          </button>
+          </Link>
         </CardHeader>
         <CardContent>
           <div className="flex h-64 items-center justify-center rounded-lg border border-dashed text-muted-foreground">
