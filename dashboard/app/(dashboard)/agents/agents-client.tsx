@@ -120,7 +120,7 @@ export function AgentsClient({ initialAgents }: { initialAgents: AgentRecord[] }
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
+      <div className="flex flex-wrap items-start justify-between gap-4 md:items-center">
         <div>
           <h1 className="text-4xl font-semibold tracking-tight">Agent Wallets</h1>
           <p className="mt-2 text-base text-muted-foreground">Manage your agents wallets and access them via MCP or skill.</p>
@@ -129,7 +129,7 @@ export function AgentsClient({ initialAgents }: { initialAgents: AgentRecord[] }
 
         <AlertDialog open={createOpen} onOpenChange={setCreateOpen}>
           <AlertDialogTrigger asChild>
-            <Button>
+            <Button size="lg">
               <Plus className="size-4" />
               Create Agent
             </Button>

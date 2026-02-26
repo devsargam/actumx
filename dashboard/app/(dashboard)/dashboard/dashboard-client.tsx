@@ -97,19 +97,19 @@ export function DashboardClient({ initialAgents }: { initialAgents: AgentRecord[
       </div>
 
       <Card>
-        <CardHeader className="flex flex-row items-start justify-between gap-4">
+        <CardHeader className="flex flex-row items-start justify-between gap-4 md:items-center">
           <div>
             <CardTitle>Agent Wallet Balances</CardTitle>
             <CardDescription>Balances may take a few seconds to update.</CardDescription>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <Button variant="secondary" asChild>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button variant="secondary" size="lg" asChild>
               <Link href="/agents">Create Agent</Link>
             </Button>
 
             <AlertDialog open={isFundOpen} onOpenChange={setIsFundOpen}>
               <AlertDialogTrigger asChild>
-                <Button>Fund Agent</Button>
+                <Button size="lg">Fund Agent</Button>
               </AlertDialogTrigger>
               <AlertDialogContent className="max-w-2xl rounded-xl p-0">
                 <AlertDialogHeader className="flex flex-row items-center justify-between border-b px-6 py-5 text-left">
