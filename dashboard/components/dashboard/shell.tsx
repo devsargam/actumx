@@ -2,12 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Activity, BarChart3, CreditCard, KeyRound, LayoutDashboard, LogOut, Sparkles, Wallet } from "lucide-react";
+import {
+  Boxes,
+  ClipboardList,
+  LayoutDashboard,
+  LogOut,
+  Orbit,
+  Sparkles,
+  WalletCards,
+} from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { ThemeToggle } from "@/components/theme-toggle";
 import {
   Sidebar,
   SidebarContent,
@@ -34,13 +40,12 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { href: "/overview", label: "Overview", icon: LayoutDashboard },
-  { href: "/billing", label: "Billing", icon: CreditCard },
-  { href: "/api-keys", label: "API Keys", icon: KeyRound },
-  { href: "/agents", label: "Agents", icon: Wallet },
-  { href: "/transactions", label: "Transactions", icon: BarChart3 },
-  { href: "/usage", label: "Usage", icon: Activity },
-  { href: "/simulator", label: "Simulator", icon: Sparkles },
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/agents", label: "Agents", icon: WalletCards },
+  { href: "/use-sponge", label: "Use Sponge", icon: Sparkles },
+  { href: "/transactions", label: "Transactions", icon: Orbit },
+  { href: "/orders", label: "Orders", icon: Boxes },
+  { href: "/agent-requests", label: "Agent Requests", icon: ClipboardList },
 ];
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
@@ -55,22 +60,22 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider>
-      <Sidebar variant="inset" collapsible="icon">
-        <SidebarHeader>
-          <div className="rounded-xl border bg-background/50 p-3 group-data-[collapsible=icon]:p-2">
+      <Sidebar variant="inset" collapsible="icon" className="border-r border-white/10 bg-[#090f1d] text-slate-100">
+        <SidebarHeader className="border-b border-white/10">
+          <div className="rounded-xl border border-white/15 bg-white/[0.03] p-3 group-data-[collapsible=icon]:p-2">
             <div className="flex items-start gap-2 group-data-[collapsible=icon]:justify-center">
-              <Sparkles className="mt-0.5 size-4 shrink-0" />
+              <Sparkles className="mt-0.5 size-4 shrink-0 text-cyan-300" />
               <div className="group-data-[collapsible=icon]:hidden">
-                <p className="text-sm font-semibold">x402 Control Plane</p>
-                <p className="text-muted-foreground text-xs">Pay, issue keys, and monitor spend</p>
+                <p className="text-sm font-semibold text-white">Actumx</p>
+                <p className="text-xs text-slate-400">Agent treasury console</p>
               </div>
             </div>
           </div>
         </SidebarHeader>
-        <SidebarSeparator />
+        <SidebarSeparator className="bg-white/10" />
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+            <SidebarGroupLabel className="text-slate-400">Navigation</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {navItems.map((item) => {
@@ -79,7 +84,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
                   return (
                     <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton asChild isActive={isActive} tooltip={item.label}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={isActive}
+                        tooltip={item.label}
+                        className="text-slate-300 hover:bg-blue-500/15 hover:text-white data-[active=true]:bg-blue-500/25 data-[active=true]:text-cyan-200"
+                      >
                         <Link href={item.href}>
                           <Icon className="size-4" />
                           <span>{item.label}</span>
@@ -93,19 +103,19 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           </SidebarGroup>
         </SidebarContent>
         <SidebarFooter>
-          <div className="rounded-xl border bg-background/50 p-3 text-xs group-data-[collapsible=icon]:p-2">
+          <div className="rounded-xl border border-white/15 bg-white/[0.03] p-3 text-xs group-data-[collapsible=icon]:p-2">
             <div className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
               <Avatar size="sm">
                 <AvatarFallback>{initials || "U"}</AvatarFallback>
               </Avatar>
               <div className="min-w-0 group-data-[collapsible=icon]:hidden">
-                <p className="font-medium">{user?.name ?? "Unknown User"}</p>
-                <p className="text-muted-foreground truncate">{user?.email ?? ""}</p>
+                <p className="font-medium text-white">{user?.name ?? "Unknown User"}</p>
+                <p className="truncate text-slate-400">{user?.email ?? ""}</p>
               </div>
             </div>
           </div>
           <Button
-            variant="outline"
+            variant="secondary"
             onClick={() => void logout()}
             className="group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:p-0"
           >
@@ -116,13 +126,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>
-      <SidebarInset className="bg-[radial-gradient(circle_at_top,_#ecfeff_0%,_#f1f5f9_45%,_#e2e8f0_100%)] dark:bg-[radial-gradient(circle_at_top,_#0f172a_0%,_#111827_45%,_#020617_100%)]">
-        <header className="sticky top-0 z-10 flex h-14 items-center gap-2 border-b bg-background/80 px-4 backdrop-blur-sm">
+      <SidebarInset className="bg-[radial-gradient(circle_at_top_left,_#1f2b4a_0%,_#0a0f19_35%,_#04060d_100%)] text-slate-100">
+        <header className="sticky top-0 z-10 flex h-14 items-center gap-2 border-b border-white/10 bg-black/40 px-4 backdrop-blur-sm">
           <SidebarTrigger />
-          <Badge variant="secondary">{pathname.replace("/", "") || "overview"}</Badge>
-          <div className="ml-auto">
-            <ThemeToggle />
-          </div>
+          <p className="text-xs font-medium tracking-wide text-slate-400">
+            {pathname.replace("/", "") || "dashboard"}
+          </p>
         </header>
         <div className="p-4 md:p-6">{children}</div>
       </SidebarInset>

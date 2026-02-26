@@ -7,7 +7,7 @@ export default async function LoginPage() {
   const session = await getServerSession();
 
   if (session?.user) {
-    redirect("/overview");
+    redirect("/dashboard");
   }
 
   return <LoginForm />;

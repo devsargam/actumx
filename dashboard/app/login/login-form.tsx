@@ -51,7 +51,7 @@ export function LoginForm() {
     }
 
     setStatus("Authenticated");
-    router.replace("/overview");
+    router.replace("/dashboard");
   }
 
   return (
@@ -62,7 +62,7 @@ export function LoginForm() {
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>x402 Control Plane</CardTitle>
+            <CardTitle>Actumx Control Plane</CardTitle>
             <CardDescription>Register or login to manage credits and API keys.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">

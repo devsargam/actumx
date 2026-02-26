@@ -18,3 +18,6 @@ Frontend dashboard for managing API keys, dummy credit top-ups, and x402 transac
 3. Start: `pnpm dev`
 
 Dashboard runs at `http://localhost:3000` by default.
+
+## Engineering Notes
+- React effects guidance: `docs/react-effects-playbook.md`

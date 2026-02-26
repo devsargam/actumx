@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,7 @@ export default function ApiKeysPage() {
   const [latestKey, setLatestKey] = useState<string | null>(null);
   const [keys, setKeys] = useState<ApiKeyRecord[]>([]);
 
-  const activeCount = useMemo(() => keys.filter((key) => !key.revokedAt).length, [keys]);
+  const activeCount = keys.filter((key) => !key.revokedAt).length;
 
   const loadKeys = useCallback(async () => {
     const response = await apiRequest<{ keys: ApiKeyRecord[] }>("/v1/api-keys");

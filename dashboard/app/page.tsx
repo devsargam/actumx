@@ -2496,7 +2496,7 @@ export default function HomePage() {
                   manual billing.
                 </p>
                 <Link
-                  href="/overview"
+                  href="/dashboard"
                   className={`${shareTechMono.className} product-cta pointer-events-none`}
                 >
                   Launch Gateway →
@@ -2632,7 +2632,7 @@ export default function HomePage() {
                   programmable payments. Deploy and earn in minutes.
                 </div>
                 <Link
-                  href="/overview"
+                  href="/dashboard"
                   className={`${shareTechMono.className} btn-sm pointer-events-none`}
                 >
                   List Your API →

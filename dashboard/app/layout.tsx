@@ -36,8 +36,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "x402",
-  description: "x402 party",
+  title: "Actumx",
+  description: "Actumx dashboard",
+  openGraph: {
+    title: "Actumx",
+    description: "Actumx dashboard",
+    siteName: "Actumx",
+  },
+  twitter: {
+    title: "Actumx",
+    description: "Actumx dashboard",
+  },
 };
 
 export default function RootLayout({
