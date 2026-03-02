@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   LogOut,
   Orbit,
+  PlugZap,
   Sparkles,
   WalletCards,
 } from "lucide-react";
@@ -42,6 +43,7 @@ type NavItem = {
 const navItems: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/agents", label: "Agents", icon: WalletCards },
+  { href: "/connect-agent", label: "Connect Agent", icon: PlugZap },
   { href: "/transactions", label: "Transactions", icon: Orbit },
   { href: "/orders", label: "Orders", icon: Boxes },
   { href: "/agent-requests", label: "Agent Requests", icon: ClipboardList },
@@ -59,7 +61,11 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider>
-      <Sidebar variant="inset" collapsible="icon" className="border-r border-white/10 bg-[#090f1d] text-slate-100">
+      <Sidebar
+        variant="inset"
+        collapsible="icon"
+        className="border-r border-white/10 bg-[#090f1d] text-slate-100"
+      >
         <SidebarHeader className="border-b border-white/10">
           <div className="rounded-xl border border-white/15 bg-white/[0.03] p-3 group-data-[collapsible=icon]:p-2">
             <div className="flex items-start gap-2 group-data-[collapsible=icon]:justify-center">
@@ -74,7 +80,9 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         <SidebarSeparator className="bg-white/10" />
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel className="text-slate-400">Navigation</SidebarGroupLabel>
+            <SidebarGroupLabel className="text-slate-400">
+              Navigation
+            </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {navItems.map((item) => {
@@ -108,7 +116,9 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                 <AvatarFallback>{initials || "U"}</AvatarFallback>
               </Avatar>
               <div className="min-w-0 group-data-[collapsible=icon]:hidden">
-                <p className="font-medium text-white">{user?.name ?? "Unknown User"}</p>
+                <p className="font-medium text-white">
+                  {user?.name ?? "Unknown User"}
+                </p>
                 <p className="truncate text-slate-400">{user?.email ?? ""}</p>
               </div>
             </div>
