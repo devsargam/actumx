@@ -47,6 +47,9 @@ export const metadata: Metadata = {
     title: "Actumx",
     description: "Actumx dashboard",
   },
+  icons: {
+    icon: "/logo.jpg",
+  },
 };
 
 export default function RootLayout({
@@ -59,7 +62,9 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         <TooltipProvider>{children}</TooltipProvider>
       </body>
     </html>
