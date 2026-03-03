@@ -4,6 +4,7 @@ import { clusterApiUrl, Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from 
 import { db } from "../../db/client";
 import { agents } from "../../db/schema";
 import { newId } from "../../lib/crypto";
+import { isDev } from "../../config/env";
 import { AuthContextService } from "../../services/auth-context.service";
 import { SolanaBalanceService } from "../../services/solana-balance.service";
 import { TimeService } from "../../services/time.service";
@@ -96,6 +97,38 @@ export abstract class AgentsService {
     try {
       const amountSol = payload.amountSol ?? 1;
       const lamports = Math.floor(amountSol * LAMPORTS_PER_SOL);
+
+      if (isDev) {
+        const connection = new Connection("http://localhost:8899", "confirmed");
+        const publicKey = new PublicKey(agent.publicKey);
+
+        const signature = await connection.requestAirdrop(publicKey, lamports);
+        const latestBlockhash = await connection.getLatestBlockhash();
+        await connection.confirmTransaction(
+          {
+            signature,
+            blockhash: latestBlockhash.blockhash,
+            lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+          },
+          "confirmed"
+        );
+
+        const balance = await SolanaBalanceService.getBalance(agent.publicKey);
+
+        return {
+          statusCode: 200,
+          body: {
+            agentId: agent.id,
+            network: "solana-local",
+            amountSol,
+            signature,
+            explorerUrl: `http://localhost:8899tx/${signature}`,
+            publicKey: agent.publicKey,
+            ...balance,
+          },
+        };
+      }
+
       const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
       const publicKey = new PublicKey(agent.publicKey);
 
@@ -125,7 +158,17 @@ export abstract class AgentsService {
         },
       };
     } catch (error) {
-      const message = error instanceof Error ? error.message : "failed to fund agent on devnet";
+      if (isDev) {
+        return {
+          statusCode: 400,
+          body: {
+            error:
+              "Failed to fund agent. Make sure local validator is running: solana-test-validator",
+          },
+        };
+      }
+      const message =
+        error instanceof Error ? error.message : "failed to fund agent on devnet";
       return {
         statusCode: 400,
         body: { error: message },

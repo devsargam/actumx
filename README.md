@@ -22,6 +22,7 @@ x402/
 - [Bun](https://bun.sh/) for the API
 - [pnpm](https://pnpm.io/) for the dashboard
 - [Docker](https://www.docker.com/) for running Postgres
+- [Solana CLI](https://docs.solana.com/cli/install-solana-cli-tools) (for local development)
 
 ### Start Postgres
 
@@ -32,6 +33,18 @@ docker run --name actumx-postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD
 This creates a database `x402` accessible at `postgres://postgres:postgres@localhost:5432/x402`.
 
 Update your `api/.env` accordingly (see `.env.example`).
+
+### Start Local Solana Validator
+
+```bash
+# Install Solana CLI if needed
+brew install solana
+
+# Start the local test validator
+solana-test-validator
+```
+
+This runs a local Solana node on `http://localhost:8899` with unlimited test SOL. The validator files are stored in `test-ledger/` (added to `.gitignore`).
 
 ## Quick Start
 
@@ -50,6 +63,8 @@ By default the API runs on `http://localhost:3001`.
 Useful API scripts:
 
 - `bun run dev` - run with watch mode
+- `bun run dev:validator` - start local Solana validator only
+- `bun run dev:all` - start validator + API together
 - `bun run start` - run once
 - `bun run check` - type-check
 - `bun run db:generate` - generate Drizzle migrations
@@ -66,3 +81,7 @@ pnpm dev
 ```
 
 By default the dashboard runs on `http://localhost:3000`.
+
+## About
+
+[actumx.app](https://actumx.app)
