@@ -40,11 +40,11 @@ export default function UsagePage() {
             </thead>
             <tbody>
               {events.map((event) => (
-                <tr key={event.id} className="border-t">
-                  <td className="py-2 font-mono text-xs">{event.id}</td>
-                  <td className="py-2 text-xs">{event.method} {event.endpoint}</td>
-                  <td className="py-2">{formatMoney(event.costCents)}</td>
-                  <td className="py-2 text-xs">{formatTimestamp(event.createdAt)}</td>
+                <tr key={event.id} className="border-t border-border">
+                  <td className="py-2 font-mono text-xs text-foreground">{event.id}</td>
+                  <td className="py-2 text-xs text-foreground">{event.method} {event.endpoint}</td>
+                  <td className="py-2 text-foreground">{formatMoney(event.costCents)}</td>
+                  <td className="py-2 text-xs text-muted-foreground">{formatTimestamp(event.createdAt)}</td>
                 </tr>
               ))}
             </tbody>

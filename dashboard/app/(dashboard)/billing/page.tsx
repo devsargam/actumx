@@ -80,11 +80,11 @@ export default function BillingPage() {
             </thead>
             <tbody>
               {intents.map((intent) => (
-                <tr key={intent.id} className="border-t">
-                  <td className="py-2 font-mono text-xs">{intent.id}</td>
-                  <td className="py-2">{formatMoney(intent.amountCents)}</td>
+                <tr key={intent.id} className="border-t border-border">
+                  <td className="py-2 font-mono text-xs text-foreground">{intent.id}</td>
+                  <td className="py-2 text-foreground">{formatMoney(intent.amountCents)}</td>
                   <td className="py-2"><Badge variant="secondary">{intent.status}</Badge></td>
-                  <td className="py-2 text-xs">{formatTimestamp(intent.createdAt)}</td>
+                  <td className="py-2 text-xs text-muted-foreground">{formatTimestamp(intent.createdAt)}</td>
                 </tr>
               ))}
             </tbody>

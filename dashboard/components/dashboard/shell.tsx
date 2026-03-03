@@ -15,6 +15,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { ThemeToggle } from "@/components/theme-toggle";
 import {
   Sidebar,
   SidebarContent,
@@ -64,23 +65,23 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       <Sidebar
         variant="inset"
         collapsible="icon"
-        className="border-r border-white/10 bg-[#090f1d] text-slate-100"
+        className="border-r border-border bg-background text-foreground dark:border-white/10 dark:bg-[#090f1d] dark:text-slate-100"
       >
-        <SidebarHeader className="border-b border-white/10">
-          <div className="rounded-xl border border-white/15 bg-white/[0.03] p-3 group-data-[collapsible=icon]:p-2">
+        <SidebarHeader className="border-b border-border dark:border-white/10">
+          <div className="rounded-xl border border-border bg-card p-3 group-data-[collapsible=icon]:p-2 dark:border-white/15 dark:bg-white/[0.03]">
             <div className="flex items-start gap-2 group-data-[collapsible=icon]:justify-center">
-              <Sparkles className="mt-0.5 size-4 shrink-0 text-[#9aacff]" />
+              <Sparkles className="mt-0.5 size-4 shrink-0 text-primary" />
               <div className="group-data-[collapsible=icon]:hidden">
-                <p className="text-sm font-semibold text-white">Actumx</p>
-                <p className="text-xs text-slate-400">Agent treasury console</p>
+                <p className="text-sm font-semibold text-foreground dark:text-white">Actumx</p>
+                <p className="text-xs text-muted-foreground dark:text-slate-400">Agent treasury console</p>
               </div>
             </div>
           </div>
         </SidebarHeader>
-        <SidebarSeparator className="bg-white/10" />
+        <SidebarSeparator className="bg-border dark:bg-white/10" />
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel className="text-slate-400">
+            <SidebarGroupLabel className="text-muted-foreground dark:text-slate-400">
               Navigation
             </SidebarGroupLabel>
             <SidebarGroupContent>
@@ -95,7 +96,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                         asChild
                         isActive={isActive}
                         tooltip={item.label}
-                        className="text-slate-300 hover:bg-[#4e6fff]/18 hover:text-white data-[active=true]:bg-[#4e6fff]/26 data-[active=true]:text-[#dbe3ff]"
+                        className="text-foreground hover:bg-accent/50 hover:text-foreground data-[active=true]:bg-accent data-[active=true]:text-accent-foreground dark:text-slate-300 dark:hover:bg-[#4e6fff]/18 dark:hover:text-white dark:data-[active=true]:bg-[#4e6fff]/26 dark:data-[active=true]:text-[#dbe3ff]"
                       >
                         <Link href={item.href}>
                           <Icon className="size-4" />
@@ -110,16 +111,16 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           </SidebarGroup>
         </SidebarContent>
         <SidebarFooter>
-          <div className="rounded-xl border border-white/15 bg-white/[0.03] p-3 text-xs group-data-[collapsible=icon]:p-2">
+          <div className="rounded-xl border border-border bg-card p-3 text-xs group-data-[collapsible=icon]:p-2 dark:border-white/15 dark:bg-white/[0.03]">
             <div className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
               <Avatar size="sm">
                 <AvatarFallback>{initials || "U"}</AvatarFallback>
               </Avatar>
               <div className="min-w-0 group-data-[collapsible=icon]:hidden">
-                <p className="font-medium text-white">
+                <p className="font-medium text-foreground">
                   {user?.name ?? "Unknown User"}
                 </p>
-                <p className="truncate text-slate-400">{user?.email ?? ""}</p>
+                <p className="truncate text-muted-foreground">{user?.email ?? ""}</p>
               </div>
             </div>
           </div>
@@ -135,12 +136,15 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>
-      <SidebarInset className="bg-[#070b14] text-slate-100">
-        <header className="sticky top-0 z-10 flex h-14 items-center gap-2 border-b border-white/10 bg-black/40 px-4 backdrop-blur-sm">
+      <SidebarInset className="bg-background text-foreground dark:bg-[#070b14] dark:text-slate-100">
+        <header className="sticky top-0 z-10 flex h-14 items-center gap-2 border-b border-border bg-background/80 px-4 backdrop-blur-sm dark:border-white/10 dark:bg-black/40">
           <SidebarTrigger />
-          <p className="text-xs font-medium tracking-wide text-slate-400">
+          <p className="text-xs font-medium tracking-wide text-muted-foreground dark:text-slate-400">
             {pathname.replace("/", "") || "dashboard"}
           </p>
+          <div className="ml-auto">
+            <ThemeToggle />
+          </div>
         </header>
         <div className="dashboard-app p-4 md:p-6">{children}</div>
       </SidebarInset>

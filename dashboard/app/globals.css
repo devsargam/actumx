@@ -130,29 +130,66 @@
 
 @layer components {
   .dashboard-app [data-slot="card"] {
-    @apply border-white/10 bg-white/[0.03] text-slate-100 ring-white/10;
-    backdrop-filter: blur(6px);
+    border-color: hsl(var(--border));
+    background-color: hsl(var(--card));
+    color: hsl(var(--card-foreground));
+  }
+
+  .dark .dashboard-app [data-slot="card"] {
+    border-color: rgb(255 255 255 / 10%);
+    background-color: rgb(255 255 255 / 3%);
+    color: rgb(241 245 249);
   }
 
   .dashboard-app [data-slot="card-title"] {
-    @apply text-white;
+    color: hsl(var(--card-foreground));
+  }
+
+  .dark .dashboard-app [data-slot="card-title"] {
+    color: white;
   }
 
   .dashboard-app [data-slot="card-description"] {
-    @apply text-slate-400;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .dark .dashboard-app [data-slot="card-description"] {
+    color: rgb(148 163 184);
   }
 
   .dashboard-app input,
   .dashboard-app textarea,
   .dashboard-app [data-slot="select-trigger"] {
-    @apply border-white/15 bg-black/25 text-slate-100;
+    border-color: hsl(var(--input));
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+
+  .dark .dashboard-app input,
+  .dark .dashboard-app textarea,
+  .dark .dashboard-app [data-slot="select-trigger"] {
+    border-color: rgb(255 255 255 / 15%);
+    background-color: rgb(0 0 0 / 25%);
+    color: rgb(241 245 249);
   }
 
   .dashboard-app table thead {
-    @apply text-slate-400;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .dark .dashboard-app table thead {
+    color: rgb(148 163 184);
   }
 
   .dashboard-app table tbody tr {
-    @apply border-white/10;
+    border-color: hsl(var(--border));
+  }
+
+  .dark .dashboard-app table tbody tr {
+    border-color: rgb(255 255 255 / 10%);
+  }
+
+  .dashboard-app [data-slot="card"] {
+    backdrop-filter: blur(6px);
   }
 }
