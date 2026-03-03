@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { ChevronRight, Ellipsis, Plus, X } from "lucide-react";
 
 import {
@@ -191,30 +192,39 @@ export function AgentsClient({ initialAgents }: { initialAgents: AgentRecord[] }
       {!isEmpty ? (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {agents.map((agent) => (
-            <Card key={agent.id} className="border-primary/25">
-              <CardContent className="p-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-3">
-                    <div className="inline-flex size-10 items-center justify-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">
-                      {agent.name.charAt(0).toUpperCase()}
+            <Link key={agent.id} href={`/agents/${agent.id}`} className="block">
+              <Card className="border-primary/25 transition-colors hover:bg-muted/30">
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start gap-3">
+                      <div className="inline-flex size-10 items-center justify-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">
+                        {agent.name.charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="font-semibold">{agent.name}</p>
+                        <p className="text-sm text-muted-foreground">{relativeFromNow(agent.createdAt)}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-semibold">{agent.name}</p>
-                      <p className="text-sm text-muted-foreground">{relativeFromNow(agent.createdAt)}</p>
-                    </div>
+                    <Ellipsis className="size-4 text-muted-foreground" />
                   </div>
-                  <Ellipsis className="size-4 text-muted-foreground" />
-                </div>
 
-                <p className="mt-8 font-mono text-3xl">{formatSolAmount(agent.balanceSol)} <span className="font-sans text-xl text-muted-foreground">SOL</span></p>
+                  <p className="mt-8 font-mono text-3xl">
+                    {formatSolAmount(agent.balanceSol)}{" "}
+                    <span className="font-sans text-xl text-muted-foreground">SOL</span>
+                  </p>
 
-                {descriptions[agent.id] ? <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{descriptions[agent.id]}</p> : null}
+                  {descriptions[agent.id] ? (
+                    <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+                      {descriptions[agent.id]}
+                    </p>
+                  ) : null}
 
-                <div className="mt-6 flex justify-end">
-                  <ChevronRight className="size-5 text-muted-foreground" />
-                </div>
-              </CardContent>
-            </Card>
+                  <div className="mt-6 flex justify-end">
+                    <ChevronRight className="size-5 text-muted-foreground" />
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
       ) : null}
