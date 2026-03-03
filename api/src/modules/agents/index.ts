@@ -18,6 +18,23 @@ export const agentsModule = new Elysia({ name: "module.agents", prefix: "/v1/age
     },
     { body: AgentsModel.createAgentBody }
   )
+  .patch(
+    "/:agentId",
+    async ({ request, params, body, set }) => {
+      const result = await AgentsService.update(request, params.agentId, body);
+      set.status = result.statusCode;
+      return result.body;
+    },
+    { body: AgentsModel.updateAgentBody }
+  )
+  .delete(
+    "/:agentId",
+    async ({ request, params, set }) => {
+      const result = await AgentsService.delete(request, params.agentId);
+      set.status = result.statusCode;
+      return result.body;
+    }
+  )
   .post(
     "/:agentId/fund-devnet",
     async ({ request, params, body, set }) => {

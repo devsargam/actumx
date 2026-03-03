@@ -9,6 +9,11 @@ export namespace AgentsModel {
     amountSol: t.Optional(t.Number({ minimum: 0.01, maximum: 2 })),
   });
 
+  export const updateAgentBody = t.Object({
+    name: t.String({ minLength: 2, maxLength: 80 }),
+  });
+
   export type CreateAgentBody = typeof createAgentBody.static;
   export type FundDevnetBody = typeof fundDevnetBody.static;
+  export type UpdateAgentBody = typeof updateAgentBody.static;
 }

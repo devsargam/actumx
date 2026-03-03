@@ -132,4 +132,53 @@ export abstract class AgentsService {
       };
     }
   }
+
+  static async update(request: Request, agentId: string, payload: AgentsModel.UpdateAgentBody) {
+    const auth = await AuthContextService.getAuthenticatedUser(request);
+    if (!auth) {
+      return { statusCode: 401, body: { error: "unauthorized" } };
+    }
+
+    const [agent] = await db
+      .select({
+        id: agents.id,
+      })
+      .from(agents)
+      .where(and(eq(agents.id, agentId), eq(agents.userId, auth.user.id)))
+      .limit(1);
+
+    if (!agent) {
+      return { statusCode: 404, body: { error: "agent not found" } };
+    }
+
+    await db
+      .update(agents)
+      .set({ name: payload.name })
+      .where(and(eq(agents.id, agentId), eq(agents.userId, auth.user.id)));
+
+    return { statusCode: 200, body: { success: true } };
+  }
+
+  static async delete(request: Request, agentId: string) {
+    const auth = await AuthContextService.getAuthenticatedUser(request);
+    if (!auth) {
+      return { statusCode: 401, body: { error: "unauthorized" } };
+    }
+
+    const [agent] = await db
+      .select({
+        id: agents.id,
+      })
+      .from(agents)
+      .where(and(eq(agents.id, agentId), eq(agents.userId, auth.user.id)))
+      .limit(1);
+
+    if (!agent) {
+      return { statusCode: 404, body: { error: "agent not found" } };
+    }
+
+    await db.delete(agents).where(and(eq(agents.id, agentId), eq(agents.userId, auth.user.id)));
+
+    return { statusCode: 200, body: { success: true } };
+  }
 }
