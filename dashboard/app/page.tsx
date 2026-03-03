@@ -446,7 +446,7 @@ export default function HomePage() {
           </div>
 
           <div className="text-sm font-medium text-slate-400">
-            © 2024 ACTUMx. All rights reserved.
+            © 2026 ACTUMx. All rights reserved.
           </div>
         </div>
       </footer>
