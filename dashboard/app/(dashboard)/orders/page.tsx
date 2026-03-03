@@ -2,14 +2,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export default function OrdersPage() {
   return (
-    <Card className="border-white/10 bg-white/[0.03] text-slate-100 ring-white/10">
+    <Card>
       <CardHeader>
-        <CardTitle className="text-white">Orders</CardTitle>
-        <CardDescription className="text-slate-400">
+        <CardTitle>Orders</CardTitle>
+        <CardDescription>
           Agent order history and execution status will be available here.
         </CardDescription>
       </CardHeader>
-      <CardContent className="text-slate-300">Coming soon.</CardContent>
+      <CardContent className="text-muted-foreground">Coming soon.</CardContent>
     </Card>
   );
 }

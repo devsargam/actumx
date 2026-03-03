@@ -42,14 +42,14 @@ export default function TransactionsPage() {
             </thead>
             <tbody>
               {transactions.map((tx) => (
-                <tr key={tx.id} className="border-t">
-                  <td className="py-2 font-mono text-xs">{tx.id}</td>
-                  <td className="py-2 text-xs">{tx.method} {tx.endpoint}</td>
-                  <td className="py-2">{formatMoney(tx.amountCents)}</td>
+                <tr key={tx.id} className="border-t border-border">
+                  <td className="py-2 font-mono text-xs text-foreground">{tx.id}</td>
+                  <td className="py-2 text-xs text-foreground">{tx.method} {tx.endpoint}</td>
+                  <td className="py-2 text-foreground">{formatMoney(tx.amountCents)}</td>
                   <td className="py-2">
                     <Badge variant={tx.status === "completed" ? "secondary" : "outline"}>{tx.status}</Badge>
                   </td>
-                  <td className="py-2 text-xs">{formatTimestamp(tx.updatedAt)}</td>
+                  <td className="py-2 text-xs text-muted-foreground">{formatTimestamp(tx.updatedAt)}</td>
                 </tr>
               ))}
             </tbody>
