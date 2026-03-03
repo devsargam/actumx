@@ -21,7 +21,17 @@ x402/
 
 - [Bun](https://bun.sh/) for the API
 - [pnpm](https://pnpm.io/) for the dashboard
-- Postgres running locally (or a reachable Postgres instance)
+- [Docker](https://www.docker.com/) for running Postgres
+
+### Start Postgres
+
+```bash
+docker run --name actumx-postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=x402 -p 5432:5432 -d postgres:latest
+```
+
+This creates a database `x402` accessible at `postgres://postgres:postgres@localhost:5432/x402`.
+
+Update your `api/.env` accordingly (see `.env.example`).
 
 ## Quick Start
 
@@ -31,6 +41,7 @@ x402/
 cd api
 cp .env.example .env
 bun install
+bun run db:migrate
 bun run dev
 ```
 
