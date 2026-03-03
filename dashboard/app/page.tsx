@@ -87,22 +87,42 @@ export default function HomePage() {
               <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.402 6.231H2.746l7.737-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
             </svg>
           </a>
-          <button
-            className="ml-4 text-[#1a1c24] md:hidden"
-            type="button"
-            aria-label="Menu"
-          >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M3 6h18M3 12h18M3 18h18" />
-            </svg>
-          </button>
+
+          <details className="relative ml-4 md:hidden">
+            <summary className="list-none cursor-pointer text-[#1a1c24] [&::-webkit-details-marker]:hidden">
+              <span className="sr-only">Open menu</span>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M3 6h18M3 12h18M3 18h18" />
+              </svg>
+            </summary>
+
+            <div className="absolute right-0 top-10 z-30 w-48 rounded-xl border border-slate-200 bg-white p-2 shadow-lg">
+              <a className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" href="#">
+                Wallet
+              </a>
+              <a className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" href="#">
+                Gateway
+              </a>
+              <a className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" href="#">
+                Agent Skill
+              </a>
+              <a
+                className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                href="https://t.me/+IugCwFOqngplOGFl"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Contact
+              </a>
+            </div>
+          </details>
         </div>
       </nav>
 
