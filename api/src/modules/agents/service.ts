@@ -132,4 +132,41 @@ export abstract class AgentsService {
       };
     }
   }
+
+  static async update(request: Request, agentId: string, payload: AgentsModel.UpdateAgentBody) {
+    const auth = await AuthContextService.getAuthenticatedUser(request);
+    if (!auth) {
+      return { statusCode: 401, body: { error: "unauthorized" } };
+    }
+
+    const updated = await db
+      .update(agents)
+      .set({ name: payload.name })
+      .where(and(eq(agents.id, agentId), eq(agents.userId, auth.user.id)))
+      .returning({ id: agents.id });
+
+    if (updated.length === 0) {
+      return { statusCode: 404, body: { error: "agent not found" } };
+    }
+
+    return { statusCode: 200, body: { success: true } };
+  }
+
+  static async delete(request: Request, agentId: string) {
+    const auth = await AuthContextService.getAuthenticatedUser(request);
+    if (!auth) {
+      return { statusCode: 401, body: { error: "unauthorized" } };
+    }
+
+    const deleted = await db
+      .delete(agents)
+      .where(and(eq(agents.id, agentId), eq(agents.userId, auth.user.id)))
+      .returning({ id: agents.id });
+
+    if (deleted.length === 0) {
+      return { statusCode: 404, body: { error: "agent not found" } };
+    }
+
+    return { statusCode: 200, body: { success: true } };
+  }
 }

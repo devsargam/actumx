@@ -130,9 +130,9 @@
 
 @layer components {
   .dashboard-app [data-slot="card"] {
-    border-color: hsl(var(--border));
-    background-color: hsl(var(--card));
-    color: hsl(var(--card-foreground));
+    border-color: var(--border);
+    background-color: var(--card);
+    color: var(--card-foreground);
   }
 
   .dark .dashboard-app [data-slot="card"] {
