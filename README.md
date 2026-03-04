@@ -47,6 +47,15 @@ bun run dev
 
 By default the API runs on `http://localhost:3001`.
 
+Set `BETTER_AUTH_URL` to include the mounted auth prefix in this repo:
+
+- `BETTER_AUTH_URL=http://localhost:3001/auth/api/auth`
+
+Required GitHub OAuth env vars (for social sign-in):
+
+- `GITHUB_CLIENT_ID`
+- `GITHUB_CLIENT_SECRET`
+
 Useful API scripts:
 
 - `bun run dev` - run with watch mode

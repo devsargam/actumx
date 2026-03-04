@@ -19,7 +19,7 @@ export async function getServerSession(): Promise<ServerSession | null> {
   const requestHeaders = await headers();
   const cookie = requestHeaders.get("cookie") ?? "";
 
-  const response = await fetch(`${API_BASE_URL}/auth/api/get-session`, {
+  const response = await fetch(`${API_BASE_URL}/auth/api/auth/get-session`, {
     method: "GET",
     headers: {
       cookie,

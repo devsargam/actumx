@@ -13,7 +13,7 @@ export const auth = betterAuth({
     camelCase: true,
   }),
   baseURL: env.BETTER_AUTH_URL,
-  basePath: "/api",
+  basePath: "/api/auth",
   trustedOrigins: [env.BETTER_AUTH_URL, env.DASHBOARD_ORIGIN],
   secret: env.BETTER_AUTH_SECRET,
   ...(isProduction
@@ -29,5 +29,12 @@ export const auth = betterAuth({
     : {}),
   emailAndPassword: {
     enabled: true,
+  },
+  socialProviders: {
+    github: {
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
+      scope: ["read:user", "user:email"],
+    },
   },
 });
