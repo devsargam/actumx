@@ -139,22 +139,15 @@ export abstract class AgentsService {
       return { statusCode: 401, body: { error: "unauthorized" } };
     }
 
-    const [agent] = await db
-      .select({
-        id: agents.id,
-      })
-      .from(agents)
-      .where(and(eq(agents.id, agentId), eq(agents.userId, auth.user.id)))
-      .limit(1);
-
-    if (!agent) {
-      return { statusCode: 404, body: { error: "agent not found" } };
-    }
-
-    await db
+    const updated = await db
       .update(agents)
       .set({ name: payload.name })
-      .where(and(eq(agents.id, agentId), eq(agents.userId, auth.user.id)));
+      .where(and(eq(agents.id, agentId), eq(agents.userId, auth.user.id)))
+      .returning({ id: agents.id });
+
+    if (updated.length === 0) {
+      return { statusCode: 404, body: { error: "agent not found" } };
+    }
 
     return { statusCode: 200, body: { success: true } };
   }
@@ -165,19 +158,14 @@ export abstract class AgentsService {
       return { statusCode: 401, body: { error: "unauthorized" } };
     }
 
-    const [agent] = await db
-      .select({
-        id: agents.id,
-      })
-      .from(agents)
+    const deleted = await db
+      .delete(agents)
       .where(and(eq(agents.id, agentId), eq(agents.userId, auth.user.id)))
-      .limit(1);
+      .returning({ id: agents.id });
 
-    if (!agent) {
+    if (deleted.length === 0) {
       return { statusCode: 404, body: { error: "agent not found" } };
     }
-
-    await db.delete(agents).where(and(eq(agents.id, agentId), eq(agents.userId, auth.user.id)));
 
     return { statusCode: 200, body: { success: true } };
   }
