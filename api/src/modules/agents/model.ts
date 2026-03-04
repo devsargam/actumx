@@ -10,7 +10,8 @@ export namespace AgentsModel {
   });
 
   export const updateAgentBody = t.Object({
-    name: t.String({ minLength: 2, maxLength: 80 }),
+    // Prevent empty or whitespace-only names
+    name: t.String({ minLength: 2, maxLength: 80, pattern: "\\S" }),
   });
 
   export type CreateAgentBody = typeof createAgentBody.static;
