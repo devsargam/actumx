@@ -3,8 +3,6 @@
   "version": "1.0.50",
   "scripts": {
     "dev": "bun run --watch src/index.ts",
-    "dev:validator": "solana-test-validator",
-    "dev:all": "solana-test-validator & bun run dev",
     "start": "bun run src/index.ts",
     "check": "tsc --noEmit",
     "db:generate": "drizzle-kit generate --config=drizzle.config.ts",

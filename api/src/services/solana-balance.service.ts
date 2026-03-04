@@ -1,11 +1,10 @@
 import { Connection, PublicKey } from "@solana/web3.js";
 
-import { env, isDev } from "../config/env";
+import { env } from "../config/env";
 
 const LAMPORTS_PER_SOL = 1_000_000_000;
 
-const rpcUrl = isDev ? env.SOLANA_RPC_URL_LOCAL : env.SOLANA_RPC_URL;
-const connection = new Connection(rpcUrl, "confirmed");
+const connection = new Connection(env.SOLANA_RPC_URL, "confirmed");
 
 export type SolanaBalance = {
   balanceLamports: number | null;
