@@ -5,9 +5,15 @@ import { useRouter } from "next/navigation";
 
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { API_BASE_URL } from "@/lib/api";
+import { authClient } from "@/lib/auth-client";
 
 export function LoginForm() {
   const router = useRouter();
@@ -20,38 +26,38 @@ export function LoginForm() {
   async function handleAuth() {
     setStatus("Authenticating...");
 
-    const endpoint = authMode === "register" ? "/auth/api/sign-up/email" : "/auth/api/sign-in/email";
-    const body =
+    const result =
       authMode === "register"
-        ? {
+        ? await authClient.signUp.email({
             email,
             name,
             password,
-          }
-        : {
+          })
+        : await authClient.signIn.email({
             email,
             password,
-          };
+          });
 
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-
-    if (!response.ok) {
-      const data = (await response.json().catch(() => ({ message: "Authentication failed" }))) as {
-        message?: string;
-      };
-      setStatus(`Auth failed: ${data.message ?? "unknown error"}`);
+    if (result.error) {
+      setStatus(`Auth failed: ${result.error.message ?? "unknown error"}`);
       return;
     }
 
     setStatus("Authenticated");
     router.replace("/dashboard");
+  }
+
+  async function handleGithubAuth() {
+    setStatus("Redirecting to GitHub...");
+    const callbackURL = `${window.location.origin}/dashboard`;
+    const result = await authClient.signIn.social({
+      provider: "github",
+      callbackURL,
+    });
+
+    if (result.error) {
+      setStatus(`Auth failed: ${result.error.message ?? "unknown error"}`);
+    }
   }
 
   return (
@@ -63,7 +69,9 @@ export function LoginForm() {
         <Card>
           <CardHeader>
             <CardTitle>Actumx Control Plane</CardTitle>
-            <CardDescription>Register or login to manage credits and API keys.</CardDescription>
+            <CardDescription>
+              Register or login to manage credits and API keys.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex gap-2">
@@ -73,13 +81,24 @@ export function LoginForm() {
               >
                 Register
               </Button>
-              <Button variant={authMode === "login" ? "default" : "outline"} onClick={() => setAuthMode("login")}>
+              <Button
+                variant={authMode === "login" ? "default" : "outline"}
+                onClick={() => setAuthMode("login")}
+              >
                 Login
               </Button>
             </div>
-            <Input value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Email" />
+            <Input
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="Email"
+            />
             {authMode === "register" ? (
-              <Input value={name} onChange={(event) => setName(event.target.value)} placeholder="Name" />
+              <Input
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                placeholder="Name"
+              />
             ) : null}
             <Input
               value={password}
@@ -89,6 +108,13 @@ export function LoginForm() {
             />
             <Button className="w-full" onClick={() => void handleAuth()}>
               Continue
+            </Button>
+            <Button
+              className="w-full"
+              variant="outline"
+              onClick={() => void handleGithubAuth()}
+            >
+              Continue with GitHub
             </Button>
             <p className="text-muted-foreground text-xs">{status}</p>
           </CardContent>

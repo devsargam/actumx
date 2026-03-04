@@ -32,14 +32,14 @@ export function DashboardAuthProvider({
   const [loading, setLoading] = useState(false);
 
   const logout = useCallback(async () => {
-    await apiRequest("/auth/api/sign-out", { method: "POST" });
+    await apiRequest("/auth/api/auth/sign-out", { method: "POST" });
     setUser(null);
     router.replace("/login");
   }, [router]);
 
   const refreshUser = useCallback(async () => {
     setLoading(true);
-    const meResult = await apiRequest<{ user?: SessionUser; error?: string }>("/auth/api/get-session");
+    const meResult = await apiRequest<{ user?: SessionUser; error?: string }>("/auth/api/auth/get-session");
 
     if (meResult.status >= 400 || !meResult.data.user) {
       setUser(null);
