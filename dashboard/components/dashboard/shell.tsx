@@ -32,6 +32,7 @@ import {
   SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { useDashboardAuth } from "@/components/dashboard/auth-context";
 
@@ -49,6 +50,38 @@ const navItems: NavItem[] = [
   { href: "/orders", label: "Orders", icon: Boxes },
   { href: "/agent-requests", label: "Agent Requests", icon: ClipboardList },
 ];
+
+function SidebarNav({ pathname }: { pathname: string }) {
+  const { setOpenMobile, isMobile } = useSidebar();
+
+  return (
+    <SidebarMenu>
+      {navItems.map((item) => {
+        const Icon = item.icon;
+        const isActive = pathname === item.href;
+
+        return (
+          <SidebarMenuItem key={item.href}>
+            <SidebarMenuButton
+              asChild
+              isActive={isActive}
+              tooltip={item.label}
+              className="text-slate-300 hover:bg-[#4e6fff]/18 hover:text-white data-[active=true]:bg-[#4e6fff]/26 data-[active=true]:text-[#dbe3ff]"
+            >
+              <Link
+                href={item.href}
+                onClick={() => isMobile && setOpenMobile(false)}
+              >
+                <Icon className="size-4" />
+                <span>{item.label}</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        );
+      })}
+    </SidebarMenu>
+  );
+}
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -85,28 +118,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
               Navigation
             </SidebarGroupLabel>
             <SidebarGroupContent>
-              <SidebarMenu>
-                {navItems.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = pathname === item.href;
-
-                  return (
-                    <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton
-                        asChild
-                        isActive={isActive}
-                        tooltip={item.label}
-                        className="text-foreground hover:bg-accent/50 hover:text-foreground data-[active=true]:bg-accent data-[active=true]:text-accent-foreground dark:text-slate-300 dark:hover:bg-[#4e6fff]/18 dark:hover:text-white dark:data-[active=true]:bg-[#4e6fff]/26 dark:data-[active=true]:text-[#dbe3ff]"
-                      >
-                        <Link href={item.href}>
-                          <Icon className="size-4" />
-                          <span>{item.label}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                })}
-              </SidebarMenu>
+              <SidebarNav pathname={pathname} />
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
