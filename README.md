@@ -66,7 +66,3 @@ pnpm dev
 ```
 
 By default the dashboard runs on `http://localhost:3000`.
-
-## About
-
-[actumx.app](https://actumx.app)
