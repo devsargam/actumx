@@ -104,13 +104,22 @@ export default function HomePage() {
             </summary>
 
             <div className="absolute right-0 top-10 z-30 w-48 rounded-xl border border-slate-200 bg-white p-2 shadow-lg">
-              <a className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" href="#">
+              <a
+                className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                href="#"
+              >
                 Wallet
               </a>
-              <a className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" href="#">
+              <a
+                className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                href="#"
+              >
                 Gateway
               </a>
-              <a className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" href="#">
+              <a
+                className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                href="#"
+              >
                 Agent Skill
               </a>
               <a
@@ -144,7 +153,7 @@ export default function HomePage() {
         <div className="mb-8 flex flex-col gap-4 sm:flex-row">
           <Link
             className="flex items-center gap-2 rounded-full bg-[#4f6eff] px-10 py-4 text-lg font-bold text-white shadow-lg shadow-[#4f6eff]/20 transition-all hover:-translate-y-0.5"
-            href="/login"
+            href="/dashboard"
           >
             Launch App →
           </Link>
