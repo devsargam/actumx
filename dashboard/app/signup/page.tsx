@@ -1,9 +1,8 @@
 import { redirect } from "next/navigation";
-
+import { SignupForm } from "@/components/signup-form"
 import { getServerSession } from "@/lib/server-auth";
-import { SigninForm } from "@/components/signin-form";
 
-export default async function LoginPage() {
+export default async function SignupPage() {
   const session = await getServerSession();
 
   if (session?.user) {
@@ -15,18 +14,13 @@ export default async function LoginPage() {
       <div className="flex flex-col gap-4 p-6 md:p-10">
         <div className="flex items-center justify-center gap-2 md:justify-start">
           <a href="#" className="flex items-center gap-2 font-medium">
-            <img
-              src="/logo.jpg"
-              alt=""
-              aria-hidden="true"
-              className="size-6 rounded-md object-cover"
-            />
+            <img src="/logo.jpg" alt="" aria-hidden="true" className="size-6 rounded-md object-cover" />
             Actumx
           </a>
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
-            <SigninForm />
+            <SignupForm />
           </div>
         </div>
       </div>
@@ -38,5 +32,5 @@ export default async function LoginPage() {
         />
       </div>
     </div>
-  );
+  )
 }
