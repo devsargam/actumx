@@ -6,6 +6,7 @@ import { agents } from "../../db/schema";
 import { newId } from "../../lib/crypto";
 import { AuthContextService } from "../../services/auth-context.service";
 import { SolanaBalanceService } from "../../services/solana-balance.service";
+import { SolanaTransferService } from "../../services/solana-transfer.service";
 import { TimeService } from "../../services/time.service";
 import type { AgentsModel } from "./model";
 
@@ -150,6 +151,58 @@ export abstract class AgentsService {
     }
 
     return { statusCode: 200, body: { success: true } };
+  }
+
+  static async send(request: Request, agentId: string, payload: AgentsModel.SendBody) {
+    const auth = await AuthContextService.getAuthenticatedUser(request);
+    if (!auth) {
+      return { statusCode: 401, body: { error: "unauthorized" } };
+    }
+
+    const [agent] = await db
+      .select({
+        id: agents.id,
+        publicKey: agents.publicKey,
+        privateKey: agents.privateKey,
+      })
+      .from(agents)
+      .where(and(eq(agents.id, agentId), eq(agents.userId, auth.user.id)))
+      .limit(1);
+
+    if (!agent) {
+      return { statusCode: 404, body: { error: "agent not found" } };
+    }
+
+    try {
+      const transfer = await SolanaTransferService.transferSol({
+        fromPrivateKeyBase64: agent.privateKey,
+        toPublicKeyBase58: payload.toPublicKey,
+        amountSol: payload.amountSol,
+      });
+      const balance = await SolanaBalanceService.getBalance(agent.publicKey);
+
+      return {
+        statusCode: 200,
+        body: {
+          agentId: agent.id,
+          network: "solana",
+          fromPublicKey: transfer.fromPublicKey,
+          toPublicKey: transfer.toPublicKey,
+          amountSol: transfer.amountSol,
+          lamports: transfer.lamports,
+          signature: transfer.signature,
+          explorerUrl: SolanaTransferService.getExplorerTxUrl(transfer.signature),
+          ...balance,
+        },
+      };
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "failed to send transaction";
+      return {
+        statusCode: 400,
+        body: { error: message },
+      };
+    }
   }
 
   static async delete(request: Request, agentId: string) {

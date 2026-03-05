@@ -43,4 +43,13 @@ export const agentsModule = new Elysia({ name: "module.agents", prefix: "/v1/age
       return result.body;
     },
     { body: AgentsModel.fundDevnetBody }
+  )
+  .post(
+    "/:agentId/send",
+    async ({ request, params, body, set }) => {
+      const result = await AgentsService.send(request, params.agentId, body);
+      set.status = result.statusCode;
+      return result.body;
+    },
+    { body: AgentsModel.sendBody }
   );

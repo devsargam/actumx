@@ -17,6 +17,7 @@ import { newId } from "../../lib/crypto";
 import { ApiKeyContextService } from "../../services/api-key-context.service";
 import { CreditsService } from "../../services/credits.service";
 import { SolanaBalanceService } from "../../services/solana-balance.service";
+import { SolanaTransferService } from "../../services/solana-transfer.service";
 import { TimeService } from "../../services/time.service";
 import type { X402Model } from "./model";
 
@@ -45,6 +46,7 @@ export abstract class X402Service {
           id: agents.id,
           name: agents.name,
           publicKey: agents.publicKey,
+          privateKey: agents.privateKey,
         })
         .from(agents)
         .where(and(eq(agents.userId, userId), eq(agents.id, agentId)))
@@ -58,6 +60,7 @@ export abstract class X402Service {
         id: agents.id,
         name: agents.name,
         publicKey: agents.publicKey,
+        privateKey: agents.privateKey,
       })
       .from(agents)
       .where(eq(agents.userId, userId))
@@ -144,6 +147,33 @@ export abstract class X402Service {
                 },
               },
             },
+            {
+              name: "wallet_send",
+              title: "Wallet Send",
+              description:
+                "Send SOL from the selected agent wallet to another Solana wallet.",
+              inputSchema: {
+                type: "object",
+                additionalProperties: false,
+                required: ["toPublicKey", "amountSol"],
+                properties: {
+                  agentId: {
+                    type: "string",
+                    description:
+                      "Optional agent id. If omitted, uses your most recent agent.",
+                  },
+                  toPublicKey: {
+                    type: "string",
+                    description: "Destination Solana wallet address.",
+                  },
+                  amountSol: {
+                    type: "number",
+                    description: "Amount of SOL to send.",
+                    exclusiveMinimum: 0,
+                  },
+                },
+              },
+            },
           ],
         }),
       };
@@ -152,14 +182,18 @@ export abstract class X402Service {
     if (method === "tools/call") {
       const params = (rpc.params ?? {}) as ToolCallParams;
       const toolName = typeof params.name === "string" ? params.name : "";
-      if (toolName !== "wallet_balance") {
+      if (toolName !== "wallet_balance" && toolName !== "wallet_send") {
         return {
           statusCode: 200,
           body: X402Service.jsonRpcError(id, -32602, "Unknown tool"),
         };
       }
 
-      const args = (params.arguments ?? {}) as { agentId?: unknown };
+      const args = (params.arguments ?? {}) as {
+        agentId?: unknown;
+        toPublicKey?: unknown;
+        amountSol?: unknown;
+      };
       const agentId =
         typeof args.agentId === "string" ? args.agentId : undefined;
 
@@ -177,6 +211,90 @@ export abstract class X402Service {
             isError: true,
           }),
         };
+      }
+
+      if (toolName === "wallet_send") {
+        if (typeof args.toPublicKey !== "string" || !args.toPublicKey.trim()) {
+          return {
+            statusCode: 200,
+            body: X402Service.jsonRpcResult(id, {
+              content: [
+                {
+                  type: "text",
+                  text: "Missing required argument: toPublicKey.",
+                },
+              ],
+              isError: true,
+            }),
+          };
+        }
+
+        if (typeof args.amountSol !== "number" || args.amountSol <= 0) {
+          return {
+            statusCode: 200,
+            body: X402Service.jsonRpcResult(id, {
+              content: [
+                {
+                  type: "text",
+                  text: "Missing or invalid required argument: amountSol.",
+                },
+              ],
+              isError: true,
+            }),
+          };
+        }
+
+        try {
+          const transfer = await SolanaTransferService.transferSol({
+            fromPrivateKeyBase64: agent.privateKey,
+            toPublicKeyBase58: args.toPublicKey,
+            amountSol: args.amountSol,
+          });
+          const balance = await SolanaBalanceService.getBalance(agent.publicKey);
+
+          return {
+            statusCode: 200,
+            body: X402Service.jsonRpcResult(id, {
+              content: [
+                {
+                  type: "text",
+                  text: `Sent ${transfer.amountSol.toFixed(9)} SOL from ${agent.name} to ${transfer.toPublicKey}. Signature: ${transfer.signature}.`,
+                },
+              ],
+              structuredContent: {
+                agentId: agent.id,
+                agentName: agent.name,
+                fromPublicKey: transfer.fromPublicKey,
+                toPublicKey: transfer.toPublicKey,
+                amountSol: transfer.amountSol,
+                lamports: transfer.lamports,
+                signature: transfer.signature,
+                explorerUrl: SolanaTransferService.getExplorerTxUrl(transfer.signature),
+                balanceLamports: balance.balanceLamports,
+                balanceSol: balance.balanceSol,
+                network: "solana",
+                error: balance.error,
+              },
+              isError: false,
+            }),
+          };
+        } catch (error) {
+          return {
+            statusCode: 200,
+            body: X402Service.jsonRpcResult(id, {
+              content: [
+                {
+                  type: "text",
+                  text:
+                    error instanceof Error
+                      ? error.message
+                      : "failed to send transaction",
+                },
+              ],
+              isError: true,
+            }),
+          };
+        }
       }
 
       const balance = await SolanaBalanceService.getBalance(agent.publicKey);

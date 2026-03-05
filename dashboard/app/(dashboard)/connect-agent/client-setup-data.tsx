@@ -31,7 +31,7 @@ function codexSnippet({ mcpUrl, apiKey }: SnippetContext): ReactNode[] {
     <p key="restart">Restart Codex by starting a new session.</p>,
     <p key="try-prompts">
       Try prompts: <code>Check my Actumx Wallet balance</code> and{" "}
-      <code>List my wallet balances using Actumx</code>.
+      <code>Send 0.01 SOL from my latest Actumx wallet to &lt;destination_wallet&gt;</code>.
     </p>,
   ];
 }
