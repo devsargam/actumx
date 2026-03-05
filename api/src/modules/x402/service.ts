@@ -1,4 +1,4 @@
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, isNull, sql } from "drizzle-orm";
 
 import { db } from "../../db/client";
 import {
@@ -15,7 +15,6 @@ import {
 } from "../../config/constants";
 import { newId } from "../../lib/crypto";
 import { ApiKeyContextService } from "../../services/api-key-context.service";
-import { CreditsService } from "../../services/credits.service";
 import { SolanaBalanceService } from "../../services/solana-balance.service";
 import { SolanaTransferService } from "../../services/solana-transfer.service";
 import { TimeService } from "../../services/time.service";
@@ -371,86 +370,142 @@ export abstract class X402Service {
       return { statusCode: 401, body: { error: "missing_or_invalid_api_key" } };
     }
 
-    const [transaction] = await db
-      .select()
-      .from(x402Transactions)
-      .where(
-        and(
-          eq(x402Transactions.id, payload.paymentId),
-          eq(x402Transactions.userId, apiKey.userId),
-          eq(x402Transactions.apiKeyId, apiKey.id),
-        ),
-      )
-      .limit(1);
+    const result = await db.transaction(async (tx) => {
+      const [scopedTransaction] = await tx
+        .select()
+        .from(x402Transactions)
+        .where(
+          and(
+            eq(x402Transactions.id, payload.paymentId),
+            eq(x402Transactions.userId, apiKey.userId),
+            eq(x402Transactions.apiKeyId, apiKey.id),
+          ),
+        )
+        .limit(1);
 
-    if (!transaction) {
-      return { statusCode: 404, body: { error: "payment_not_found" } };
-    }
+      if (!scopedTransaction) {
+        return { statusCode: 404 as const, body: { error: "payment_not_found" } };
+      }
 
-    if (
-      (transaction.status === "settled" ||
-        transaction.status === "completed") &&
-      transaction.receiptId
-    ) {
+      if (
+        (scopedTransaction.status === "settled" ||
+          scopedTransaction.status === "completed") &&
+        scopedTransaction.receiptId
+      ) {
+        return {
+          statusCode: 200 as const,
+          body: {
+            receiptId: scopedTransaction.receiptId,
+            paymentId: scopedTransaction.id,
+            status: scopedTransaction.status,
+            amountCents: scopedTransaction.amountCents,
+          },
+        };
+      }
+
+      const [balanceResult] = await tx
+        .select({
+          balanceCents: sql<number>`COALESCE(SUM(CASE WHEN ${creditLedger.direction} = 'credit' THEN ${creditLedger.amountCents} ELSE -${creditLedger.amountCents} END), 0)`,
+        })
+        .from(creditLedger)
+        .where(eq(creditLedger.userId, apiKey.userId));
+      const balanceCents = balanceResult?.balanceCents ?? 0;
+
+      if (balanceCents < scopedTransaction.amountCents) {
+        return {
+          statusCode: 402 as const,
+          body: {
+            error: "insufficient_balance",
+            requiredCents: scopedTransaction.amountCents,
+            balanceCents,
+            message:
+              "Top up balance in dashboard before settling this x402 payment.",
+          },
+        };
+      }
+
+      const receiptId = newId("receipt");
+      const timestamp = TimeService.nowIso();
+
+      const [updatedTransaction] = await tx
+        .update(x402Transactions)
+        .set({
+          status: "settled",
+          receiptId,
+          updatedAt: timestamp,
+        })
+        .where(
+          and(
+            eq(x402Transactions.id, scopedTransaction.id),
+            eq(x402Transactions.status, "pending"),
+            isNull(x402Transactions.receiptId),
+          ),
+        )
+        .returning({
+          id: x402Transactions.id,
+          amountCents: x402Transactions.amountCents,
+          status: x402Transactions.status,
+          receiptId: x402Transactions.receiptId,
+        });
+
+      if (!updatedTransaction) {
+        const [latestTransaction] = await tx
+          .select({
+            id: x402Transactions.id,
+            amountCents: x402Transactions.amountCents,
+            status: x402Transactions.status,
+            receiptId: x402Transactions.receiptId,
+          })
+          .from(x402Transactions)
+          .where(eq(x402Transactions.id, scopedTransaction.id))
+          .limit(1);
+
+        if (
+          latestTransaction &&
+          (latestTransaction.status === "settled" ||
+            latestTransaction.status === "completed") &&
+          latestTransaction.receiptId
+        ) {
+          return {
+            statusCode: 200 as const,
+            body: {
+              receiptId: latestTransaction.receiptId,
+              paymentId: latestTransaction.id,
+              status: latestTransaction.status,
+              amountCents: latestTransaction.amountCents,
+            },
+          };
+        }
+
+        return {
+          statusCode: 409 as const,
+          body: { error: "payment_state_conflict" },
+        };
+      }
+
+      await tx.insert(creditLedger).values({
+        id: newId("ledger"),
+        userId: apiKey.userId,
+        direction: "debit",
+        amountCents: scopedTransaction.amountCents,
+        source: "api_request",
+        referenceId: scopedTransaction.id,
+        createdAt: timestamp,
+      });
+
       return {
-        statusCode: 200,
+        statusCode: 200 as const,
         body: {
-          receiptId: transaction.receiptId,
-          paymentId: transaction.id,
-          status: transaction.status,
-          amountCents: transaction.amountCents,
+          receiptId,
+          paymentId: scopedTransaction.id,
+          status: "settled",
+          amountCents: scopedTransaction.amountCents,
+          settledAt: timestamp,
         },
       };
-    }
-
-    const balanceCents = await CreditsService.computeBalanceCents(
-      apiKey.userId,
-    );
-    if (balanceCents < transaction.amountCents) {
-      return {
-        statusCode: 402,
-        body: {
-          error: "insufficient_balance",
-          requiredCents: transaction.amountCents,
-          balanceCents,
-          message:
-            "Top up balance in dashboard before settling this x402 payment.",
-        },
-      };
-    }
-
-    const receiptId = newId("receipt");
-    const timestamp = TimeService.nowIso();
-
-    await db.insert(creditLedger).values({
-      id: newId("ledger"),
-      userId: apiKey.userId,
-      direction: "debit",
-      amountCents: transaction.amountCents,
-      source: "api_request",
-      referenceId: transaction.id,
-      createdAt: timestamp,
     });
 
-    await db
-      .update(x402Transactions)
-      .set({
-        status: "settled",
-        receiptId,
-        updatedAt: timestamp,
-      })
-      .where(eq(x402Transactions.id, transaction.id));
-
-    return {
-      statusCode: 200,
-      body: {
-        receiptId,
-        paymentId: transaction.id,
-        status: "settled",
-        amountCents: transaction.amountCents,
-        settledAt: timestamp,
-      },
-    };
+    return result;
   }
 
   static async quote(
@@ -509,6 +564,26 @@ export abstract class X402Service {
       return { statusCode: 402, body: { error: "invalid_payment_proof" } };
     }
 
+    if (transaction.status === "completed") {
+      return {
+        statusCode: 200,
+        body: {
+          data: {
+            topic: query.topic ?? "general",
+            insight:
+              "x402 allows machine-readable payment requirements using HTTP 402 so clients can settle and retry without custom per-API billing logic.",
+            generatedAt: transaction.consumedAt ?? transaction.updatedAt,
+          },
+          payment: {
+            paymentId: transaction.id,
+            receiptId: transaction.receiptId,
+            amountCents: transaction.amountCents,
+            status: "completed",
+          },
+        },
+      };
+    }
+
     if (transaction.status !== "settled") {
       return {
         statusCode: 402,
@@ -518,31 +593,42 @@ export abstract class X402Service {
 
     const timestamp = TimeService.nowIso();
 
-    await db
+    const [completedTransaction] = await db
       .update(x402Transactions)
       .set({
         status: "completed",
         consumedAt: timestamp,
         updatedAt: timestamp,
       })
-      .where(eq(x402Transactions.id, transaction.id));
+      .where(
+        and(
+          eq(x402Transactions.id, transaction.id),
+          eq(x402Transactions.status, "settled"),
+          isNull(x402Transactions.consumedAt),
+        ),
+      )
+      .returning({
+        id: x402Transactions.id,
+      });
 
-    await db.insert(usageEvents).values({
-      id: newId("usage"),
-      userId: apiKey.userId,
-      apiKeyId: apiKey.id,
-      endpoint: X402_PAID_ENDPOINT,
-      method: "GET",
-      units: 1,
-      costCents: transaction.amountCents,
-      x402TransactionId: transaction.id,
-      createdAt: timestamp,
-    });
+    if (completedTransaction) {
+      await db.insert(usageEvents).values({
+        id: newId("usage"),
+        userId: apiKey.userId,
+        apiKeyId: apiKey.id,
+        endpoint: X402_PAID_ENDPOINT,
+        method: "GET",
+        units: 1,
+        costCents: transaction.amountCents,
+        x402TransactionId: transaction.id,
+        createdAt: timestamp,
+      });
 
-    await db
-      .update(apiKeys)
-      .set({ lastUsedAt: timestamp })
-      .where(eq(apiKeys.id, apiKey.id));
+      await db
+        .update(apiKeys)
+        .set({ lastUsedAt: timestamp })
+        .where(eq(apiKeys.id, apiKey.id));
+    }
 
     return {
       statusCode: 200,
