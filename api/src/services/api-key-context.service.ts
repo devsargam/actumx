@@ -21,17 +21,9 @@ export abstract class ApiKeyContextService {
   }
 
   private static extractApiKey(request: Request): string | null {
-    const xApiKeyHeaders = [
-      "x-api-key",
-      "x-api_key",
-      "api-key",
-      "x-actumx-api-key",
-    ];
-    for (const headerName of xApiKeyHeaders) {
-      const value = request.headers.get(headerName)?.trim();
-      if (value) {
-        return value;
-      }
+    const xApiKey = request.headers.get("x-api-key");
+    if (xApiKey) {
+      return xApiKey;
     }
 
     const authorization = request.headers.get("authorization");
@@ -39,37 +31,11 @@ export abstract class ApiKeyContextService {
       return null;
     }
 
-    const normalized = authorization.trim();
-    const [scheme, token] = normalized.split(/\s+/, 2);
-    const schemeLower = scheme?.toLowerCase();
-    if (
-      (schemeLower === "bearer" || schemeLower === "token") &&
-      token?.trim()
-    ) {
-      return token.trim();
-    }
-
-    // Some MCP clients pass the raw token as Authorization header value.
-    if (!token && normalized) {
-      return normalized;
-    }
-
-    const proxyAuthorization = request.headers.get("proxy-authorization");
-    if (!proxyAuthorization) {
+    const [scheme, token] = authorization.split(" ");
+    if (scheme?.toLowerCase() !== "bearer" || !token) {
       return null;
     }
 
-    const [proxyScheme, proxyToken] = proxyAuthorization
-      .trim()
-      .split(/\s+/, 2);
-    if (
-      (proxyScheme?.toLowerCase() === "bearer" ||
-        proxyScheme?.toLowerCase() === "token") &&
-      proxyToken?.trim()
-    ) {
-      return proxyToken.trim();
-    }
-
-    return null;
+    return token;
   }
 }
