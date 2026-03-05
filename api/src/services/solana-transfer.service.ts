@@ -9,19 +9,9 @@ import {
 } from "@solana/web3.js";
 
 import { env } from "../config/env";
+import { detectExplorerClusterParam } from "../lib/solana";
 
 const connection = new Connection(env.SOLANA_RPC_URL, "confirmed");
-
-function detectExplorerClusterParam() {
-  const rpc = env.SOLANA_RPC_URL.toLowerCase();
-  if (rpc.includes("devnet")) {
-    return "devnet";
-  }
-  if (rpc.includes("testnet")) {
-    return "testnet";
-  }
-  return null;
-}
 
 type TransferInput = {
   fromPrivateKeyBase64: string;
@@ -39,7 +29,7 @@ type TransferResult = {
 
 export abstract class SolanaTransferService {
   static getExplorerTxUrl(signature: string): string {
-    const cluster = detectExplorerClusterParam();
+    const cluster = detectExplorerClusterParam(env.SOLANA_RPC_URL);
     const query = cluster ? `?cluster=${cluster}` : "";
     return `https://explorer.solana.com/tx/${signature}${query}`;
   }
