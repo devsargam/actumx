@@ -90,14 +90,6 @@ export abstract class X402Service {
     request: Request,
     payload?: unknown,
   ): Promise<JsonRpcHandlerResult> {
-    const apiKey = await ApiKeyContextService.getAuthenticatedApiKey(request);
-    if (!apiKey) {
-      return {
-        statusCode: 401,
-        body: X402Service.jsonRpcError(null, -32001, "API key required"),
-      };
-    }
-
     if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
       return {
         statusCode: 400,
@@ -180,6 +172,14 @@ export abstract class X402Service {
     }
 
     if (method === "tools/call") {
+      const apiKey = await ApiKeyContextService.getAuthenticatedApiKey(request);
+      if (!apiKey) {
+        return {
+          statusCode: 200,
+          body: X402Service.jsonRpcError(id, -32001, "API key required"),
+        };
+      }
+
       const params = (rpc.params ?? {}) as ToolCallParams;
       const toolName = typeof params.name === "string" ? params.name : "";
       if (toolName !== "wallet_balance" && toolName !== "wallet_send") {
