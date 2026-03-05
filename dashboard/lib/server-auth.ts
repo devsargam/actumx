@@ -1,6 +1,4 @@
-import { headers } from "next/headers";
-
-import { API_BASE_URL } from "@/lib/api";
+import { serverApiRequest } from "@/lib/server-api";
 
 export type ServerSession = {
   user: {
@@ -16,21 +14,9 @@ export type ServerSession = {
 };
 
 export async function getServerSession(): Promise<ServerSession | null> {
-  const requestHeaders = await headers();
-  const cookie = requestHeaders.get("cookie") ?? "";
-
-  const response = await fetch(`${API_BASE_URL}/auth/api/auth/get-session`, {
-    method: "GET",
-    headers: {
-      cookie,
-    },
-    cache: "no-store",
-  });
-
-  if (!response.ok) {
+  const result = await serverApiRequest<ServerSession | null>("/auth/api/auth/get-session");
+  if (result.status < 200 || result.status >= 300) {
     return null;
   }
-
-  const data = (await response.json()) as ServerSession | null;
-  return data;
+  return result.data;
 }

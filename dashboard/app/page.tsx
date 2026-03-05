@@ -14,15 +14,6 @@ const plusJakarta = Plus_Jakarta_Sans({
   weight: ["300", "400", "500", "600", "700", "800"],
 });
 
-function DotPulse() {
-  return (
-    <span className="relative flex h-2 w-2">
-      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-      <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
-    </span>
-  );
-}
-
 function TinyBar({ className }: { className: string }) {
   return <div className={`h-2.5 w-full rounded-sm ${className}`} />;
 }
@@ -136,10 +127,6 @@ export default function HomePage() {
       </nav>
 
       <section className="relative z-10 mx-auto flex max-w-7xl flex-col items-center px-6 pb-8 pt-20 text-center md:px-8 md:pt-24">
-        {/* <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500 shadow-sm">
-          <DotPulse /> x402 infrastructure
-        </div> */}
-
         <h1 className="mb-8 max-w-5xl text-5xl font-bold leading-[1.05] tracking-tighter text-[#1a1c24] md:text-[5.5rem] [font-family:var(--font-home-display)]">
           The Payment Rail for{" "}
           <span className="text-[#4f6eff]">Agentic AI.</span>
