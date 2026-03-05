@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -14,7 +15,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarSeparator,
 } from "@/components/ui/sidebar";
 import {
   LayoutDashboardIcon,
@@ -23,9 +23,7 @@ import {
   BoxesIcon,
   PlugZapIcon,
   WalletCardsIcon,
-  CommandIcon,
 } from "lucide-react";
-import Image from "next/image";
 
 const NAV_ITEMS = [
   {
