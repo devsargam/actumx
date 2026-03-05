@@ -33,28 +33,14 @@ type FundDevnetResponse = {
   balanceSol?: number | null;
 };
 
-type SendResponse = {
-  signature?: string;
-  explorerUrl?: string;
-  error?: string;
-  balanceSol?: number | null;
-};
-
 export function DashboardClient({ initialAgents }: { initialAgents: AgentRecord[] }) {
   const [agents, setAgents] = useState<AgentRecord[]>(initialAgents);
   const [isFundOpen, setIsFundOpen] = useState(false);
-  const [isSendOpen, setIsSendOpen] = useState(false);
   const [selectedAgentId, setSelectedAgentId] = useState(initialAgents[0]?.id ?? "");
-  const [sendAgentId, setSendAgentId] = useState(initialAgents[0]?.id ?? "");
   const [fundAmountSol, setFundAmountSol] = useState("1");
-  const [sendAmountSol, setSendAmountSol] = useState("0.01");
-  const [recipientPublicKey, setRecipientPublicKey] = useState("");
   const [fundStatus, setFundStatus] = useState("Ready");
-  const [sendStatus, setSendStatus] = useState("Ready");
   const [txSignature, setTxSignature] = useState<string | null>(null);
   const [explorerUrl, setExplorerUrl] = useState<string | null>(null);
-  const [sendSignature, setSendSignature] = useState<string | null>(null);
-  const [sendExplorerUrl, setSendExplorerUrl] = useState<string | null>(null);
 
   const totalBalance = useMemo(
     () => agents.reduce((sum, agent) => sum + (agent.balanceSol ?? 0), 0),
@@ -64,10 +50,6 @@ export function DashboardClient({ initialAgents }: { initialAgents: AgentRecord[
   const selectedAgent = useMemo(
     () => agents.find((agent) => agent.id === selectedAgentId) ?? agents[0],
     [agents, selectedAgentId]
-  );
-  const selectedSendAgent = useMemo(
-    () => agents.find((agent) => agent.id === sendAgentId) ?? agents[0],
-    [agents, sendAgentId]
   );
 
   async function refreshAgents() {
@@ -105,34 +87,6 @@ export function DashboardClient({ initialAgents }: { initialAgents: AgentRecord[
     await refreshAgents();
   }
 
-  async function sendFromSelectedAgent() {
-    if (!selectedSendAgent) {
-      setSendStatus("No agent selected");
-      return;
-    }
-
-    if (!recipientPublicKey.trim()) {
-      setSendStatus("Recipient wallet is required");
-      return;
-    }
-
-    setSendStatus("Sending transaction...");
-    const response = await apiRequest<SendResponse>(`/v1/agents/${selectedSendAgent.id}/send`, {
-      method: "POST",
-      body: { toPublicKey: recipientPublicKey.trim(), amountSol: Number(sendAmountSol) },
-    });
-
-    if (response.status >= 400 || !response.data.signature) {
-      setSendStatus(`Failed: ${response.data.error ?? "unknown error"}`);
-      return;
-    }
-
-    setSendSignature(response.data.signature);
-    setSendExplorerUrl(response.data.explorerUrl ?? null);
-    setSendStatus("Transfer successful");
-    await refreshAgents();
-  }
-
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -152,93 +106,6 @@ export function DashboardClient({ initialAgents }: { initialAgents: AgentRecord[
             <Button variant="secondary" size="lg" asChild>
               <Link href="/agents">Create Agent</Link>
             </Button>
-
-            <AlertDialog
-              open={isSendOpen}
-              onOpenChange={(open) => {
-                setIsSendOpen(open);
-                if (open) {
-                  setSendSignature(null);
-                  setSendExplorerUrl(null);
-                  setSendStatus("Ready");
-                }
-              }}
-            >
-              <AlertDialogTrigger asChild>
-                <Button variant="outline" size="lg">Send</Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent className="max-w-2xl rounded-xl p-0">
-                <AlertDialogHeader className="flex flex-row items-center justify-between border-b px-6 py-5 text-left">
-                  <AlertDialogTitle className="text-2xl">Send SOL</AlertDialogTitle>
-                  <AlertDialogCancel asChild className="p-0">
-                    <Button variant="ghost" size="icon-sm" aria-label="Close send dialog">
-                      <X className="size-4" />
-                    </Button>
-                  </AlertDialogCancel>
-                </AlertDialogHeader>
-
-                <div className="space-y-4 px-6 py-5">
-                  <div className="space-y-2">
-                    <p className="text-sm text-muted-foreground">From Agent</p>
-                    <select
-                      className="h-9 w-full rounded-md border bg-background px-3 text-sm"
-                      value={selectedSendAgent?.id}
-                      onChange={(event) => setSendAgentId(event.target.value)}
-                    >
-                      {agents.map((agent) => (
-                        <option key={agent.id} value={agent.id}>
-                          {agent.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <p className="text-sm text-muted-foreground">Recipient Wallet</p>
-                    <Input
-                      value={recipientPublicKey}
-                      onChange={(event) => setRecipientPublicKey(event.target.value)}
-                      placeholder="Enter destination Solana address"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <p className="text-sm text-muted-foreground">Amount (SOL)</p>
-                    <Input
-                      type="number"
-                      min={0.000000001}
-                      step={0.000000001}
-                      value={sendAmountSol}
-                      onChange={(event) => setSendAmountSol(event.target.value)}
-                    />
-                  </div>
-
-                  {sendSignature ? (
-                    <div className="rounded-lg border border-emerald-300/60 bg-emerald-100/40 p-3 text-sm text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-900/20 dark:text-emerald-200">
-                      <p className="inline-flex items-center gap-1 font-medium">
-                        <Check className="size-4" /> Transfer successful
-                      </p>
-                      {sendExplorerUrl ? (
-                        <p className="mt-1">
-                          <a href={sendExplorerUrl} target="_blank" rel="noreferrer" className="underline">
-                            View transaction on Solana Explorer
-                          </a>
-                        </p>
-                      ) : null}
-                    </div>
-                  ) : null}
-
-                  <p className="text-sm text-muted-foreground">{sendStatus}</p>
-                </div>
-
-                <AlertDialogFooter className="border-t px-6 py-4 sm:justify-end">
-                  <AlertDialogCancel asChild>
-                    <Button variant="secondary">Done</Button>
-                  </AlertDialogCancel>
-                  <Button onClick={() => void sendFromSelectedAgent()}>Send SOL</Button>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
 
             <AlertDialog open={isFundOpen} onOpenChange={setIsFundOpen}>
               <AlertDialogTrigger asChild>
