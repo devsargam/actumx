@@ -55,13 +55,6 @@ export abstract class BillingService {
       return { statusCode: 401, body: { error: "unauthorized" } };
     }
 
-    if (payload.amountCents < 100 || payload.amountCents > 100000) {
-      return {
-        statusCode: 400,
-        body: { error: "amount_must_be_between_100_and_100000_cents" },
-      };
-    }
-
     const timestamp = TimeService.nowIso();
     const intentId = newId("pi");
 

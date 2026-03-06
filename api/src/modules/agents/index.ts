@@ -1,5 +1,6 @@
 import { Elysia } from "elysia";
 
+import { getZodErrorMessage, ZOD_VALIDATION_ERROR } from "../../lib/zod-validation";
 import { AgentsModel } from "./model";
 import { AgentsService } from "./service";
 
@@ -12,25 +13,63 @@ export const agentsModule = new Elysia({ name: "module.agents", prefix: "/v1/age
   .post(
     "",
     async ({ request, body, set }) => {
-      const result = await AgentsService.create(request, body);
+      const parsedBody = AgentsModel.createAgentBodySchema.safeParse(body);
+      if (!parsedBody.success) {
+        set.status = 400;
+        return {
+          error: ZOD_VALIDATION_ERROR,
+          message: getZodErrorMessage(parsedBody.error),
+        };
+      }
+
+      const result = await AgentsService.create(request, parsedBody.data);
       set.status = result.statusCode;
       return result.body;
-    },
-    { body: AgentsModel.createAgentBody }
+    }
   )
   .patch(
     "/:agentId",
     async ({ request, params, body, set }) => {
-      const result = await AgentsService.update(request, params.agentId, body);
+      const parsedParams = AgentsModel.agentIdParamsSchema.safeParse(params);
+      if (!parsedParams.success) {
+        set.status = 400;
+        return {
+          error: ZOD_VALIDATION_ERROR,
+          message: getZodErrorMessage(parsedParams.error),
+        };
+      }
+
+      const parsedBody = AgentsModel.updateAgentBodySchema.safeParse(body);
+      if (!parsedBody.success) {
+        set.status = 400;
+        return {
+          error: ZOD_VALIDATION_ERROR,
+          message: getZodErrorMessage(parsedBody.error),
+        };
+      }
+
+      const result = await AgentsService.update(
+        request,
+        parsedParams.data.agentId,
+        parsedBody.data
+      );
       set.status = result.statusCode;
       return result.body;
-    },
-    { body: AgentsModel.updateAgentBody }
+    }
   )
   .delete(
     "/:agentId",
     async ({ request, params, set }) => {
-      const result = await AgentsService.delete(request, params.agentId);
+      const parsedParams = AgentsModel.agentIdParamsSchema.safeParse(params);
+      if (!parsedParams.success) {
+        set.status = 400;
+        return {
+          error: ZOD_VALIDATION_ERROR,
+          message: getZodErrorMessage(parsedParams.error),
+        };
+      }
+
+      const result = await AgentsService.delete(request, parsedParams.data.agentId);
       set.status = result.statusCode;
       return result.body;
     }
@@ -38,9 +77,30 @@ export const agentsModule = new Elysia({ name: "module.agents", prefix: "/v1/age
   .post(
     "/:agentId/fund-devnet",
     async ({ request, params, body, set }) => {
-      const result = await AgentsService.fundDevnet(request, params.agentId, body);
+      const parsedParams = AgentsModel.agentIdParamsSchema.safeParse(params);
+      if (!parsedParams.success) {
+        set.status = 400;
+        return {
+          error: ZOD_VALIDATION_ERROR,
+          message: getZodErrorMessage(parsedParams.error),
+        };
+      }
+
+      const parsedBody = AgentsModel.fundDevnetBodySchema.safeParse(body);
+      if (!parsedBody.success) {
+        set.status = 400;
+        return {
+          error: ZOD_VALIDATION_ERROR,
+          message: getZodErrorMessage(parsedBody.error),
+        };
+      }
+
+      const result = await AgentsService.fundDevnet(
+        request,
+        parsedParams.data.agentId,
+        parsedBody.data
+      );
       set.status = result.statusCode;
       return result.body;
-    },
-    { body: AgentsModel.fundDevnetBody }
+    }
   );

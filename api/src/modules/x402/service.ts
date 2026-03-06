@@ -18,19 +18,7 @@ import { ApiKeyContextService } from "../../services/api-key-context.service";
 import { SolanaBalanceService } from "../../services/solana-balance.service";
 import { SolanaTransferService } from "../../services/solana-transfer.service";
 import { TimeService } from "../../services/time.service";
-import type { X402Model } from "./model";
-
-type JsonRpcRequest = {
-  jsonrpc?: unknown;
-  id?: unknown;
-  method?: unknown;
-  params?: unknown;
-};
-
-type ToolCallParams = {
-  name?: unknown;
-  arguments?: unknown;
-};
+import { X402Model } from "./model";
 
 type JsonRpcHandlerResult = {
   statusCode: number;
@@ -89,15 +77,16 @@ export abstract class X402Service {
     request: Request,
     payload?: unknown,
   ): Promise<JsonRpcHandlerResult> {
-    if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    const rpcResult = X402Model.jsonRpcRequestSchema.safeParse(payload);
+    if (!rpcResult.success) {
       return {
         statusCode: 400,
         body: X402Service.jsonRpcError(null, -32600, "Invalid Request"),
       };
     }
 
-    const rpc = payload as JsonRpcRequest;
-    const method = typeof rpc.method === "string" ? rpc.method : "";
+    const rpc = rpcResult.data;
+    const method = rpc.method;
     const id = rpc.id ?? null;
 
     if (method === "initialize") {
@@ -179,8 +168,16 @@ export abstract class X402Service {
         };
       }
 
-      const params = (rpc.params ?? {}) as ToolCallParams;
-      const toolName = typeof params.name === "string" ? params.name : "";
+      const paramsResult = X402Model.toolCallParamsSchema.safeParse(rpc.params ?? {});
+      if (!paramsResult.success) {
+        return {
+          statusCode: 200,
+          body: X402Service.jsonRpcError(id, -32602, "Invalid params"),
+        };
+      }
+
+      const params = paramsResult.data;
+      const toolName = params.name;
       if (toolName !== "wallet_balance" && toolName !== "wallet_send") {
         return {
           statusCode: 200,
@@ -188,39 +185,24 @@ export abstract class X402Service {
         };
       }
 
-      const args = (params.arguments ?? {}) as {
-        agentId?: unknown;
-        toPublicKey?: unknown;
-        amountSol?: unknown;
-      };
-      const agentId =
-        typeof args.agentId === "string" ? args.agentId : undefined;
-
-      const agent = await X402Service.getAgentForTool(apiKey.userId, agentId);
-      if (!agent) {
-        return {
-          statusCode: 200,
-          body: X402Service.jsonRpcResult(id, {
-            content: [
-              {
-                type: "text",
-                text: "No agents found for this API key user. Create an agent first.",
-              },
-            ],
-            isError: true,
-          }),
-        };
-      }
-
       if (toolName === "wallet_send") {
-        if (typeof args.toPublicKey !== "string" || !args.toPublicKey.trim()) {
+        const argsResult = X402Model.walletSendArgumentsSchema.safeParse(
+          params.arguments ?? {}
+        );
+        if (!argsResult.success) {
+          const hasToPublicKeyError = argsResult.error.issues.some((issue) =>
+            issue.path.includes("toPublicKey")
+          );
+
           return {
             statusCode: 200,
             body: X402Service.jsonRpcResult(id, {
               content: [
                 {
                   type: "text",
-                  text: "Missing required argument: toPublicKey.",
+                  text: hasToPublicKeyError
+                    ? "Missing required argument: toPublicKey."
+                    : "Missing or invalid required argument: amountSol.",
                 },
               ],
               isError: true,
@@ -228,14 +210,16 @@ export abstract class X402Service {
           };
         }
 
-        if (typeof args.amountSol !== "number" || args.amountSol <= 0) {
+        const args = argsResult.data;
+        const agent = await X402Service.getAgentForTool(apiKey.userId, args.agentId);
+        if (!agent) {
           return {
             statusCode: 200,
             body: X402Service.jsonRpcResult(id, {
               content: [
                 {
                   type: "text",
-                  text: "Missing or invalid required argument: amountSol.",
+                  text: "No agents found for this API key user. Create an agent first.",
                 },
               ],
               isError: true,
@@ -294,6 +278,34 @@ export abstract class X402Service {
             }),
           };
         }
+      }
+
+      const argsResult = X402Model.walletBalanceArgumentsSchema.safeParse(
+        params.arguments ?? {}
+      );
+      if (!argsResult.success) {
+        return {
+          statusCode: 200,
+          body: X402Service.jsonRpcError(id, -32602, "Invalid params"),
+        };
+      }
+
+      const args = argsResult.data;
+      const agent = await X402Service.getAgentForTool(apiKey.userId, args.agentId);
+
+      if (!agent) {
+        return {
+          statusCode: 200,
+          body: X402Service.jsonRpcResult(id, {
+            content: [
+              {
+                type: "text",
+                text: "No agents found for this API key user. Create an agent first.",
+              },
+            ],
+            isError: true,
+          }),
+        };
       }
 
       const balance = await SolanaBalanceService.getBalance(agent.publicKey);
@@ -510,9 +522,7 @@ export abstract class X402Service {
 
   static async quote(
     request: Request,
-    query: {
-      topic?: string;
-    },
+    query: X402Model.QuoteQuery,
   ) {
     const apiKey = await ApiKeyContextService.getAuthenticatedApiKey(request);
     if (!apiKey) {
