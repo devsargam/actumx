@@ -1,9 +1,14 @@
-import { t } from "elysia";
+import { z } from "zod";
 
 export namespace ApiKeysModel {
-  export const createApiKeyBody = t.Object({
-    name: t.String({ minLength: 2, maxLength: 80 }),
+  export const createApiKeyBodySchema = z.object({
+    name: z.string().trim().min(2).max(80),
   });
 
-  export type CreateApiKeyBody = typeof createApiKeyBody.static;
+  export const idParamsSchema = z.object({
+    id: z.string().trim().min(1),
+  });
+
+  export type CreateApiKeyBody = z.infer<typeof createApiKeyBodySchema>;
+  export type IdParams = z.infer<typeof idParamsSchema>;
 }

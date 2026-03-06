@@ -1,5 +1,6 @@
 import { Elysia } from "elysia";
 
+import { getZodErrorMessage, ZOD_VALIDATION_ERROR } from "../../lib/zod-validation";
 import { BillingModel } from "./model";
 import { BillingService } from "./service";
 
@@ -15,11 +16,19 @@ export const billingModule = new Elysia({
   .post(
     "/top-up",
     async ({ request, body, set }) => {
-      const result = await BillingService.topUp(request, body);
+      const parsedBody = BillingModel.topUpBodySchema.safeParse(body);
+      if (!parsedBody.success) {
+        set.status = 400;
+        return {
+          error: ZOD_VALIDATION_ERROR,
+          message: getZodErrorMessage(parsedBody.error),
+        };
+      }
+
+      const result = await BillingService.topUp(request, parsedBody.data);
       set.status = result.statusCode;
       return result.body;
-    },
-    { body: BillingModel.topUpBody },
+    }
   )
   .get("/payment-intents", async ({ request, set }) => {
     const result = await BillingService.paymentIntents(request);

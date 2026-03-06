@@ -1,5 +1,6 @@
 import { Elysia } from "elysia";
 
+import { getZodErrorMessage, ZOD_VALIDATION_ERROR } from "../../lib/zod-validation";
 import { X402Model } from "./model";
 import { X402Service } from "./service";
 
@@ -23,14 +24,31 @@ export const x402Module = new Elysia({ name: "module.x402" })
   .post(
     "/v1/x402/settle",
     async ({ request, body, set }) => {
-      const result = await X402Service.settle(request, body);
+      const parsedBody = X402Model.settleBodySchema.safeParse(body);
+      if (!parsedBody.success) {
+        set.status = 400;
+        return {
+          error: ZOD_VALIDATION_ERROR,
+          message: getZodErrorMessage(parsedBody.error),
+        };
+      }
+
+      const result = await X402Service.settle(request, parsedBody.data);
       set.status = result.statusCode;
       return result.body;
-    },
-    { body: X402Model.settleBody }
+    }
   )
   .get("/v1/protected/quote", async ({ request, query, set }) => {
-    const result = await X402Service.quote(request, query);
+    const parsedQuery = X402Model.quoteQuerySchema.safeParse(query);
+    if (!parsedQuery.success) {
+      set.status = 400;
+      return {
+        error: ZOD_VALIDATION_ERROR,
+        message: getZodErrorMessage(parsedQuery.error),
+      };
+    }
+
+    const result = await X402Service.quote(request, parsedQuery.data);
     set.status = result.statusCode;
     return result.body;
   });

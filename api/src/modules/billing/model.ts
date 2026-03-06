@@ -1,9 +1,9 @@
-import { t } from "elysia";
+import { z } from "zod";
 
 export namespace BillingModel {
-  export const topUpBody = t.Object({
-    amountCents: t.Number({ minimum: 100 }),
+  export const topUpBodySchema = z.object({
+    amountCents: z.number().int().min(100).max(100000),
   });
 
-  export type TopUpBody = typeof topUpBody.static;
+  export type TopUpBody = z.infer<typeof topUpBodySchema>;
 }
