@@ -1,0 +1,22 @@
+# ACTUMX MCP Tools
+
+> MCP Endpoint: `POST /mcp`
+> Auth: `x-api-key: <key>` or `Authorization: Bearer <key>`
+
+## wallet_balance
+
+Return the selected agent wallet balance on Solana.
+
+| Argument | Type | Required | Description |
+|----------|------|----------|-------------|
+| `agentId` | string | No | Agent ID. If omitted, uses your most recent agent. |
+
+## wallet_send
+
+Send SOL from the selected agent wallet to another Solana wallet.
+
+| Argument | Type | Required | Description |
+|----------|------|----------|-------------|
+| `toPublicKey` | string | Yes | Destination Solana wallet address. |
+| `amountSol` | number | Yes | Amount of SOL to send (must be > 0). |
+| `agentId` | string | No | Agent ID. If omitted, uses your most recent agent. |
