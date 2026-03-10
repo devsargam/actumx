@@ -3,6 +3,7 @@ import { Elysia } from "elysia";
 import { getZodErrorMessage, ZOD_VALIDATION_ERROR } from "../../lib/zod-validation";
 import { X402Model } from "./model";
 import { X402Service } from "./service";
+import { GatewayService } from "./gateway.service";
 
 export const x402Module = new Elysia({ name: "module.x402" })
   .get("/mcp", async ({ request, set }) => {
@@ -38,6 +39,24 @@ export const x402Module = new Elysia({ name: "module.x402" })
       return result.body;
     }
   )
+  .all("/x402/pay/:linkId", async ({ request, params, set }) => {
+    const result = await GatewayService.handlePaymentLink(request, params.linkId);
+    set.status = result.statusCode;
+    return result.body;
+  })
+  .all("/x402/purchase/:serviceId/*", async ({ request, params, set }) => {
+    const serviceId = params.serviceId;
+    const wildcardPath = (params as Record<string, string>)["*"] ?? "";
+    const path = "/" + wildcardPath;
+    const result = await GatewayService.handleGatewayRequest(request, serviceId, path);
+    set.status = result.statusCode;
+    if (result.headers) {
+      for (const [key, value] of Object.entries(result.headers)) {
+        set.headers[key] = value;
+      }
+    }
+    return result.body;
+  })
   .get("/v1/protected/quote", async ({ request, query, set }) => {
     const parsedQuery = X402Model.quoteQuerySchema.safeParse(query);
     if (!parsedQuery.success) {

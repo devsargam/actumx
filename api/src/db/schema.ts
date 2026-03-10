@@ -81,3 +81,44 @@ export const agents = pgTable("agents", {
 }, (table) => ({
   agentsUserIdIdx: index("idx_agents_user_id").on(table.userId),
 }));
+
+export const services = pgTable("services", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  description: text("description"),
+  faviconUrl: text("favicon_url"),
+  baseUrl: text("base_url").notNull(),
+  websocketUrl: text("websocket_url"),
+  authMethod: text("auth_method").notNull(),
+  apiKey: text("api_key"),
+  isLive: text("is_live").notNull(),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
+}, (table) => ({
+  servicesUserIdIdx: index("idx_services_user_id").on(table.userId),
+}));
+
+export const endpoints = pgTable("endpoints", {
+  id: text("id").primaryKey(),
+  serviceId: text("service_id").notNull().references(() => services.id, { onDelete: "cascade" }),
+  method: text("method").notNull(),
+  path: text("path").notNull(),
+  priceCents: integer("price_cents").notNull(),
+  isEnabled: text("is_enabled").notNull(),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
+}, (table) => ({
+  endpointsServiceIdIdx: index("idx_endpoints_service_id").on(table.serviceId),
+}));
+
+export const paymentLinks = pgTable("payment_links", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+  amountCents: integer("amount_cents").notNull(),
+  description: text("description"),
+  isReusable: text("is_reusable").notNull(),
+  createdAt: text("created_at").notNull(),
+}, (table) => ({
+  paymentLinksUserIdIdx: index("idx_payment_links_user_id").on(table.userId),
+}));

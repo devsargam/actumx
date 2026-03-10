@@ -15,6 +15,13 @@
       "when": 1771685365738,
       "tag": "0001_crazy_valeria_richards",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1772983590299,
+      "tag": "0002_greedy_titanium_man",
+      "breakpoints": true
     }
   ]
 }

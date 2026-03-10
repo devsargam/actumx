@@ -67,6 +67,40 @@ export type AgentRecord = {
   error: string | null;
 };
 
+export type ServiceRecord = {
+  id: string;
+  name: string;
+  description: string | null;
+  faviconUrl: string | null;
+  baseUrl: string;
+  websocketUrl: string | null;
+  authMethod: string;
+  apiKey: string | null;
+  isLive: string;
+  createdAt: string;
+  updatedAt: string;
+  endpointCount?: number;
+};
+
+export type EndpointRecord = {
+  id: string;
+  serviceId: string;
+  method: string;
+  path: string;
+  priceCents: number;
+  isEnabled: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type PaymentLinkRecord = {
+  id: string;
+  amountCents: number;
+  description: string | null;
+  isReusable: string;
+  createdAt: string;
+};
+
 export type ApiResponse<T> = {
   status: number;
   data: T;
