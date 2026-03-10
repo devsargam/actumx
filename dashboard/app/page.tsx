@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Space_Grotesk } from "next/font/google";
 import {
+  ArrowRight,
   CircleDollarSign,
   CreditCard,
   Monitor,
@@ -97,10 +98,10 @@ export default function HomePage() {
 
         <div className="flex flex-col gap-4 sm:flex-row">
           <Link
-            className="rounded-full bg-[#4f6eff] px-10 py-4 text-lg font-semibold text-white transition-all hover:opacity-90"
+            className="rounded-full flex items-center gap-x-4 bg-[#4f6eff] px-10 py-4 text-lg font-semibold text-white transition-all hover:opacity-90"
             href="/dashboard"
           >
-            Launch Your Endpoint &rarr;
+            Explore Marketplace <ArrowRight size={18} strokeWidth={2} />
           </Link>
           {/* TODO: To add for docs */}
           {/* <Link
@@ -520,6 +521,69 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+      {/* CTA */}
+      <section className="mx-auto max-w-5xl px-8 py-20">
+        <div className="rounded-3xl bg-[#4f6eff] px-8 py-20 text-center">
+          <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
+            Join Agent Commerce
+          </h2>
+          <p className="mx-auto mb-10 max-w-lg text-lg text-white/80">
+            Welcome to the frontier of the agentic economy.
+          </p>
+          <Link
+            className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-semibold text-[#4f6eff] shadow-lg transition-all hover:opacity-90"
+            href="/dashboard"
+          >
+            Explore &rarr;
+          </Link>
+        </div>
+      </section>
+      {/* Footer */}
+      <footer className="border-t border-[#eef0f4]">
+        <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-6 px-8 py-8 md:flex-row">
+          <Link href="/" className="flex items-center gap-3">
+            <Image
+              alt="ACTUMx Logo"
+              className="rounded-md object-contain"
+              height={32}
+              src="/logo.jpg"
+              width={32}
+            />
+            <span className="text-lg font-bold tracking-tight text-[#1a1c24]">
+              ACTUM<span className="font-normal">x</span>
+            </span>
+          </Link>
+
+          <div className="flex gap-8 text-sm font-medium text-[#7a7d8a]">
+            <a className="transition-colors hover:text-[#4f6eff]" href="#">
+              Terms
+            </a>
+            <a className="transition-colors hover:text-[#4f6eff]" href="#">
+              Privacy
+            </a>
+            <a
+              className="transition-colors hover:text-[#4f6eff]"
+              href="https://x.com/Actumx"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Twitter
+            </a>
+            <a
+              className="transition-colors hover:text-[#4f6eff]"
+              href="https://github.com/devsargam/x402"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              GitHub
+            </a>
+          </div>
+
+          <p className="text-sm text-[#b0b3be]">
+            &copy; 2026 ACTUMx. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </main>
   );
 }
