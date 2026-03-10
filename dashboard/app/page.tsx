@@ -80,7 +80,7 @@ export default function HomePage() {
       </nav>
 
       {/* Hero */}
-      <section className="mx-auto flex max-w-4xl flex-col items-center px-6 pb-20 pt-28 text-center md:pt-36">
+      <section className="mx-auto flex max-w-4xl flex-col items-center px-8 pb-20 pt-28 text-center md:pt-36">
         <h1 className="mb-8 text-5xl font-bold leading-[1.1] tracking-tight text-[#1a1c24] md:text-7xl">
           <Balancer>
             The marketplace for the{" "}
@@ -395,7 +395,7 @@ export default function HomePage() {
                   <div className="h-2.5 w-2.5 rounded-full bg-[#d9dbe1]" />
                 </div>
                 <div className="ml-3 rounded-md border border-[#eef0f4] bg-white px-3 py-1 font-mono text-[11px] text-[#7a7d8a]">
-                  https://api.webscrape.dev/v1/scrape
+                  https://api.yourservice.com/endpoint
                 </div>
               </div>
               <span className="rounded bg-[#4f6eff]/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#4f6eff]">
@@ -522,7 +522,7 @@ export default function HomePage() {
         </div>
       </section>
       {/* CTA */}
-      <section className="mx-auto max-w-5xl px-8 py-20">
+      <section className="mx-auto max-w-5xl px-8 py-24">
         <div className="rounded-3xl bg-[#4f6eff] px-8 py-20 text-center">
           <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
             Join Agent Commerce
