@@ -24,20 +24,20 @@ export namespace X402Model {
       method: z.string(),
       params: z.unknown().optional(),
     })
-    .strict();
+    .passthrough();
 
   export const toolCallParamsSchema = z
     .object({
       name: z.string(),
       arguments: z.unknown().optional(),
     })
-    .strict();
+    .passthrough();
 
   export const walletBalanceArgumentsSchema = z
     .object({
       agentId: z.string().trim().min(1).optional(),
     })
-    .strict();
+    .passthrough();
 
   export const walletSendArgumentsSchema = z
     .object({
@@ -45,7 +45,7 @@ export namespace X402Model {
       toPublicKey: z.string().trim().min(1),
       amountSol: z.number().positive(),
     })
-    .strict();
+    .passthrough();
 
   export type SettleBody = z.infer<typeof settleBodySchema>;
   export type QuoteQuery = z.infer<typeof quoteQuerySchema>;
