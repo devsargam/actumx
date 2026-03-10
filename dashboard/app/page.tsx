@@ -1,55 +1,59 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
+import {
+  ArrowRight,
+  CircleDollarSign,
+  CreditCard,
+  Monitor,
+  ScanEye,
+  Store,
+  TrendingUp,
+  TwitterIcon,
+  Wallet,
+  XIcon,
+} from "lucide-react";
+import Balancer from "react-wrap-balancer";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 
-const inter = Inter({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-home-sans",
+  variable: "--font-space",
   weight: ["400", "500", "600", "700"],
 });
-
-const plusJakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-home-display",
-  weight: ["300", "400", "500", "600", "700", "800"],
-});
-
-function TinyBar({ className }: { className: string }) {
-  return <div className={`h-2.5 w-full rounded-sm ${className}`} />;
-}
 
 export default function HomePage() {
   return (
     <main
-      className={`${inter.variable} ${plusJakarta.variable} min-h-screen bg-white text-slate-800 [font-family:var(--font-home-sans)] selection:bg-[#4f6eff]/20`}
+      className={`${spaceGrotesk.variable} min-h-screen bg-white dark:bg-[#141520] [font-family:var(--font-space)]`}
     >
-      <div className="pointer-events-none fixed inset-0 z-0 [background-image:radial-gradient(circle_at_1px_1px,rgba(79,110,255,0.05)_1px,transparent_0)] [background-size:40px_40px]" />
-
-      <nav className="relative z-20 flex w-full items-center px-6 py-6 md:px-8">
-        <Link href="/" className="flex flex-1 items-center gap-2">
+      {/* Nav */}
+      <nav className="mx-auto flex w-full max-w-5xl items-center justify-between px-8 py-6">
+        <Link href="/" className="flex items-center gap-3 ">
           <Image
-            alt="ACTUM Logo"
-            className="h-8 w-8 rounded-md object-contain"
-            height={32}
+            alt="ACTUMx Logo"
+            className="rounded-lg object-contain"
+            height={40}
             src="/logo.jpg"
-            width={32}
+            width={40}
           />
-
-          <span className="text-2xl font-bold tracking-tight text-[#1a1c24] [font-family:var(--font-home-display)]">
-            ACTUMx
+          <span className="text-2xl font-bold tracking-tight text-[#1a1c24]">
+            {/* ACTUM<span className="font-normal">x</span> */}
           </span>
         </Link>
 
-        <div className="hidden items-center gap-10 text-sm font-semibold text-slate-600 md:flex">
-          <a className="transition-colors hover:text-[#4f6eff]" href="#">
+        <div className="hidden items-center gap-10 text-[15px] font-medium text-[#3a3d4a] dark:text-[#94a3b8] md:flex">
+          <Link className="transition-colors hover:text-[#4f6eff]" href="#">
             Wallet
-          </a>
-          <a className="transition-colors hover:text-[#4f6eff]" href="#">
+          </Link>
+          <Link className="transition-colors hover:text-[#4f6eff]" href="#">
             Gateway
-          </a>
-          <a className="transition-colors hover:text-[#4f6eff]" href="#">
+          </Link>
+          <Link className="transition-colors hover:text-[#4f6eff]" href="#">
             Agent Skill
-          </a>
+          </Link>
           <a
             className="transition-colors hover:text-[#4f6eff]"
             href="https://t.me/+IugCwFOqngplOGFl"
@@ -60,203 +64,311 @@ export default function HomePage() {
           </a>
         </div>
 
-        <div className="flex flex-1 items-center justify-end">
-          <a
-            aria-label="Follow ACTUMx on X"
-            className="text-[#1a1c24] transition-opacity hover:opacity-70"
-            href="https://x.com/intent/follow?screen_name=Actumx"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <svg
-              aria-hidden="true"
-              fill="currentColor"
-              height="28"
-              viewBox="0 0 24 24"
-              width="28"
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <Separator decorative orientation="vertical" />
+          <Button variant="ghost" size="icon" asChild>
+            <Link
+              aria-label="Follow ACTUMx on X"
+              href="https://x.com/intent/follow?screen_name=Actumx"
+              rel="noopener noreferrer"
+              target="_blank"
             >
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.402 6.231H2.746l7.737-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-            </svg>
-          </a>
-
-          <details className="relative ml-4 md:hidden">
-            <summary className="list-none cursor-pointer text-[#1a1c24] [&::-webkit-details-marker]:hidden">
-              <span className="sr-only">Open menu</span>
               <svg
-                width="24"
-                height="24"
+                role="img"
                 viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
+                xmlns="http://www.w3.org/2000/svg"
+                className="size-4 text-[#1a1c24] fill-[#1a1c24] dark:text-white dark:fill-white"
               >
-                <path d="M3 6h18M3 12h18M3 18h18" />
+                <path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z" />
               </svg>
-            </summary>
-
-            <div className="absolute right-0 top-10 z-30 w-48 rounded-xl border border-slate-200 bg-white p-2 shadow-lg">
-              <a
-                className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                href="#"
-              >
-                Wallet
-              </a>
-              <a
-                className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                href="#"
-              >
-                Gateway
-              </a>
-              <a
-                className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                href="#"
-              >
-                Agent Skill
-              </a>
-              <a
-                className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                href="https://t.me/+IugCwFOqngplOGFl"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                Contact
-              </a>
-            </div>
-          </details>
+            </Link>
+          </Button>
         </div>
       </nav>
 
-      <section className="relative z-10 mx-auto flex max-w-7xl flex-col items-center px-6 pb-8 pt-20 text-center md:px-8 md:pt-24">
-        <h1 className="mb-8 max-w-5xl text-5xl font-bold leading-[1.05] tracking-tighter text-[#1a1c24] md:text-[5.5rem] [font-family:var(--font-home-display)]">
-          The Payment Rail for{" "}
-          <span className="text-[#4f6eff]">Agentic AI.</span>
+      {/* Hero */}
+      <section className="mx-auto flex max-w-4xl flex-col items-center px-8 pb-20 pt-28 text-center md:pt-36">
+        <h1 className="mb-8 text-5xl font-bold leading-[1.1] tracking-tight text-[#1a1c24] dark:text-white md:text-7xl">
+          <Balancer>
+            The marketplace for the{" "}
+            <span className="text-[#4f6eff]">agentic economy</span>
+          </Balancer>
         </h1>
 
-        <p className="mb-12 max-w-3xl text-lg leading-relaxed text-slate-500 md:text-xl">
-          ACTUMx gives AI agents a native wallet to discover, pay, and transact
-          across the internet without human intervention.
+        <p className="mb-12 max-w-2xl text-lg leading-relaxed text-[#7a7d8a] dark:text-[#94a3b8]">
+          <Balancer>
+            AI agents can buy and sell skills. Businesses can monetize
+            endpoints. ACTUMx brings together the wallet, gateway, and
+            marketplace that power machine to machine commerce.
+          </Balancer>
         </p>
 
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row">
+        <div className="flex flex-col gap-4 sm:flex-row">
           <Link
-            className="flex items-center gap-2 rounded-full bg-[#4f6eff] px-10 py-4 text-lg font-bold text-white shadow-lg shadow-[#4f6eff]/20 transition-all hover:-translate-y-0.5"
+            className="rounded-full flex items-center gap-x-4 bg-[#4f6eff] px-10 py-4 text-lg font-semibold text-white transition-all hover:opacity-90"
             href="/dashboard"
           >
-            Launch App →
+            Explore Marketplace <ArrowRight size={18} strokeWidth={2} />
           </Link>
-          <Link
-            className="rounded-full border border-slate-200 px-10 py-4 text-lg font-bold text-slate-400 transition-colors hover:bg-slate-50"
-            href="/docs"
+          {/* TODO: To add for docs */}
+          {/* <Link
+            className="rounded-full border border-[#d9dbe1] px-10 py-4 text-lg font-medium text-[#7a7d8a] transition-colors hover:border-[#b0b3be] hover:text-[#3a3d4a]"
+            href="/login"
           >
-            View Docs
-          </Link>
+            Get an Agent Wallet
+          </Link> */}
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl items-center gap-16 px-6 py-12 md:px-8 lg:grid-cols-2">
-        <div className="order-2 lg:order-1">
-          <div className="max-w-xl">
-            <h2 className="mb-6 text-5xl font-bold leading-tight text-[#1a1c24] [font-family:var(--font-home-display)]">
-              Give your agent <br />
-              <span className="text-[#4f6eff]">a wallet.</span>
+      {/* Features */}
+      <section className="mx-auto max-w-5xl px-8 py-20">
+        <h2 className="mb-4 text-center text-4xl font-bold tracking-tight text-[#1a1c24] dark:text-white md:text-5xl">
+          <Balancer>Everything needed to power agentic commerce</Balancer>
+        </h2>
+
+        <p className="mx-auto mb-16 text-center text-lg text-[#7a7d8a] dark:text-[#94a3b8]">
+          <Balancer>
+            ACTUMx brings together the three layers needed for autonomous
+            digital trade.
+          </Balancer>
+        </p>
+
+        <div className="grid gap-6 md:grid-cols-3">
+          {[
+            {
+              icon: <Store size={24} strokeWidth={1.5} color="#4f6eff" />,
+              title: "Marketplace",
+              description:
+                "The discovery layer where AI agents find, access, and buy skills, tools, and endpoints.",
+            },
+            {
+              icon: <Wallet size={24} strokeWidth={1.5} color="#4f6eff" />,
+              title: "Agent Wallet",
+              description:
+                "Purpose-built accounts that allow autonomous agents to hold capital and settle transactions instantly.",
+            },
+            {
+              icon: (
+                <CircleDollarSign size={24} strokeWidth={1.5} color="#4f6eff" />
+              ),
+              title: "Payment Gateway",
+              description:
+                "The infrastructure for businesses to monetize any API or endpoint for machine-to-machine commerce.",
+            },
+          ].map((feature) => (
+            <div
+              key={feature.title}
+              className="flex flex-col gap-4 rounded-2xl border border-[#eef0f4] dark:border-white/10 bg-[#f8f9fb] dark:bg-white/[0.03] p-8"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#eef0f6] dark:bg-white/10 text-[#4f6eff]">
+                {feature.icon}
+              </div>
+              <h3 className="text-xl font-bold text-[#1a1c24] dark:text-white">
+                {feature.title}
+              </h3>
+              <p className="text-[15px] leading-relaxed text-[#7a7d8a] dark:text-[#94a3b8]">
+                {feature.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Marketplace Section */}
+      <section className="border-t border-[#eef0f4] dark:border-white/10 bg-[#f8f9fb] dark:bg-white/[0.02]">
+        <div className="mx-auto grid max-w-5xl items-center gap-12 px-8 py-24 lg:grid-cols-2">
+          <div>
+            <h2 className="mb-6 text-4xl font-bold leading-[1.1] tracking-tight text-[#1a1c24] dark:text-white md:text-5xl">
+              The discovery layer{" "}
+              <span className="text-[#4f6eff]">for AI agents.</span>
             </h2>
-            <p className="mb-8 text-lg leading-relaxed text-slate-500">
+            <p className="mb-8 max-w-md text-[15px] leading-relaxed text-[#7a7d8a] dark:text-[#94a3b8]">
+              A global marketplace where AI agents can find, access, and buy
+              skills, tools, and endpoints. Enable your agent to find the exact
+              capability it needs to complete its task autonomously.
+            </p>
+            <Link
+              className="inline-flex items-center gap-2 rounded-full bg-[#4f6eff] px-7 py-3 text-sm font-semibold text-white transition-all hover:opacity-90"
+              href="/dashboard"
+            >
+              Explore Marketplace &rarr;
+            </Link>
+          </div>
+
+          {/* Marketplace mock card */}
+          <div className="rounded-2xl border border-[#eef0f4] dark:border-white/10 bg-white dark:bg-white/[0.03] p-6 shadow-sm">
+            {/* Search bar */}
+            <div className="mb-5 flex items-center gap-3 rounded-xl border border-[#eef0f4] dark:border-white/10 bg-[#f8f9fb] dark:bg-white/[0.03] px-4 py-3">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#9ca3af"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <span className="text-sm text-[#b0b3be] dark:text-[#64748b]">
+                Search for skills, tools, APIs...
+              </span>
+            </div>
+
+            {/* Listing items */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between rounded-xl border border-[#4f6eff]/20 bg-[#4f6eff]/[0.03] dark:bg-[#4f6eff]/[0.06] p-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#4f6eff] text-xs font-bold text-white">
+                    JS
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-[#1a1c24] dark:text-white">
+                      NodeJS Executor
+                    </p>
+                    <p className="text-[11px] font-medium uppercase tracking-wider text-[#7a7d8a] dark:text-[#64748b]">
+                      Agent Skill
+                    </p>
+                  </div>
+                </div>
+                <span className="font-mono text-sm font-medium text-[#4f6eff]">
+                  $0.02 / call
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between rounded-xl border border-[#eef0f4] dark:border-white/10 p-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#eef0f6] dark:bg-white/10 text-[#7a7d8a] dark:text-[#94a3b8]">
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                      <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-[#1a1c24] dark:text-white">
+                      PDF Parser
+                    </p>
+                    <p className="text-[11px] font-medium uppercase tracking-wider text-[#7a7d8a] dark:text-[#64748b]">
+                      Utility
+                    </p>
+                  </div>
+                </div>
+                <span className="font-mono text-sm font-medium text-[#7a7d8a] dark:text-[#94a3b8]">
+                  $0.01 / call
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Wallet Section */}
+      <section className="border-t border-[#eef0f4] dark:border-white/10">
+        <div className="mx-auto grid max-w-5xl items-center gap-12 px-8 py-24 lg:grid-cols-2">
+          <div>
+            <h2 className="mb-6 text-4xl font-bold leading-[1.1] tracking-tight text-[#1a1c24] dark:text-white md:text-5xl">
+              Give your agent{" "}
+              <span className="text-[#4f6eff]">an account.</span>
+            </h2>
+            <p className="mb-8 max-w-md text-[15px] leading-relaxed text-[#7a7d8a] dark:text-[#94a3b8]">
               Let your AI autonomously pay for services, APIs, and compute. If
               an agent can call an endpoint, it can settle instantly with ACTUMx
               Wallet.
             </p>
-            <Link href="/dashboard">
-              <button
-                className="flex items-center gap-2 rounded-full bg-[#4f6eff] px-6 py-3 font-bold text-white transition-all hover:shadow-lg hover:shadow-[#4f6eff]/20"
-                type="button"
-              >
-                Launch Wallet <span aria-hidden="true">→</span>
-              </button>
+            <Link
+              className="inline-flex items-center gap-2 rounded-full bg-[#4f6eff] px-7 py-3 text-sm font-semibold text-white transition-all hover:opacity-90"
+              href="/dashboard"
+            >
+              Launch Wallet &rarr;
             </Link>
           </div>
-        </div>
 
-        <div className="order-1 lg:order-2">
-          <div className="rounded-3xl border border-[#eef2f6] bg-white p-8 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.08)]">
-            <div className="mb-8 flex items-center justify-between gap-4">
+          {/* Wallet mock card */}
+          <div className="rounded-2xl border border-[#eef0f4] dark:border-white/10 bg-[#f8f9fb] dark:bg-white/[0.03] p-6 shadow-sm">
+            {/* Header */}
+            <div className="mb-6 flex items-center justify-between">
               <div>
-                <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400">
-                  ACTUMX WALLET // AGENT ACCOUNT
-                </h4>
-                <h3 className="mt-1 text-2xl font-bold text-[#1a1c24]">
-                  Peter&apos;s Agent Wallet
+                <p className="text-[10px] font-bold uppercase tracking-widest text-[#b0b3be] dark:text-[#64748b]">
+                  ACTUMx Wallet // Agent Account
+                </p>
+                <h3 className="mt-1 text-xl font-bold text-[#1a1c24] dark:text-white">
+                  Eric&apos;s Agent Wallet
                 </h3>
               </div>
-              <div className="flex items-center gap-2 rounded-full border border-green-100 bg-green-50 px-3 py-1">
+              <div className="flex items-center gap-1.5 rounded-full border border-green-100 dark:border-green-500/20 bg-green-50 dark:bg-green-500/10 px-3 py-1">
                 <span className="h-2 w-2 rounded-full bg-green-500" />
-                <span className="text-[10px] font-bold uppercase text-green-600">
+                <span className="text-[10px] font-bold uppercase text-green-600 dark:text-green-400">
                   Auto-pay: Enabled
                 </span>
               </div>
             </div>
 
-            <div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div className="rounded-2xl border border-slate-100 bg-slate-50 p-6">
-                <span className="text-sm font-medium text-slate-500">
+            {/* Balance + Last Transaction */}
+            <div className="mb-6 grid grid-cols-2 gap-4">
+              <div className="rounded-xl border border-[#eef0f4] dark:border-white/10 bg-white dark:bg-black/25 p-5">
+                <p className="text-xs font-medium text-[#7a7d8a] dark:text-[#94a3b8]">
                   Current Balance
-                </span>
-                <div className="mt-2 text-4xl font-bold text-[#1a1c24]">
+                </p>
+                <p className="mt-2 text-3xl font-bold text-[#1a1c24] dark:text-white">
                   $49.06
-                </div>
-                <div className="mt-4 flex h-8 items-end gap-1">
-                  <TinyBar className="bg-[#4f6eff]/10" />
-                  <TinyBar className="h-4 bg-[#4f6eff]/20" />
-                  <TinyBar className="h-3 bg-[#4f6eff]/15" />
-                  <TinyBar className="h-8 bg-[#4f6eff]" />
-                  <TinyBar className="h-5 bg-[#4f6eff]/40" />
+                </p>
+                {/* Mini bar chart */}
+                <div className="mt-4 flex h-6 items-end gap-1">
+                  <div className="h-2.5 w-full rounded-sm bg-[#4f6eff]/10" />
+                  <div className="h-4 w-full rounded-sm bg-[#4f6eff]/20" />
+                  <div className="h-3 w-full rounded-sm bg-[#4f6eff]/15" />
+                  <div className="h-6 w-full rounded-sm bg-[#4f6eff]" />
+                  <div className="h-4 w-full rounded-sm bg-[#4f6eff]/30" />
                 </div>
               </div>
-
-              <div className="flex flex-col justify-center rounded-2xl border border-slate-100 bg-slate-50 p-6">
-                <span className="text-sm font-medium text-slate-500">
+              <div className="flex flex-col justify-center rounded-xl border border-[#eef0f4] dark:border-white/10 bg-white dark:bg-black/25 p-5">
+                <p className="text-xs font-medium text-[#7a7d8a] dark:text-[#94a3b8]">
                   Last Transaction
-                </span>
-                <div className="mt-2 text-xl font-bold text-[#1a1c24]">
+                </p>
+                <p className="mt-2 text-xl font-bold text-[#1a1c24] dark:text-white">
                   -$1.00
-                </div>
-                <div className="mt-1 text-xs text-slate-400">WebScrape API</div>
+                </p>
+                <p className="mt-1 text-xs text-[#b0b3be] dark:text-[#64748b]">
+                  WebScrape API
+                </p>
               </div>
             </div>
 
+            {/* Recent Payments */}
             <div>
-              <h4 className="mb-4 text-sm font-bold text-[#1a1c24]">
+              <h4 className="mb-3 text-sm font-bold text-[#1a1c24] dark:text-white">
                 Recent Payments
               </h4>
               <div className="space-y-2">
                 {[
-                  {
-                    name: "WebScrape API",
-                    amount: "$1.00",
-                    tint: "bg-[#4f6eff]/10",
-                    symbol: "◈",
-                  },
-                  {
-                    name: "Midjourney",
-                    amount: "$0.42",
-                    tint: "bg-slate-200",
-                    symbol: "◎",
-                  },
+                  { name: "WebScrape API", amount: "$1.00", symbol: "A" },
+                  { name: "GPT-4o Inference", amount: "$0.42", symbol: "G" },
                 ].map((item) => (
                   <div
                     key={item.name}
-                    className="flex items-center justify-between rounded-xl border border-slate-100 bg-white p-3"
+                    className="flex items-center justify-between rounded-xl border border-[#eef0f4] dark:border-white/10 bg-white dark:bg-black/25 p-3"
                   >
                     <div className="flex items-center gap-3">
-                      <div
-                        className={`flex h-8 w-8 items-center justify-center rounded-lg text-xs text-[#4f6eff] ${item.tint}`}
-                      >
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#4f6eff]/10 text-xs font-bold text-[#4f6eff]">
                         {item.symbol}
                       </div>
-                      <span className="text-sm font-semibold text-slate-700">
+                      <span className="text-sm font-semibold text-[#3a3d4a] dark:text-[#e2e8f0]">
                         {item.name}
                       </span>
                     </div>
-                    <span className="font-mono text-sm font-bold text-[#1a1c24]">
+                    <span className="font-mono text-sm font-bold text-[#1a1c24] dark:text-white">
                       {item.amount}
                     </span>
                   </div>
@@ -267,203 +379,229 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl rounded-[3rem] bg-slate-50/50 px-6 py-14 md:px-8">
-        <div className="grid items-center gap-16 lg:grid-cols-2">
-          <div className="order-2">
-            <div className="max-w-xl">
-              <h2 className="mb-6 text-5xl font-bold leading-tight text-[#1a1c24] [font-family:var(--font-home-display)]">
-                Sell directly <br />
-                <span className="text-[#4f6eff]">to agents.</span>
-              </h2>
-              <p className="mb-8 text-lg leading-relaxed text-slate-500">
-                Turn any API into a programmable revenue stream with x402
-                payments. Onboard once, then earn from autonomous agent calls
-                without manual billing.
-              </p>
-              <button
-                className="flex items-center gap-2 rounded-full bg-[#4f6eff] px-6 py-3 font-bold text-white transition-all hover:shadow-lg hover:shadow-[#4f6eff]/20"
-                type="button"
-              >
-                Launch Gateway <span aria-hidden="true">→</span>
-              </button>
-            </div>
+      {/* Gateway Section */}
+      <section className="border-t border-[#eef0f4] dark:border-white/10 bg-[#f8f9fb] dark:bg-white/[0.02]">
+        <div className="mx-auto grid max-w-5xl items-center gap-12 px-8 py-24 lg:grid-cols-2">
+          <div>
+            <h2 className="mb-6 text-4xl font-bold leading-[1.1] tracking-tight text-[#1a1c24] dark:text-white md:text-5xl">
+              Sell directly <span className="text-[#4f6eff]">to agents.</span>
+            </h2>
+            <p className="mb-8 max-w-md text-[15px] leading-relaxed text-[#7a7d8a] dark:text-[#94a3b8]">
+              Turn any API into a programmable revenue stream with x402
+              payments. Onboard once, then earn from autonomous agent calls
+              without manual billing.
+            </p>
+            <Link
+              className="inline-flex items-center gap-2 rounded-full bg-[#4f6eff] px-7 py-3 text-sm font-semibold text-white transition-all hover:opacity-90"
+              href="/dashboard"
+            >
+              Launch Gateway &rarr;
+            </Link>
           </div>
 
-          <div className="order-1">
-            <div className="overflow-hidden rounded-3xl border border-[#eef2f6] bg-white shadow-[0_10px_30px_-10px_rgba(0,0,0,0.08)]">
-              <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50 p-4">
-                <div className="flex items-center gap-2">
-                  <div className="flex gap-1.5">
-                    <div className="h-2.5 w-2.5 rounded-full bg-slate-200" />
-                    <div className="h-2.5 w-2.5 rounded-full bg-slate-200" />
-                    <div className="h-2.5 w-2.5 rounded-full bg-slate-200" />
-                  </div>
-                  <div className="ml-4 rounded-md border border-slate-200 bg-white px-3 py-1 font-mono text-[10px] text-slate-500">
-                    https://api.webscrape.dev/v1/scrape
-                  </div>
+          {/* Gateway mock card */}
+          <div className="overflow-hidden rounded-2xl border border-[#eef0f4] dark:border-white/10 bg-white dark:bg-white/[0.03] shadow-sm">
+            {/* Browser chrome */}
+            <div className="flex items-center justify-between border-b border-[#eef0f4] dark:border-white/10 bg-[#f8f9fb] dark:bg-white/[0.03] px-5 py-3">
+              <div className="flex items-center gap-3">
+                <div className="flex gap-1.5">
+                  <div className="h-2.5 w-2.5 rounded-full bg-[#d9dbe1] dark:bg-white/15" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-[#d9dbe1] dark:bg-white/15" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-[#d9dbe1] dark:bg-white/15" />
                 </div>
-                <div className="rounded bg-[#4f6eff]/10 px-2 py-0.5 text-[10px] font-bold text-[#4f6eff]">
-                  LIVE
+                <div className="ml-3 rounded-md border border-[#eef0f4] dark:border-white/10 bg-white dark:bg-black/25 px-3 py-1 font-mono text-[11px] text-[#7a7d8a] dark:text-[#64748b]">
+                  https://api.yourservice.com/endpoint
+                </div>
+              </div>
+              <span className="rounded bg-[#4f6eff]/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#4f6eff]">
+                Live
+              </span>
+            </div>
+
+            <div className="p-6">
+              {/* Stats row */}
+              <div className="mb-6 flex items-center justify-between">
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#b0b3be] dark:text-[#64748b]">
+                    API Monetization
+                  </p>
+                  <p className="mt-1 text-3xl font-bold text-[#1a1c24] dark:text-white">
+                    $0.05{" "}
+                    <span className="text-sm font-normal text-[#b0b3be] dark:text-[#64748b]">
+                      / req
+                    </span>
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#b0b3be] dark:text-[#64748b]">
+                    Revenue Counter
+                  </p>
+                  <p className="mt-1 text-3xl font-bold tracking-tight text-[#4f6eff]">
+                    $1,284.45
+                  </p>
                 </div>
               </div>
 
-              <div className="p-8">
-                <div className="mb-8 flex items-center justify-between">
-                  <div>
-                    <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400">
-                      API MONETIZATION
-                    </h4>
-                    <div className="mt-1 text-3xl font-bold text-[#1a1c24]">
-                      $0.05{" "}
-                      <span className="text-sm font-normal italic text-slate-400">
-                        / req
+              {/* Recent agent requests */}
+              <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-[#b0b3be] dark:text-[#64748b]">
+                Recent Agent Requests
+              </p>
+              <div className="space-y-2">
+                {["#576", "#3301", "#892"].map((id) => (
+                  <div
+                    key={id}
+                    className="flex items-center justify-between rounded-xl border border-[#eef0f4] dark:border-white/10 bg-white dark:bg-black/25 p-3"
+                  >
+                    <div>
+                      <p className="font-mono text-sm font-bold text-[#1a1c24] dark:text-white">
+                        Agent {id}
+                      </p>
+                      <p className="font-mono text-[10px] text-[#b0b3be] dark:text-[#64748b]">
+                        /v1/scrape
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-sm font-bold text-[#4f6eff]">
+                        $0.05
                       </span>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#22c55e"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="m9 12 2 2 4-4" />
+                      </svg>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400">
-                      REVENUE COUNTER
-                    </h4>
-                    <div className="mt-1 text-3xl font-bold tracking-tighter text-[#4f6eff]">
-                      $1,284.45
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <h4 className="mb-4 text-xs font-bold uppercase tracking-widest text-slate-400">
-                    Recent Agent Requests
-                  </h4>
-                  {["Agent #576", "Agent #3301", "Agent #892"].map((agent) => (
-                    <div
-                      key={agent}
-                      className="group flex items-center justify-between rounded-xl border border-slate-100 bg-white p-3 transition-colors hover:border-[#4f6eff]/30"
-                    >
-                      <div className="flex flex-col">
-                        <span className="font-mono text-xs font-bold text-[#1a1c24]">
-                          {agent}
-                        </span>
-                        <span className="font-mono text-[10px] text-slate-400">
-                          /v1/scrape
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className="font-mono text-xs font-bold text-[#4f6eff]">
-                          $0.05
-                        </span>
-                        <span className="text-sm text-green-500">●</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-14 md:px-8">
-        <div className="mb-12">
-          <h4 className="mb-2 text-xs font-bold uppercase tracking-widest text-slate-400">
-            PROTOCOL
-          </h4>
-          <h2 className="text-5xl font-black uppercase text-[#1a1c24] [font-family:var(--font-home-display)] md:text-6xl">
-            HOW IT <span className="text-[#4f6eff]">WORKS</span>
-          </h2>
-        </div>
+      {/* How It Works */}
+      <section className="mx-auto max-w-5xl px-8 py-24">
+        <h2 className="mb-10 text-4xl font-black uppercase tracking-tight text-[#1a1c24] dark:text-white md:text-5xl">
+          How It <span className="text-[#4f6eff]">Works</span>
+        </h2>
 
-        <div className="grid overflow-hidden rounded-3xl border border-slate-100 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.08)] md:grid-cols-4">
+        <div className="grid overflow-hidden rounded-2xl border border-[#eef0f4] dark:border-white/10 shadow-sm md:grid-cols-4">
           {[
             {
+              step: "01",
+              icon: <TrendingUp size={22} strokeWidth={1.5} color="#4f6eff" />,
               title: "Agent Requests",
               body: "Agent calls your API endpoint normally.",
             },
             {
+              step: "02",
+              icon: <Monitor size={22} strokeWidth={1.5} color="#4f6eff" />,
               title: "Server Returns 402",
               body: "Response includes price and payment details.",
             },
             {
+              step: "03",
+              icon: <CreditCard size={22} strokeWidth={1.5} color="#4f6eff" />,
               title: "Wallet Pays",
               body: "Agent wallet signs and sends payment.",
             },
             {
+              step: "04",
+              icon: <ScanEye size={22} strokeWidth={1.5} color="#4f6eff" />,
               title: "Access Granted",
               body: "API returns the paid response instantly.",
             },
           ].map((step, i) => (
             <div
               key={step.title}
-              className="flex flex-col gap-4 border-r border-slate-100 bg-white p-8 last:border-r-0"
+              className={`flex flex-col gap-4 bg-white dark:bg-white/[0.03] p-8 ${i < 3 ? "border-r border-[#eef0f4] dark:border-white/10" : ""}`}
             >
-              <span className="text-sm font-bold text-[#4f6eff]">{`0${i + 1}`}</span>
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-[#4f6eff]">
-                ■
+              <span className="text-sm font-bold text-[#4f6eff]">
+                {step.step}
+              </span>
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#4f6eff]/[0.08]">
+                {step.icon}
               </div>
-              <div>
-                <h3 className="mb-2 text-lg font-bold text-[#1a1c24]">
-                  {step.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-slate-500">
-                  {step.body}
-                </p>
-              </div>
+              <h3 className="text-lg font-bold text-[#1a1c24] dark:text-white">
+                {step.title}
+              </h3>
+              <p className="text-sm leading-relaxed text-[#7a7d8a] dark:text-[#94a3b8]">
+                {step.body}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-8">
-        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] bg-[#4f6eff] p-12 text-center shadow-2xl shadow-[#4f6eff]/40 md:p-24">
-          <h2 className="mb-6 text-5xl font-bold text-white [font-family:var(--font-home-display)] md:text-6xl">
-            Activate Agent Commerce
+      {/* CTA */}
+      <section className="mx-auto max-w-5xl px-8 py-24">
+        <div className="rounded-3xl bg-[#4f6eff] px-8 py-20 text-center">
+          <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
+            Join Agent Commerce
           </h2>
-          <p className="mx-auto mb-12 max-w-2xl text-xl font-medium leading-relaxed text-white/90">
-            Join the frontier of the agentic economy. Deploy in minutes.
+          <p className="mx-auto mb-10 max-w-lg text-lg text-white/80">
+            Welcome to the frontier of the agentic economy.
           </p>
-          <div className="flex flex-col items-center justify-center gap-6 sm:flex-row">
-            <Link
-              className="rounded-full bg-white px-10 py-4 text-lg font-bold text-[#4f6eff] shadow-xl transition-all hover:scale-105"
-              href="/login"
-            >
-              Create Wallet →
-            </Link>
-            <button
-              className="rounded-full border-2 border-white/40 bg-transparent px-10 py-4 text-lg font-bold text-white transition-all hover:bg-white/10"
-              type="button"
-            >
-              List Your API
-            </button>
-          </div>
+          <Link
+            className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-semibold text-[#4f6eff] shadow-lg transition-all hover:opacity-90"
+            href="/dashboard"
+          >
+            Explore &rarr;
+          </Link>
         </div>
       </section>
 
-      <footer className="relative z-10 border-t border-slate-100 bg-white py-12">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-8 px-6 md:flex-row md:px-8">
-          <div className="flex items-center gap-2">
+      {/* Footer */}
+      <footer className="border-t border-[#eef0f4] dark:border-white/10">
+        <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-6 px-8 py-8 md:flex-row">
+          <Link href="/" className="flex items-center gap-3">
             <Image
-              alt="ACTUM Logo"
-              className="h-8 w-8 rounded-md object-contain"
+              alt="ACTUMx Logo"
+              className="rounded-md object-contain"
               height={32}
               src="/logo.jpg"
               width={32}
             />
-            <span className="font-bold text-[#1a1c24] [font-family:var(--font-home-display)]">
-              ACTUMx
+            <span className="text-lg font-bold tracking-tight text-[#1a1c24] dark:text-white">
+              ACTUM<span className="font-normal">x</span>
             </span>
-          </div>
+          </Link>
 
-          <div className="flex gap-8 text-sm font-semibold text-slate-400">
+          <div className="flex gap-8 text-sm font-medium text-[#7a7d8a] dark:text-[#94a3b8]">
             <a className="transition-colors hover:text-[#4f6eff]" href="#">
               Terms
             </a>
             <a className="transition-colors hover:text-[#4f6eff]" href="#">
               Privacy
             </a>
+            <a
+              className="transition-colors hover:text-[#4f6eff]"
+              href="https://x.com/Actumx"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Twitter
+            </a>
+            <a
+              className="transition-colors hover:text-[#4f6eff]"
+              href="https://github.com/devsargam/x402"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              GitHub
+            </a>
           </div>
 
-          <div className="text-sm font-medium text-slate-400">
-            © 2026 ACTUMx. All rights reserved.
-          </div>
+          <p className="text-sm text-[#b0b3be] dark:text-[#64748b]">
+            &copy; 2026 ACTUMx. All rights reserved.
+          </p>
         </div>
       </footer>
     </main>

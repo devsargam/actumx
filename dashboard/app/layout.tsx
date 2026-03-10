@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Noto_Sans } from "next/font/google";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
+import Balancer, { Provider } from "react-wrap-balancer";
 
 const THEME_STORAGE_KEY = "x402-theme-mode";
 const THEME_INIT_SCRIPT = `
@@ -65,7 +66,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <TooltipProvider>{children}</TooltipProvider>
+        <TooltipProvider>
+          <Provider>{children}</Provider>
+        </TooltipProvider>
       </body>
     </html>
   );
