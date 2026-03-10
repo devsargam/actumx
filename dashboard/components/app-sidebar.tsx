@@ -23,6 +23,8 @@ import {
   BoxesIcon,
   PlugZapIcon,
   WalletCardsIcon,
+  ServerIcon,
+  LinkIcon,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -40,6 +42,16 @@ const NAV_ITEMS = [
     title: "Connect Agent",
     url: "/connect-agent",
     icon: <PlugZapIcon />,
+  },
+  {
+    title: "API Services",
+    url: "/services",
+    icon: <ServerIcon />,
+  },
+  {
+    title: "Payment Links",
+    url: "/payment-links",
+    icon: <LinkIcon />,
   },
   {
     title: "Transactions",

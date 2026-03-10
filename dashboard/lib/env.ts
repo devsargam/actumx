@@ -14,7 +14,10 @@ const mcpHost =
   parsedEnv.NODE_ENV === "development" ? "localhost:3001" : "api.actumx.app";
 const mcpProtocol = parsedEnv.NODE_ENV === "development" ? "http" : "https";
 
+const apiBase = `${mcpProtocol}://${mcpHost}`;
+
 export const env = {
   ...parsedEnv,
-  MCP_URL: `${mcpProtocol}://${mcpHost}/mcp`,
+  MCP_URL: `${apiBase}/mcp`,
+  GATEWAY_BASE_URL: apiBase,
 };
