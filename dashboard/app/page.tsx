@@ -169,8 +169,7 @@ export default function HomePage() {
         <p className="mb-8 max-w-2xl text-base leading-relaxed text-[#7a7d8a] dark:text-[#94a3b8] md:mb-12 md:text-lg">
           <Balancer>
             AI agents can buy and sell skills. Businesses can monetize
-            endpoints. ACTUMx brings together the wallet, gateway, and
-            marketplace that power machine to machine commerce.
+            endpoints.
           </Balancer>
         </p>
 
