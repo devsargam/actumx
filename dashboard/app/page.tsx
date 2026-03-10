@@ -373,7 +373,7 @@ export default function HomePage() {
                   ACTUMx Wallet // Agent Account
                 </p>
                 <h3 className="mt-1 text-lg font-bold text-[#1a1c24] dark:text-white md:text-xl">
-                  Eric&apos;s Agent Wallet
+                  Joe&apos;s Agent Wallet
                 </h3>
               </div>
               <div className="flex w-fit items-center gap-1.5 rounded-full border border-green-100 dark:border-green-500/20 bg-green-50 dark:bg-green-500/10 px-3 py-1">
