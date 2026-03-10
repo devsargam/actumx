@@ -14,6 +14,9 @@ import {
   XIcon,
 } from "lucide-react";
 import Balancer from "react-wrap-balancer";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -61,22 +64,27 @@ export default function HomePage() {
           </a>
         </div>
 
-        <a
-          aria-label="Follow ACTUMx on X"
-          className="text-[#1a1c24] dark:text-white transition-opacity hover:opacity-70"
-          href="https://x.com/intent/follow?screen_name=Actumx"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          <svg
-            role="img"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-            className="size-6 text-[#1a1c24] fill-[#1a1c24] dark:text-white dark:fill-white hover:text-[#4f6eff] hover:fill-[#4f6eff]"
-          >
-            <path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z" />
-          </svg>
-        </a>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <Separator decorative orientation="vertical" />
+          <Button variant="ghost" size="icon" asChild>
+            <Link
+              aria-label="Follow ACTUMx on X"
+              href="https://x.com/intent/follow?screen_name=Actumx"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <svg
+                role="img"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                className="size-4 text-[#1a1c24] fill-[#1a1c24] dark:text-white dark:fill-white"
+              >
+                <path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z" />
+              </svg>
+            </Link>
+          </Button>
+        </div>
       </nav>
 
       {/* Hero */}
@@ -313,7 +321,9 @@ export default function HomePage() {
                 <p className="text-xs font-medium text-[#7a7d8a] dark:text-[#94a3b8]">
                   Current Balance
                 </p>
-                <p className="mt-2 text-3xl font-bold text-[#1a1c24] dark:text-white">$49.06</p>
+                <p className="mt-2 text-3xl font-bold text-[#1a1c24] dark:text-white">
+                  $49.06
+                </p>
                 {/* Mini bar chart */}
                 <div className="mt-4 flex h-6 items-end gap-1">
                   <div className="h-2.5 w-full rounded-sm bg-[#4f6eff]/10" />
@@ -327,8 +337,12 @@ export default function HomePage() {
                 <p className="text-xs font-medium text-[#7a7d8a] dark:text-[#94a3b8]">
                   Last Transaction
                 </p>
-                <p className="mt-2 text-xl font-bold text-[#1a1c24] dark:text-white">-$1.00</p>
-                <p className="mt-1 text-xs text-[#b0b3be] dark:text-[#64748b]">WebScrape API</p>
+                <p className="mt-2 text-xl font-bold text-[#1a1c24] dark:text-white">
+                  -$1.00
+                </p>
+                <p className="mt-1 text-xs text-[#b0b3be] dark:text-[#64748b]">
+                  WebScrape API
+                </p>
               </div>
             </div>
 
@@ -515,7 +529,9 @@ export default function HomePage() {
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#4f6eff]/[0.08]">
                 {step.icon}
               </div>
-              <h3 className="text-lg font-bold text-[#1a1c24] dark:text-white">{step.title}</h3>
+              <h3 className="text-lg font-bold text-[#1a1c24] dark:text-white">
+                {step.title}
+              </h3>
               <p className="text-sm leading-relaxed text-[#7a7d8a] dark:text-[#94a3b8]">
                 {step.body}
               </p>
