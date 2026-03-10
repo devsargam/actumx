@@ -24,7 +24,7 @@ const spaceGrotesk = Space_Grotesk({
 export default function HomePage() {
   return (
     <main
-      className={`${spaceGrotesk.variable} min-h-screen bg-white [font-family:var(--font-space)]`}
+      className={`${spaceGrotesk.variable} min-h-screen bg-white dark:bg-[#141520] [font-family:var(--font-space)]`}
     >
       {/* Nav */}
       <nav className="mx-auto flex w-full max-w-5xl items-center justify-between px-8 py-6">
@@ -41,7 +41,7 @@ export default function HomePage() {
           </span>
         </Link>
 
-        <div className="hidden items-center gap-10 text-[15px] font-medium text-[#3a3d4a] md:flex">
+        <div className="hidden items-center gap-10 text-[15px] font-medium text-[#3a3d4a] dark:text-[#94a3b8] md:flex">
           <Link className="transition-colors hover:text-[#4f6eff]" href="#">
             Wallet
           </Link>
@@ -63,7 +63,7 @@ export default function HomePage() {
 
         <a
           aria-label="Follow ACTUMx on X"
-          className="text-[#1a1c24] transition-opacity hover:opacity-70"
+          className="text-[#1a1c24] dark:text-white transition-opacity hover:opacity-70"
           href="https://x.com/intent/follow?screen_name=Actumx"
           rel="noopener noreferrer"
           target="_blank"
@@ -72,7 +72,7 @@ export default function HomePage() {
             role="img"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
-            className="size-6 text-[#1a1c24] fill-[#1a1c24] hover:text-[#4f6eff] hover:fill-[#4f6eff]"
+            className="size-6 text-[#1a1c24] fill-[#1a1c24] dark:text-white dark:fill-white hover:text-[#4f6eff] hover:fill-[#4f6eff]"
           >
             <path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z" />
           </svg>
@@ -81,14 +81,14 @@ export default function HomePage() {
 
       {/* Hero */}
       <section className="mx-auto flex max-w-4xl flex-col items-center px-8 pb-20 pt-28 text-center md:pt-36">
-        <h1 className="mb-8 text-5xl font-bold leading-[1.1] tracking-tight text-[#1a1c24] md:text-7xl">
+        <h1 className="mb-8 text-5xl font-bold leading-[1.1] tracking-tight text-[#1a1c24] dark:text-white md:text-7xl">
           <Balancer>
             The marketplace for the{" "}
             <span className="text-[#4f6eff]">agentic economy</span>
           </Balancer>
         </h1>
 
-        <p className="mb-12 max-w-2xl text-lg leading-relaxed text-[#7a7d8a]">
+        <p className="mb-12 max-w-2xl text-lg leading-relaxed text-[#7a7d8a] dark:text-[#94a3b8]">
           <Balancer>
             AI agents can buy and sell skills. Businesses can monetize
             endpoints. ACTUMx brings together the wallet, gateway, and
@@ -115,11 +115,11 @@ export default function HomePage() {
 
       {/* Features */}
       <section className="mx-auto max-w-5xl px-8 py-20">
-        <h2 className="mb-4 text-center text-4xl font-bold tracking-tight text-[#1a1c24] md:text-5xl">
+        <h2 className="mb-4 text-center text-4xl font-bold tracking-tight text-[#1a1c24] dark:text-white md:text-5xl">
           <Balancer>Everything needed to power agentic commerce</Balancer>
         </h2>
 
-        <p className="mx-auto mb-16 text-center text-lg text-[#7a7d8a]">
+        <p className="mx-auto mb-16 text-center text-lg text-[#7a7d8a] dark:text-[#94a3b8]">
           <Balancer>
             ACTUMx brings together the three layers needed for autonomous
             digital trade.
@@ -151,15 +151,15 @@ export default function HomePage() {
           ].map((feature) => (
             <div
               key={feature.title}
-              className="flex flex-col gap-4 rounded-2xl border border-[#eef0f4] bg-[#f8f9fb] p-8"
+              className="flex flex-col gap-4 rounded-2xl border border-[#eef0f4] dark:border-white/10 bg-[#f8f9fb] dark:bg-white/[0.03] p-8"
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#eef0f6] text-[#4f6eff]">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#eef0f6] dark:bg-white/10 text-[#4f6eff]">
                 {feature.icon}
               </div>
-              <h3 className="text-xl font-bold text-[#1a1c24]">
+              <h3 className="text-xl font-bold text-[#1a1c24] dark:text-white">
                 {feature.title}
               </h3>
-              <p className="text-[15px] leading-relaxed text-[#7a7d8a]">
+              <p className="text-[15px] leading-relaxed text-[#7a7d8a] dark:text-[#94a3b8]">
                 {feature.description}
               </p>
             </div>
@@ -168,14 +168,14 @@ export default function HomePage() {
       </section>
 
       {/* Marketplace Section */}
-      <section className="border-t border-[#eef0f4] bg-[#f8f9fb]">
+      <section className="border-t border-[#eef0f4] dark:border-white/10 bg-[#f8f9fb] dark:bg-white/[0.02]">
         <div className="mx-auto grid max-w-5xl items-center gap-12 px-8 py-24 lg:grid-cols-2">
           <div>
-            <h2 className="mb-6 text-4xl font-bold leading-[1.1] tracking-tight text-[#1a1c24] md:text-5xl">
+            <h2 className="mb-6 text-4xl font-bold leading-[1.1] tracking-tight text-[#1a1c24] dark:text-white md:text-5xl">
               The discovery layer{" "}
               <span className="text-[#4f6eff]">for AI agents.</span>
             </h2>
-            <p className="mb-8 max-w-md text-[15px] leading-relaxed text-[#7a7d8a]">
+            <p className="mb-8 max-w-md text-[15px] leading-relaxed text-[#7a7d8a] dark:text-[#94a3b8]">
               A global marketplace where AI agents can find, access, and buy
               skills, tools, and endpoints. Enable your agent to find the exact
               capability it needs to complete its task autonomously.
@@ -189,9 +189,9 @@ export default function HomePage() {
           </div>
 
           {/* Marketplace mock card */}
-          <div className="rounded-2xl border border-[#eef0f4] bg-white p-6 shadow-sm">
+          <div className="rounded-2xl border border-[#eef0f4] dark:border-white/10 bg-white dark:bg-white/[0.03] p-6 shadow-sm">
             {/* Search bar */}
-            <div className="mb-5 flex items-center gap-3 rounded-xl border border-[#eef0f4] bg-[#f8f9fb] px-4 py-3">
+            <div className="mb-5 flex items-center gap-3 rounded-xl border border-[#eef0f4] dark:border-white/10 bg-[#f8f9fb] dark:bg-white/[0.03] px-4 py-3">
               <svg
                 width="16"
                 height="16"
@@ -205,23 +205,23 @@ export default function HomePage() {
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.3-4.3" />
               </svg>
-              <span className="text-sm text-[#b0b3be]">
+              <span className="text-sm text-[#b0b3be] dark:text-[#64748b]">
                 Search for skills, tools, APIs...
               </span>
             </div>
 
             {/* Listing items */}
             <div className="space-y-3">
-              <div className="flex items-center justify-between rounded-xl border border-[#4f6eff]/20 bg-[#4f6eff]/[0.03] p-4">
+              <div className="flex items-center justify-between rounded-xl border border-[#4f6eff]/20 bg-[#4f6eff]/[0.03] dark:bg-[#4f6eff]/[0.06] p-4">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#4f6eff] text-xs font-bold text-white">
                     JS
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-[#1a1c24]">
+                    <p className="text-sm font-semibold text-[#1a1c24] dark:text-white">
                       NodeJS Executor
                     </p>
-                    <p className="text-[11px] font-medium uppercase tracking-wider text-[#7a7d8a]">
+                    <p className="text-[11px] font-medium uppercase tracking-wider text-[#7a7d8a] dark:text-[#64748b]">
                       Agent Skill
                     </p>
                   </div>
@@ -231,9 +231,9 @@ export default function HomePage() {
                 </span>
               </div>
 
-              <div className="flex items-center justify-between rounded-xl border border-[#eef0f4] p-4">
+              <div className="flex items-center justify-between rounded-xl border border-[#eef0f4] dark:border-white/10 p-4">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#eef0f6] text-[#7a7d8a]">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#eef0f6] dark:bg-white/10 text-[#7a7d8a] dark:text-[#94a3b8]">
                     <svg
                       width="18"
                       height="18"
@@ -249,15 +249,15 @@ export default function HomePage() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-[#1a1c24]">
+                    <p className="text-sm font-semibold text-[#1a1c24] dark:text-white">
                       PDF Parser
                     </p>
-                    <p className="text-[11px] font-medium uppercase tracking-wider text-[#7a7d8a]">
+                    <p className="text-[11px] font-medium uppercase tracking-wider text-[#7a7d8a] dark:text-[#64748b]">
                       Utility
                     </p>
                   </div>
                 </div>
-                <span className="font-mono text-sm font-medium text-[#7a7d8a]">
+                <span className="font-mono text-sm font-medium text-[#7a7d8a] dark:text-[#94a3b8]">
                   $0.01 / call
                 </span>
               </div>
@@ -267,14 +267,14 @@ export default function HomePage() {
       </section>
 
       {/* Wallet Section */}
-      <section className="border-t border-[#eef0f4]">
+      <section className="border-t border-[#eef0f4] dark:border-white/10">
         <div className="mx-auto grid max-w-5xl items-center gap-12 px-8 py-24 lg:grid-cols-2">
           <div>
-            <h2 className="mb-6 text-4xl font-bold leading-[1.1] tracking-tight text-[#1a1c24] md:text-5xl">
+            <h2 className="mb-6 text-4xl font-bold leading-[1.1] tracking-tight text-[#1a1c24] dark:text-white md:text-5xl">
               Give your agent{" "}
               <span className="text-[#4f6eff]">an account.</span>
             </h2>
-            <p className="mb-8 max-w-md text-[15px] leading-relaxed text-[#7a7d8a]">
+            <p className="mb-8 max-w-md text-[15px] leading-relaxed text-[#7a7d8a] dark:text-[#94a3b8]">
               Let your AI autonomously pay for services, APIs, and compute. If
               an agent can call an endpoint, it can settle instantly with ACTUMx
               Wallet.
@@ -288,20 +288,20 @@ export default function HomePage() {
           </div>
 
           {/* Wallet mock card */}
-          <div className="rounded-2xl border border-[#eef0f4] bg-[#f8f9fb] p-6 shadow-sm">
+          <div className="rounded-2xl border border-[#eef0f4] dark:border-white/10 bg-[#f8f9fb] dark:bg-white/[0.03] p-6 shadow-sm">
             {/* Header */}
             <div className="mb-6 flex items-center justify-between">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-[#b0b3be]">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-[#b0b3be] dark:text-[#64748b]">
                   ACTUMx Wallet // Agent Account
                 </p>
-                <h3 className="mt-1 text-xl font-bold text-[#1a1c24]">
+                <h3 className="mt-1 text-xl font-bold text-[#1a1c24] dark:text-white">
                   Eric&apos;s Agent Wallet
                 </h3>
               </div>
-              <div className="flex items-center gap-1.5 rounded-full border border-green-100 bg-green-50 px-3 py-1">
+              <div className="flex items-center gap-1.5 rounded-full border border-green-100 dark:border-green-500/20 bg-green-50 dark:bg-green-500/10 px-3 py-1">
                 <span className="h-2 w-2 rounded-full bg-green-500" />
-                <span className="text-[10px] font-bold uppercase text-green-600">
+                <span className="text-[10px] font-bold uppercase text-green-600 dark:text-green-400">
                   Auto-pay: Enabled
                 </span>
               </div>
@@ -309,11 +309,11 @@ export default function HomePage() {
 
             {/* Balance + Last Transaction */}
             <div className="mb-6 grid grid-cols-2 gap-4">
-              <div className="rounded-xl border border-[#eef0f4] bg-white p-5">
-                <p className="text-xs font-medium text-[#7a7d8a]">
+              <div className="rounded-xl border border-[#eef0f4] dark:border-white/10 bg-white dark:bg-black/25 p-5">
+                <p className="text-xs font-medium text-[#7a7d8a] dark:text-[#94a3b8]">
                   Current Balance
                 </p>
-                <p className="mt-2 text-3xl font-bold text-[#1a1c24]">$49.06</p>
+                <p className="mt-2 text-3xl font-bold text-[#1a1c24] dark:text-white">$49.06</p>
                 {/* Mini bar chart */}
                 <div className="mt-4 flex h-6 items-end gap-1">
                   <div className="h-2.5 w-full rounded-sm bg-[#4f6eff]/10" />
@@ -323,18 +323,18 @@ export default function HomePage() {
                   <div className="h-4 w-full rounded-sm bg-[#4f6eff]/30" />
                 </div>
               </div>
-              <div className="flex flex-col justify-center rounded-xl border border-[#eef0f4] bg-white p-5">
-                <p className="text-xs font-medium text-[#7a7d8a]">
+              <div className="flex flex-col justify-center rounded-xl border border-[#eef0f4] dark:border-white/10 bg-white dark:bg-black/25 p-5">
+                <p className="text-xs font-medium text-[#7a7d8a] dark:text-[#94a3b8]">
                   Last Transaction
                 </p>
-                <p className="mt-2 text-xl font-bold text-[#1a1c24]">-$1.00</p>
-                <p className="mt-1 text-xs text-[#b0b3be]">WebScrape API</p>
+                <p className="mt-2 text-xl font-bold text-[#1a1c24] dark:text-white">-$1.00</p>
+                <p className="mt-1 text-xs text-[#b0b3be] dark:text-[#64748b]">WebScrape API</p>
               </div>
             </div>
 
             {/* Recent Payments */}
             <div>
-              <h4 className="mb-3 text-sm font-bold text-[#1a1c24]">
+              <h4 className="mb-3 text-sm font-bold text-[#1a1c24] dark:text-white">
                 Recent Payments
               </h4>
               <div className="space-y-2">
@@ -344,17 +344,17 @@ export default function HomePage() {
                 ].map((item) => (
                   <div
                     key={item.name}
-                    className="flex items-center justify-between rounded-xl border border-[#eef0f4] bg-white p-3"
+                    className="flex items-center justify-between rounded-xl border border-[#eef0f4] dark:border-white/10 bg-white dark:bg-black/25 p-3"
                   >
                     <div className="flex items-center gap-3">
                       <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#4f6eff]/10 text-xs font-bold text-[#4f6eff]">
                         {item.symbol}
                       </div>
-                      <span className="text-sm font-semibold text-[#3a3d4a]">
+                      <span className="text-sm font-semibold text-[#3a3d4a] dark:text-[#e2e8f0]">
                         {item.name}
                       </span>
                     </div>
-                    <span className="font-mono text-sm font-bold text-[#1a1c24]">
+                    <span className="font-mono text-sm font-bold text-[#1a1c24] dark:text-white">
                       {item.amount}
                     </span>
                   </div>
@@ -364,14 +364,15 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
       {/* Gateway Section */}
-      <section className="border-t border-[#eef0f4] bg-[#f8f9fb]">
+      <section className="border-t border-[#eef0f4] dark:border-white/10 bg-[#f8f9fb] dark:bg-white/[0.02]">
         <div className="mx-auto grid max-w-5xl items-center gap-12 px-8 py-24 lg:grid-cols-2">
           <div>
-            <h2 className="mb-6 text-4xl font-bold leading-[1.1] tracking-tight text-[#1a1c24] md:text-5xl">
+            <h2 className="mb-6 text-4xl font-bold leading-[1.1] tracking-tight text-[#1a1c24] dark:text-white md:text-5xl">
               Sell directly <span className="text-[#4f6eff]">to agents.</span>
             </h2>
-            <p className="mb-8 max-w-md text-[15px] leading-relaxed text-[#7a7d8a]">
+            <p className="mb-8 max-w-md text-[15px] leading-relaxed text-[#7a7d8a] dark:text-[#94a3b8]">
               Turn any API into a programmable revenue stream with x402
               payments. Onboard once, then earn from autonomous agent calls
               without manual billing.
@@ -385,16 +386,16 @@ export default function HomePage() {
           </div>
 
           {/* Gateway mock card */}
-          <div className="overflow-hidden rounded-2xl border border-[#eef0f4] bg-white shadow-sm">
+          <div className="overflow-hidden rounded-2xl border border-[#eef0f4] dark:border-white/10 bg-white dark:bg-white/[0.03] shadow-sm">
             {/* Browser chrome */}
-            <div className="flex items-center justify-between border-b border-[#eef0f4] bg-[#f8f9fb] px-5 py-3">
+            <div className="flex items-center justify-between border-b border-[#eef0f4] dark:border-white/10 bg-[#f8f9fb] dark:bg-white/[0.03] px-5 py-3">
               <div className="flex items-center gap-3">
                 <div className="flex gap-1.5">
-                  <div className="h-2.5 w-2.5 rounded-full bg-[#d9dbe1]" />
-                  <div className="h-2.5 w-2.5 rounded-full bg-[#d9dbe1]" />
-                  <div className="h-2.5 w-2.5 rounded-full bg-[#d9dbe1]" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-[#d9dbe1] dark:bg-white/15" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-[#d9dbe1] dark:bg-white/15" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-[#d9dbe1] dark:bg-white/15" />
                 </div>
-                <div className="ml-3 rounded-md border border-[#eef0f4] bg-white px-3 py-1 font-mono text-[11px] text-[#7a7d8a]">
+                <div className="ml-3 rounded-md border border-[#eef0f4] dark:border-white/10 bg-white dark:bg-black/25 px-3 py-1 font-mono text-[11px] text-[#7a7d8a] dark:text-[#64748b]">
                   https://api.yourservice.com/endpoint
                 </div>
               </div>
@@ -407,18 +408,18 @@ export default function HomePage() {
               {/* Stats row */}
               <div className="mb-6 flex items-center justify-between">
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#b0b3be]">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#b0b3be] dark:text-[#64748b]">
                     API Monetization
                   </p>
-                  <p className="mt-1 text-3xl font-bold text-[#1a1c24]">
+                  <p className="mt-1 text-3xl font-bold text-[#1a1c24] dark:text-white">
                     $0.05{" "}
-                    <span className="text-sm font-normal text-[#b0b3be]">
+                    <span className="text-sm font-normal text-[#b0b3be] dark:text-[#64748b]">
                       / req
                     </span>
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#b0b3be]">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#b0b3be] dark:text-[#64748b]">
                     Revenue Counter
                   </p>
                   <p className="mt-1 text-3xl font-bold tracking-tight text-[#4f6eff]">
@@ -428,20 +429,20 @@ export default function HomePage() {
               </div>
 
               {/* Recent agent requests */}
-              <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-[#b0b3be]">
+              <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-[#b0b3be] dark:text-[#64748b]">
                 Recent Agent Requests
               </p>
               <div className="space-y-2">
                 {["#576", "#3301", "#892"].map((id) => (
                   <div
                     key={id}
-                    className="flex items-center justify-between rounded-xl border border-[#eef0f4] bg-white p-3"
+                    className="flex items-center justify-between rounded-xl border border-[#eef0f4] dark:border-white/10 bg-white dark:bg-black/25 p-3"
                   >
                     <div>
-                      <p className="font-mono text-sm font-bold text-[#1a1c24]">
+                      <p className="font-mono text-sm font-bold text-[#1a1c24] dark:text-white">
                         Agent {id}
                       </p>
-                      <p className="font-mono text-[10px] text-[#b0b3be]">
+                      <p className="font-mono text-[10px] text-[#b0b3be] dark:text-[#64748b]">
                         /v1/scrape
                       </p>
                     </div>
@@ -470,13 +471,14 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
       {/* How It Works */}
       <section className="mx-auto max-w-5xl px-8 py-24">
-        <h2 className="mb-10 text-4xl font-black uppercase tracking-tight text-[#1a1c24] md:text-5xl">
+        <h2 className="mb-10 text-4xl font-black uppercase tracking-tight text-[#1a1c24] dark:text-white md:text-5xl">
           How It <span className="text-[#4f6eff]">Works</span>
         </h2>
 
-        <div className="grid overflow-hidden rounded-2xl border border-[#eef0f4] shadow-sm md:grid-cols-4">
+        <div className="grid overflow-hidden rounded-2xl border border-[#eef0f4] dark:border-white/10 shadow-sm md:grid-cols-4">
           {[
             {
               step: "01",
@@ -505,7 +507,7 @@ export default function HomePage() {
           ].map((step, i) => (
             <div
               key={step.title}
-              className={`flex flex-col gap-4 bg-white p-8 ${i < 3 ? "border-r border-[#eef0f4]" : ""}`}
+              className={`flex flex-col gap-4 bg-white dark:bg-white/[0.03] p-8 ${i < 3 ? "border-r border-[#eef0f4] dark:border-white/10" : ""}`}
             >
               <span className="text-sm font-bold text-[#4f6eff]">
                 {step.step}
@@ -513,14 +515,15 @@ export default function HomePage() {
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#4f6eff]/[0.08]">
                 {step.icon}
               </div>
-              <h3 className="text-lg font-bold text-[#1a1c24]">{step.title}</h3>
-              <p className="text-sm leading-relaxed text-[#7a7d8a]">
+              <h3 className="text-lg font-bold text-[#1a1c24] dark:text-white">{step.title}</h3>
+              <p className="text-sm leading-relaxed text-[#7a7d8a] dark:text-[#94a3b8]">
                 {step.body}
               </p>
             </div>
           ))}
         </div>
       </section>
+
       {/* CTA */}
       <section className="mx-auto max-w-5xl px-8 py-24">
         <div className="rounded-3xl bg-[#4f6eff] px-8 py-20 text-center">
@@ -538,8 +541,9 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
+
       {/* Footer */}
-      <footer className="border-t border-[#eef0f4]">
+      <footer className="border-t border-[#eef0f4] dark:border-white/10">
         <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-6 px-8 py-8 md:flex-row">
           <Link href="/" className="flex items-center gap-3">
             <Image
@@ -549,12 +553,12 @@ export default function HomePage() {
               src="/logo.jpg"
               width={32}
             />
-            <span className="text-lg font-bold tracking-tight text-[#1a1c24]">
+            <span className="text-lg font-bold tracking-tight text-[#1a1c24] dark:text-white">
               ACTUM<span className="font-normal">x</span>
             </span>
           </Link>
 
-          <div className="flex gap-8 text-sm font-medium text-[#7a7d8a]">
+          <div className="flex gap-8 text-sm font-medium text-[#7a7d8a] dark:text-[#94a3b8]">
             <a className="transition-colors hover:text-[#4f6eff]" href="#">
               Terms
             </a>
@@ -579,7 +583,7 @@ export default function HomePage() {
             </a>
           </div>
 
-          <p className="text-sm text-[#b0b3be]">
+          <p className="text-sm text-[#b0b3be] dark:text-[#64748b]">
             &copy; 2026 ACTUMx. All rights reserved.
           </p>
         </div>
