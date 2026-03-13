@@ -45,6 +45,12 @@ export default function HomePage() {
         </Link>
 
         <div className="hidden items-center gap-10 text-[15px] font-medium text-[#3a3d4a] dark:text-[#94a3b8] md:flex">
+          <Link
+            className="transition-colors hover:text-[#4f6eff]"
+            href="/marketplace"
+          >
+            Marketplace
+          </Link>
           <Link className="transition-colors hover:text-[#4f6eff]" href="#">
             Wallet
           </Link>
@@ -109,6 +115,12 @@ export default function HomePage() {
             </summary>
 
             <div className="absolute right-0 top-10 z-30 w-52 rounded-xl border border-[#eef0f4] dark:border-white/10 bg-white dark:bg-[#1e2030] p-2 shadow-lg">
+              <Link
+                className="block rounded-lg px-4 py-2.5 text-sm font-medium text-[#3a3d4a] dark:text-[#94a3b8] hover:bg-[#f8f9fb] dark:hover:bg-white/5"
+                href="/marketplace"
+              >
+                Marketplace
+              </Link>
               <Link
                 className="block rounded-lg px-4 py-2.5 text-sm font-medium text-[#3a3d4a] dark:text-[#94a3b8] hover:bg-[#f8f9fb] dark:hover:bg-white/5"
                 href="#"
@@ -176,7 +188,7 @@ export default function HomePage() {
         <div className="flex flex-col gap-4 sm:flex-row">
           <Link
             className="rounded-full flex items-center justify-center gap-x-3 bg-[#4f6eff] px-7 py-3 text-base font-semibold text-white transition-all hover:opacity-90 md:gap-x-4 md:px-10 md:py-4 md:text-lg"
-            href="/dashboard"
+            href="/marketplace"
           >
             Explore Marketplace <ArrowRight size={18} strokeWidth={2} />
           </Link>
@@ -259,7 +271,7 @@ export default function HomePage() {
             </p>
             <Link
               className="inline-flex items-center gap-2 rounded-full bg-[#4f6eff] px-6 py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90 md:px-7 md:py-3"
-              href="/dashboard"
+              href="/marketplace"
             >
               Explore Marketplace &rarr;
             </Link>
@@ -632,9 +644,9 @@ export default function HomePage() {
           </p>
           <Link
             className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#4f6eff] shadow-lg transition-all hover:opacity-90 md:px-8 md:py-3.5"
-            href="/dashboard"
+            href="/marketplace"
           >
-            Explore &rarr;
+            Explore Marketplace &rarr;
           </Link>
         </div>
       </section>

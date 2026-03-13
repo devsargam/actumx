@@ -25,6 +25,7 @@ import {
   WalletCardsIcon,
   ServerIcon,
   LinkIcon,
+  StoreIcon,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -67,6 +68,11 @@ const NAV_ITEMS = [
     title: "Agent Requests",
     url: "/agent-requests",
     icon: <ClipboardListIcon />,
+  },
+  {
+    title: "Marketplace",
+    url: "/marketplace",
+    icon: <StoreIcon />,
   },
 ];
 
