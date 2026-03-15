@@ -18,14 +18,9 @@ import {
 } from "@/components/ui/sidebar";
 import {
   LayoutDashboardIcon,
-  ClipboardListIcon,
-  OrbitIcon,
   BoxesIcon,
-  PlugZapIcon,
-  WalletCardsIcon,
   ServerIcon,
   LinkIcon,
-  StoreIcon,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -33,16 +28,6 @@ const NAV_ITEMS = [
     title: "Dashboard",
     url: "/dashboard",
     icon: <LayoutDashboardIcon />,
-  },
-  {
-    title: "Agents",
-    url: "/agents",
-    icon: <WalletCardsIcon />,
-  },
-  {
-    title: "Connect Agent",
-    url: "/connect-agent",
-    icon: <PlugZapIcon />,
   },
   {
     title: "API Services",
@@ -55,24 +40,9 @@ const NAV_ITEMS = [
     icon: <LinkIcon />,
   },
   {
-    title: "Transactions",
-    url: "/transactions",
-    icon: <OrbitIcon />,
-  },
-  {
     title: "Orders",
     url: "/orders",
     icon: <BoxesIcon />,
-  },
-  {
-    title: "Agent Requests",
-    url: "/agent-requests",
-    icon: <ClipboardListIcon />,
-  },
-  {
-    title: "Marketplace",
-    url: "/marketplace",
-    icon: <StoreIcon />,
   },
 ];
 
