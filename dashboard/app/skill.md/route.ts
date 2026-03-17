@@ -1,35 +1,45 @@
-# ACTUMx Agent Onboarding
+import { env } from "@/lib/env";
+
+const getBaseUrl = () =>
+  env.NODE_ENV === "production"
+    ? "https://actumx.app"
+    : "http://localhost:3000";
+
+const getApiBaseUrl = () =>
+  env.NODE_ENV === "production"
+    ? "https://api.actumx.app"
+    : "http://localhost:3001";
+
+const buildSkillMd = (baseUrl: string, apiBaseUrl: string) => `# ACTUMx Agent Onboarding
 
 Register your AI agent and get an API key to use tools on ACTUMx.
 
 ## Base URL
 
-```
-https://actumx.app
-```
-
-For local development: `http://localhost:3000`
+\`\`\`
+${baseUrl}
+\`\`\`
 
 ## Step 1: Request an OTP
 
 Send your email to receive a one-time password.
 
-```
-POST /api/onboard/otp/request
+\`\`\`
+POST ${apiBaseUrl}/v1/onboard/otp/request
 Content-Type: application/json
 
 {
   "email": "agent@example.com"
 }
-```
+\`\`\`
 
 **Response (200):**
-```json
+\`\`\`json
 {
   "success": true,
   "message": "OTP sent to your email."
 }
-```
+\`\`\`
 
 The OTP is valid for 5 minutes.
 
@@ -37,18 +47,18 @@ The OTP is valid for 5 minutes.
 
 Submit the OTP you received to get your API key.
 
-```
-POST /api/onboard/otp/verify
+\`\`\`
+POST ${apiBaseUrl}/v1/onboard/otp/verify
 Content-Type: application/json
 
 {
   "email": "agent@example.com",
   "otp": "A1B2C3"
 }
-```
+\`\`\`
 
 **Response (200):**
-```json
+\`\`\`json
 {
   "apiKey": "xk_live_...",
   "keyPrefix": "xk_live_abcdef",
@@ -56,9 +66,9 @@ Content-Type: application/json
   "isNewUser": true,
   "message": "Welcome! Your account has been created with $1.00 free credits."
 }
-```
+\`\`\`
 
-Store the `apiKey` — it is shown only once.
+Store the \`apiKey\` — it is shown only once.
 
 New accounts receive $1.00 in free credits automatically.
 
@@ -66,15 +76,15 @@ New accounts receive $1.00 in free credits automatically.
 
 Include the API key in all subsequent requests:
 
-```
+\`\`\`
 x-api-key: xk_live_...
-```
+\`\`\`
 
 Or as a Bearer token:
 
-```
+\`\`\`
 Authorization: Bearer xk_live_...
-```
+\`\`\`
 
 ## Available tools
 
@@ -87,17 +97,28 @@ Authorization: Bearer xk_live_...
 
 ## Check balance
 
-```
-GET /api/marketplace/balance
+\`\`\`
+GET ${apiBaseUrl}/v1/marketplace/balance
 x-api-key: xk_live_...
-```
+\`\`\`
 
 ## Errors
 
 | Status | Error | Meaning |
 |--------|-------|---------|
-| 400 | `invalid_email` | Email format is invalid |
-| 400 | `no_otp` | No OTP found, request a new one |
-| 400 | `otp_expired` | OTP expired, request a new one |
-| 400 | `invalid_otp` | Wrong OTP code |
-| 402 | `insufficient_balance` | Not enough credits |
+| 400 | \`invalid_email\` | Email format is invalid |
+| 400 | \`no_otp\` | No OTP found, request a new one |
+| 400 | \`otp_expired\` | OTP expired, request a new one |
+| 400 | \`invalid_otp\` | Wrong OTP code |
+| 402 | \`insufficient_balance\` | Not enough credits |
+`;
+
+export const GET = async () => {
+  const baseUrl = getBaseUrl();
+  const apiBaseUrl = getApiBaseUrl();
+  return new Response(buildSkillMd(baseUrl, apiBaseUrl), {
+    headers: {
+      "Content-Type": "text/markdown",
+    },
+  });
+};

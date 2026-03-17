@@ -2,14 +2,27 @@ import { db } from "../../db/client";
 import { creditLedger } from "../../db/schema";
 import { newId } from "../../lib/crypto";
 import { AuthContextService } from "../../services/auth-context.service";
+import { ApiKeyContextService } from "../../services/api-key-context.service";
 import { CreditsService } from "../../services/credits.service";
 import { TimeService } from "../../services/time.service";
 import { MarketplaceModel } from "./model";
 
+async function resolveUserId(request: Request): Promise<string | null> {
+  // Try session auth first
+  const session = await AuthContextService.getAuthenticatedUser(request);
+  if (session) return session.user.id;
+
+  // Fall back to API key auth
+  const apiKey = await ApiKeyContextService.getAuthenticatedApiKey(request);
+  if (apiKey) return apiKey.userId;
+
+  return null;
+}
+
 export abstract class MarketplaceService {
   static async run(request: Request, payload: MarketplaceModel.RunBody) {
-    const auth = await AuthContextService.getAuthenticatedUser(request);
-    if (!auth) {
+    const userId = await resolveUserId(request);
+    if (!userId) {
       return { statusCode: 401, body: { error: "unauthorized" } };
     }
 
@@ -22,7 +35,7 @@ export abstract class MarketplaceService {
     }
 
     // Check balance
-    const balanceCents = await CreditsService.computeBalanceCents(auth.user.id);
+    const balanceCents = await CreditsService.computeBalanceCents(userId);
     if (balanceCents < pricing.costCents) {
       return {
         statusCode: 402,
@@ -49,7 +62,7 @@ export abstract class MarketplaceService {
       const timestamp = TimeService.nowIso();
       await db.insert(creditLedger).values({
         id: newId("ledger"),
-        userId: auth.user.id,
+        userId,
         direction: "debit",
         amountCents: pricing.costCents,
         source: "marketplace_run",
@@ -58,7 +71,7 @@ export abstract class MarketplaceService {
       });
     }
 
-    const newBalance = await CreditsService.computeBalanceCents(auth.user.id);
+    const newBalance = await CreditsService.computeBalanceCents(userId);
 
     return {
       statusCode: 200,
@@ -73,8 +86,8 @@ export abstract class MarketplaceService {
   }
 
   static async deduct(request: Request, payload: { modelId: string }) {
-    const auth = await AuthContextService.getAuthenticatedUser(request);
-    if (!auth) {
+    const userId = await resolveUserId(request);
+    if (!userId) {
       return { statusCode: 401, body: { error: "unauthorized" } };
     }
 
@@ -86,7 +99,7 @@ export abstract class MarketplaceService {
       };
     }
 
-    const balanceCents = await CreditsService.computeBalanceCents(auth.user.id);
+    const balanceCents = await CreditsService.computeBalanceCents(userId);
     if (balanceCents < pricing.costCents) {
       return {
         statusCode: 402,
@@ -103,7 +116,7 @@ export abstract class MarketplaceService {
       const timestamp = TimeService.nowIso();
       await db.insert(creditLedger).values({
         id: newId("ledger"),
-        userId: auth.user.id,
+        userId,
         direction: "debit",
         amountCents: pricing.costCents,
         source: "marketplace_run",
@@ -112,7 +125,7 @@ export abstract class MarketplaceService {
       });
     }
 
-    const newBalance = await CreditsService.computeBalanceCents(auth.user.id);
+    const newBalance = await CreditsService.computeBalanceCents(userId);
     return {
       statusCode: 200,
       body: { balanceCents: newBalance, costCents: pricing.costCents },
@@ -120,12 +133,12 @@ export abstract class MarketplaceService {
   }
 
   static async balance(request: Request) {
-    const auth = await AuthContextService.getAuthenticatedUser(request);
-    if (!auth) {
+    const userId = await resolveUserId(request);
+    if (!userId) {
       return { statusCode: 401, body: { error: "unauthorized" } };
     }
 
-    const balanceCents = await CreditsService.computeBalanceCents(auth.user.id);
+    const balanceCents = await CreditsService.computeBalanceCents(userId);
     return { statusCode: 200, body: { balanceCents } };
   }
 }
