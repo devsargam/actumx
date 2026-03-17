@@ -13,6 +13,7 @@ import { healthModule } from "./modules/health";
 import { servicesModule } from "./modules/services";
 import { paymentLinksModule } from "./modules/payment-links";
 import { marketplaceModule } from "./modules/marketplace";
+import { onboardModule } from "./modules/onboard";
 
 export const app = new Elysia({ name: "x402.api" })
   .use(
@@ -34,4 +35,5 @@ export const app = new Elysia({ name: "x402.api" })
   .use(x402Module)
   .use(servicesModule)
   .use(paymentLinksModule)
-  .use(marketplaceModule);
+  .use(marketplaceModule)
+  .use(onboardModule);
