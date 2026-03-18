@@ -8,6 +8,26 @@ import { CreditsService } from "../../services/credits.service";
 import { TimeService } from "../../services/time.service";
 import { MarketplaceModel } from "./model";
 
+// ─── Image Store (in-memory with 1h TTL) ────────────────────────────────────
+
+const IMAGE_TTL_MS = 60 * 60 * 1000; // 1 hour
+
+interface StoredImage {
+  data: Buffer;
+  mimeType: string;
+  expiresAt: number;
+}
+
+export const imageStore = new Map<string, StoredImage>();
+
+// Cleanup expired images every 10 minutes
+setInterval(() => {
+  const now = Date.now();
+  for (const [id, img] of imageStore) {
+    if (now > img.expiresAt) imageStore.delete(id);
+  }
+}, 10 * 60 * 1000);
+
 async function resolveUserId(request: Request): Promise<string | null> {
   const session = await AuthContextService.getAuthenticatedUser(request);
   if (session) return session.user.id;
@@ -167,6 +187,20 @@ export abstract class MarketplaceService {
       return { statusCode: 502, body: { error: "llm_error", message } };
     }
 
+    // Store images and build public URLs
+    const origin = getRequestOrigin(request);
+    const imageUrls: string[] = [];
+    for (const dataUrl of result.images) {
+      const { buffer, mimeType } = parseDataUrl(dataUrl);
+      const imageId = newId("img");
+      imageStore.set(imageId, {
+        data: buffer,
+        mimeType,
+        expiresAt: Date.now() + IMAGE_TTL_MS,
+      });
+      imageUrls.push(`${origin}/v1/marketplace/images/${imageId}`);
+    }
+
     const timestamp = TimeService.nowIso();
     await db.insert(creditLedger).values({
       id: newId("ledger"),
@@ -186,7 +220,7 @@ export abstract class MarketplaceService {
         modelId: "google/gemini-3-pro-image",
         modelLabel: model.label,
         text: result.text,
-        images: result.images,
+        images: imageUrls,
         costCents: model.costCents,
         balanceCents: newBalance,
       },
@@ -256,5 +290,22 @@ async function callOpenRouterImage(
   return {
     text: message?.content ?? null,
     images,
+  };
+}
+
+function getRequestOrigin(request: Request): string {
+  const url = new URL(request.url);
+  return url.origin;
+}
+
+function parseDataUrl(dataUrl: string): { buffer: Buffer; mimeType: string } {
+  // data:image/png;base64,iVBOR...
+  const match = dataUrl.match(/^data:([^;]+);base64,(.+)$/);
+  if (!match) {
+    return { buffer: Buffer.from(dataUrl), mimeType: "image/png" };
+  }
+  return {
+    mimeType: match[1],
+    buffer: Buffer.from(match[2], "base64"),
   };
 }

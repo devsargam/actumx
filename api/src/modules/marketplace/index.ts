@@ -2,7 +2,7 @@ import { Elysia } from "elysia";
 
 import { getZodErrorMessage, ZOD_VALIDATION_ERROR } from "../../lib/zod-validation";
 import { MarketplaceModel } from "./model";
-import { MarketplaceService } from "./service";
+import { MarketplaceService, imageStore } from "./service";
 
 export const marketplaceModule = new Elysia({
   name: "module.marketplace",
@@ -46,6 +46,17 @@ export const marketplaceModule = new Elysia({
     const result = await MarketplaceService.imagine(request, parsed.data);
     set.status = result.statusCode;
     return result.body;
+  })
+  .get("/images/:id", ({ params, set }) => {
+    const image = imageStore.get(params.id);
+    if (!image || Date.now() > image.expiresAt) {
+      imageStore.delete(params.id);
+      set.status = 404;
+      return { error: "not_found", message: "Image not found or expired." };
+    }
+    set.headers["content-type"] = image.mimeType;
+    set.headers["cache-control"] = "public, max-age=3600";
+    return new Response(image.data);
   })
   .get("/models", () => {
     const models = Object.entries(MarketplaceModel.MODELS).map(
