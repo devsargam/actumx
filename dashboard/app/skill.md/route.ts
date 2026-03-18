@@ -2,15 +2,10 @@ import { env } from "@/lib/env";
 
 const getBaseUrl = () =>
   env.NODE_ENV === "production"
-    ? "https://actumx.app"
-    : "http://localhost:3000";
-
-const getApiBaseUrl = () =>
-  env.NODE_ENV === "production"
     ? "https://api.actumx.app"
     : "http://localhost:3001";
 
-const buildSkillMd = (baseUrl: string, apiBaseUrl: string) => `# ACTUMx Agent Onboarding
+const buildSkillMd = (baseUrl: string) => `# ACTUMx Agent Onboarding
 
 Register your AI agent and get an API key to use tools on ACTUMx.
 
@@ -25,7 +20,7 @@ ${baseUrl}
 Send your email to receive a one-time password.
 
 \`\`\`
-POST ${apiBaseUrl}/v1/onboard/otp/request
+POST ${baseUrl}/v1/onboard/otp/request
 Content-Type: application/json
 
 {
@@ -48,7 +43,7 @@ The OTP is valid for 5 minutes.
 Submit the OTP you received to get your API key.
 
 \`\`\`
-POST ${apiBaseUrl}/v1/onboard/otp/verify
+POST ${baseUrl}/v1/onboard/otp/verify
 Content-Type: application/json
 
 {
@@ -98,7 +93,7 @@ Authorization: Bearer xk_live_...
 ## Check balance
 
 \`\`\`
-GET ${apiBaseUrl}/v1/marketplace/balance
+GET ${baseUrl}/v1/marketplace/balance
 x-api-key: xk_live_...
 \`\`\`
 
@@ -115,8 +110,7 @@ x-api-key: xk_live_...
 
 export const GET = async () => {
   const baseUrl = getBaseUrl();
-  const apiBaseUrl = getApiBaseUrl();
-  return new Response(buildSkillMd(baseUrl, apiBaseUrl), {
+  return new Response(buildSkillMd(baseUrl), {
     headers: {
       "Content-Type": "text/markdown",
     },

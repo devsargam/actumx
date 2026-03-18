@@ -1,12 +1,16 @@
 import { eq } from "drizzle-orm";
 import { randomBytes } from "node:crypto";
+import { Resend } from "resend";
 
 import { db } from "../../db/client";
 import { authDb } from "../../db/auth-client";
 import { user } from "../../db/auth-schema";
 import { apiKeys, creditLedger } from "../../db/schema";
+import { env } from "../../config/env";
 import { hashSecret, newApiKey, newId } from "../../lib/crypto";
 import { TimeService } from "../../services/time.service";
+
+const resend = new Resend(env.RESEND_API_KEY);
 
 // In-memory OTP store: email -> { otp, expiresAt }
 const otpStore = new Map<string, { otp: string; expiresAt: number }>();
@@ -23,11 +27,24 @@ export abstract class OnboardService {
     const otp = randomBytes(3).toString("hex").slice(0, 6).toUpperCase();
     otpStore.set(email, { otp, expiresAt: Date.now() + OTP_TTL_MS });
 
-    // Mock: log OTP to terminal instead of sending email
-    console.log(`\n========================================`);
-    console.log(`  OTP for ${email}: ${otp}`);
-    console.log(`  Expires in 5 minutes`);
-    console.log(`========================================\n`);
+    const { error } = await resend.emails.send({
+      from: "ACTUMx <noreply@actumx.app>",
+      to: email,
+      subject: `Your ACTUMx verification code: ${otp}`,
+      html: `
+        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
+          <h2>Your verification code</h2>
+          <p style="font-size: 32px; font-weight: bold; letter-spacing: 4px; margin: 24px 0;">${otp}</p>
+          <p>This code expires in 5 minutes.</p>
+          <p style="color: #666; font-size: 14px;">If you didn't request this code, you can safely ignore this email.</p>
+        </div>
+      `,
+    });
+
+    if (error) {
+      console.error("Failed to send OTP email:", error);
+      return { statusCode: 500, body: { error: "email_failed", message: "Failed to send OTP email." } };
+    }
 
     return {
       statusCode: 200,

@@ -10,6 +10,7 @@ const envSchema = z.object({
   GITHUB_CLIENT_SECRET: z.string().min(1),
   SOLANA_RPC_URL: z.url().default("https://api.devnet.solana.com"),
   OPENAI_API_KEY: z.string().min(1),
+  RESEND_API_KEY: z.string().min(1),
 });
 
 export const env = envSchema.parse({
@@ -25,4 +26,5 @@ export const env = envSchema.parse({
   GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
   SOLANA_RPC_URL: process.env.SOLANA_RPC_URL,
   OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+  RESEND_API_KEY: process.env.RESEND_API_KEY,
 });
