@@ -145,6 +145,34 @@ x-api-key: xk_live_...
 
 Credits are deducted automatically after a successful response.
 
+## Step 5: Generate an image
+
+Use the \`/v1/marketplace/imagine\` endpoint to generate images. Pass your API key and a prompt.
+
+\`\`\`
+POST ${baseUrl}/v1/marketplace/imagine
+Content-Type: application/json
+x-api-key: xk_live_...
+
+{
+  "prompt": "A beautiful sunset over mountains"
+}
+\`\`\`
+
+**Response (200):**
+\`\`\`json
+{
+  "modelId": "google/gemini-3-pro-image",
+  "modelLabel": "Gemini 3 Pro Image",
+  "text": "Here is a beautiful sunset over mountains.",
+  "images": ["data:image/png;base64,iVBOR..."],
+  "costCents": 5,
+  "balanceCents": 93
+}
+\`\`\`
+
+The \`images\` array contains base64 data URLs. Costs $0.05 per request.
+
 ## Check balance
 
 \`\`\`

@@ -18,6 +18,7 @@ const MODELS: Record<string, { costCents: number; openRouterId: string }> = {
   "anthropic/claude-3-opus": { costCents: 10, openRouterId: "anthropic/claude-3-opus" },
   "google/gemini-pro-1.5": { costCents: 3, openRouterId: "google/gemini-pro-1.5" },
   "qwen/qwen-2.5-72b": { costCents: 1, openRouterId: "qwen/qwen-2.5-72b-instruct" },
+  "google/gemini-3-pro-image": { costCents: 5, openRouterId: "google/gemini-3-pro-image-preview" },
 };
 
 async function backendFetch(path: string, cookie: string, init?: RequestInit) {

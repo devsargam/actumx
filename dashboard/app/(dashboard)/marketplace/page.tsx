@@ -257,6 +257,26 @@ const MODELS: Model[] = [
       "Alibaba's powerful open model with strong coding and math abilities.",
     spec: "72B Params",
   },
+  {
+    id: "google-gemini-3-pro-image",
+    apiModelId: "google/gemini-3-pro-image",
+    name: "google/gemini-3-pro-image",
+    icon: (
+      <span className="text-[13px] font-bold text-muted-foreground tracking-tight">
+        G.
+      </span>
+    ),
+    price: "$0.05/req",
+    costCents: 5,
+    priceColor: "text-primary",
+    category: "IMAGE GEN",
+    badgeLabel: "IMAGE GEN",
+    badgeColor:
+      "bg-pink-500/20 text-pink-600 dark:text-pink-400 border-pink-500/30",
+    description:
+      "Gemini 3 Pro with image generation. Send a text prompt, get images back.",
+    spec: "Multimodal",
+  },
 ];
 
 const ACTIVITY: ActivityItem[] = [

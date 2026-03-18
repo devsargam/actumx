@@ -13,6 +13,7 @@ export namespace MarketplaceModel {
     "anthropic/claude-3-opus": { costCents: 10, label: "Claude 3 Opus", openRouterId: "anthropic/claude-3-opus" },
     "google/gemini-pro-1.5": { costCents: 3, label: "Google Gemini Pro 1.5", openRouterId: "google/gemini-pro-1.5" },
     "qwen/qwen-2.5-72b": { costCents: 1, label: "Qwen 2.5 72B", openRouterId: "qwen/qwen-2.5-72b-instruct" },
+    "google/gemini-3-pro-image": { costCents: 5, label: "Gemini 3 Pro Image", openRouterId: "google/gemini-3-pro-image-preview" },
   } as const satisfies Record<string, { costCents: number; label: string; openRouterId: string }>;
 
   export type ModelId = keyof typeof MODELS;
@@ -34,4 +35,10 @@ export namespace MarketplaceModel {
   });
 
   export type DeductBody = z.infer<typeof deductBodySchema>;
+
+  export const imagineBodySchema = z.object({
+    prompt: z.string().min(1).max(4000),
+  });
+
+  export type ImagineBody = z.infer<typeof imagineBodySchema>;
 }

@@ -37,6 +37,16 @@ export const marketplaceModule = new Elysia({
     set.status = result.statusCode;
     return result.body;
   })
+  .post("/imagine", async ({ request, body, set }) => {
+    const parsed = MarketplaceModel.imagineBodySchema.safeParse(body);
+    if (!parsed.success) {
+      set.status = 400;
+      return { error: ZOD_VALIDATION_ERROR, message: getZodErrorMessage(parsed.error) };
+    }
+    const result = await MarketplaceService.imagine(request, parsed.data);
+    set.status = result.statusCode;
+    return result.body;
+  })
   .get("/models", () => {
     const models = Object.entries(MarketplaceModel.MODELS).map(
       ([id, { costCents, label }]) => ({
