@@ -1,5 +1,6 @@
 import { db } from "../../db/client";
 import { creditLedger } from "../../db/schema";
+import { env } from "../../config/env";
 import { newId } from "../../lib/crypto";
 import { AuthContextService } from "../../services/auth-context.service";
 import { ApiKeyContextService } from "../../services/api-key-context.service";
@@ -8,11 +9,9 @@ import { TimeService } from "../../services/time.service";
 import { MarketplaceModel } from "./model";
 
 async function resolveUserId(request: Request): Promise<string | null> {
-  // Try session auth first
   const session = await AuthContextService.getAuthenticatedUser(request);
   if (session) return session.user.id;
 
-  // Fall back to API key auth
   const apiKey = await ApiKeyContextService.getAuthenticatedApiKey(request);
   if (apiKey) return apiKey.userId;
 
@@ -26,47 +25,44 @@ export abstract class MarketplaceService {
       return { statusCode: 401, body: { error: "unauthorized" } };
     }
 
-    const pricing = MarketplaceModel.MODEL_PRICING[payload.modelId];
-    if (!pricing) {
+    const model = MarketplaceModel.MODELS[payload.modelId as MarketplaceModel.ModelId];
+    if (!model) {
       return {
         statusCode: 400,
         body: { error: "unknown_model", message: "Model not found." },
       };
     }
 
-    // Check balance
     const balanceCents = await CreditsService.computeBalanceCents(userId);
-    if (balanceCents < pricing.costCents) {
+    if (balanceCents < model.costCents) {
       return {
         statusCode: 402,
         body: {
           error: "insufficient_balance",
-          message: `Insufficient credits. You have $${(balanceCents / 100).toFixed(2)} but this request costs $${(pricing.costCents / 100).toFixed(2)}.`,
+          message: `Insufficient credits. You have $${(balanceCents / 100).toFixed(2)} but this request costs $${(model.costCents / 100).toFixed(2)}.`,
           balanceCents,
-          costCents: pricing.costCents,
+          costCents: model.costCents,
         },
       };
     }
 
-    // Call the LLM
     let aiResponse: string;
     try {
-      aiResponse = await callLLM(payload.modelId, payload.prompt);
+      aiResponse = await callOpenRouter(model.openRouterId, payload.prompt);
     } catch (err) {
       const message = err instanceof Error ? err.message : "LLM call failed";
       return { statusCode: 502, body: { error: "llm_error", message } };
     }
 
-    // Deduct credits (only after successful LLM call)
-    if (pricing.costCents > 0) {
+    if (model.costCents > 0) {
       const timestamp = TimeService.nowIso();
       await db.insert(creditLedger).values({
         id: newId("ledger"),
         userId,
         direction: "debit",
-        amountCents: pricing.costCents,
+        amountCents: model.costCents,
         source: "marketplace_run",
-        referenceId: `${payload.modelId}`,
+        referenceId: payload.modelId,
         createdAt: timestamp,
       });
     }
@@ -77,9 +73,9 @@ export abstract class MarketplaceService {
       statusCode: 200,
       body: {
         modelId: payload.modelId,
-        modelLabel: pricing.label,
+        modelLabel: model.label,
         response: aiResponse,
-        costCents: pricing.costCents,
+        costCents: model.costCents,
         balanceCents: newBalance,
       },
     };
@@ -91,8 +87,8 @@ export abstract class MarketplaceService {
       return { statusCode: 401, body: { error: "unauthorized" } };
     }
 
-    const pricing = MarketplaceModel.MODEL_PRICING[payload.modelId];
-    if (!pricing) {
+    const model = MarketplaceModel.MODELS[payload.modelId as MarketplaceModel.ModelId];
+    if (!model) {
       return {
         statusCode: 400,
         body: { error: "unknown_model", message: "Model not found." },
@@ -100,27 +96,27 @@ export abstract class MarketplaceService {
     }
 
     const balanceCents = await CreditsService.computeBalanceCents(userId);
-    if (balanceCents < pricing.costCents) {
+    if (balanceCents < model.costCents) {
       return {
         statusCode: 402,
         body: {
           error: "insufficient_balance",
-          message: `Insufficient credits. You have $${(balanceCents / 100).toFixed(2)} but this request costs $${(pricing.costCents / 100).toFixed(2)}.`,
+          message: `Insufficient credits. You have $${(balanceCents / 100).toFixed(2)} but this request costs $${(model.costCents / 100).toFixed(2)}.`,
           balanceCents,
-          costCents: pricing.costCents,
+          costCents: model.costCents,
         },
       };
     }
 
-    if (pricing.costCents > 0) {
+    if (model.costCents > 0) {
       const timestamp = TimeService.nowIso();
       await db.insert(creditLedger).values({
         id: newId("ledger"),
         userId,
         direction: "debit",
-        amountCents: pricing.costCents,
+        amountCents: model.costCents,
         source: "marketplace_run",
-        referenceId: `${payload.modelId}`,
+        referenceId: payload.modelId,
         createdAt: timestamp,
       });
     }
@@ -128,7 +124,7 @@ export abstract class MarketplaceService {
     const newBalance = await CreditsService.computeBalanceCents(userId);
     return {
       statusCode: 200,
-      body: { balanceCents: newBalance, costCents: pricing.costCents },
+      body: { balanceCents: newBalance, costCents: model.costCents },
     };
   }
 
@@ -143,77 +139,17 @@ export abstract class MarketplaceService {
   }
 }
 
-// ─── LLM Caller ─────────────────────────────────────────────────────────────
+// ─── OpenRouter ──────────────────────────────────────────────────────────────
 
-async function callLLM(modelId: string, prompt: string): Promise<string> {
-  // Try real API keys from env first
-  const geminiKey = process.env.GEMINI_API_KEY;
-  const openaiKey = process.env.OPENAI_API_KEY;
-
-  if (modelId === "google-gemini-flash" && geminiKey) {
-    console.log("Calling Gemini API...");
-    console.log(geminiKey);
-    console.log(prompt);
-    return callGemini(geminiKey, prompt);
-  }
-
-  if (modelId === "openai-gpt-4o-mini" && openaiKey) {
-    return callOpenAI(openaiKey, "gpt-4o-mini", prompt);
-  }
-
-  if (modelId === "claude-3-opus" && openaiKey) {
-    // Fall back to OpenAI for claude-3-opus in demo mode
-    return callOpenAI(openaiKey, "gpt-4o-mini", prompt);
-  }
-
-  // If we have at least one key, use it as fallback for any model
-  if (geminiKey) {
-    return callGemini(geminiKey, prompt);
-  }
-  if (openaiKey) {
-    return callOpenAI(openaiKey, "gpt-4o-mini", prompt);
-  }
-
-  // No API keys configured — return a simulated response
-  return simulateLLMResponse(modelId, prompt);
-}
-
-async function callGemini(apiKey: string, prompt: string): Promise<string> {
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-      }),
-    },
-  );
-
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Gemini API error (${res.status}): ${text}`);
-  }
-
-  const data = await res.json();
-  return (
-    data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "No response generated."
-  );
-}
-
-async function callOpenAI(
-  apiKey: string,
-  model: string,
-  prompt: string,
-): Promise<string> {
-  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+async function callOpenRouter(modelId: string, prompt: string): Promise<string> {
+  const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${env.OPENROUTER_API_KEY}`,
     },
     body: JSON.stringify({
-      model,
+      model: modelId,
       messages: [{ role: "user", content: prompt }],
       max_tokens: 1024,
     }),
@@ -221,14 +157,9 @@ async function callOpenAI(
 
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`OpenAI API error (${res.status}): ${text}`);
+    throw new Error(`OpenRouter API error (${res.status}): ${text}`);
   }
 
   const data = await res.json();
   return data?.choices?.[0]?.message?.content ?? "No response generated.";
-}
-
-function simulateLLMResponse(modelId: string, prompt: string): string {
-  const label = MarketplaceModel.MODEL_PRICING[modelId]?.label ?? modelId;
-  return `[Simulated response from ${label}]\n\nYou asked: "${prompt.slice(0, 100)}${prompt.length > 100 ? "..." : ""}"\n\nThis is a demo response. Configure GEMINI_API_KEY or OPENAI_API_KEY in your API .env file to get real AI responses.\n\nThe credit deduction has been applied to your wallet.`;
 }

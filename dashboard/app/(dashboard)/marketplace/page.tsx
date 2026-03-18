@@ -61,9 +61,9 @@ const CATEGORIES: Category[] = [
 
 const MODELS: Model[] = [
   {
-    id: "google-gemini-flash",
-    apiModelId: "google-gemini-flash",
-    name: "google/gemini-flash",
+    id: "google-gemini-2.0-flash",
+    apiModelId: "google/gemini-2.0-flash",
+    name: "google/gemini-2.0-flash",
     icon: (
       <span className="text-[13px] font-bold text-muted-foreground tracking-tight">
         G.
@@ -81,14 +81,14 @@ const MODELS: Model[] = [
   },
   {
     id: "openai-gpt-4o-mini",
-    apiModelId: "openai-gpt-4o-mini",
+    apiModelId: "openai/gpt-4o-mini",
     name: "openai/gpt-4o-mini",
     icon: <span className="text-base text-muted-foreground">◐</span>,
     price: "$0.03/req",
     costCents: 3,
     priceColor: "text-primary",
     category: "DATA ANALYSIS",
-    badgeLabel: "MULTI-MODAL",
+    badgeLabel: "EFFICIENT",
     badgeColor:
       "bg-purple-500/20 text-purple-500 dark:text-purple-400 border-purple-500/30",
     description:
@@ -96,21 +96,13 @@ const MODELS: Model[] = [
     spec: "128k Context",
   },
   {
-    id: "claude-3-opus",
-    apiModelId: "claude-3-opus",
-    name: "claude-3-opus",
+    id: "anthropic-claude-3.5-sonnet",
+    apiModelId: "anthropic/claude-3.5-sonnet",
+    name: "anthropic/claude-3.5-sonnet",
     icon: (
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 16 16"
-        fill="none"
-        className="text-muted-foreground"
-      >
-        <rect x="3" y="5" width="10" height="6" rx="1" stroke="currentColor" strokeWidth="1.5" />
-        <line x1="6" y1="5" x2="6" y2="11" stroke="currentColor" strokeWidth="1" />
-        <line x1="10" y1="5" x2="10" y2="11" stroke="currentColor" strokeWidth="1" />
-      </svg>
+      <span className="text-[13px] font-bold text-muted-foreground tracking-tight">
+        A.
+      </span>
     ),
     price: "$0.05/req",
     costCents: 5,
@@ -119,13 +111,13 @@ const MODELS: Model[] = [
     badgeLabel: "REASONING",
     badgeColor: "bg-primary/20 text-primary border-primary/30",
     description:
-      "State-of-the-art model for complex analysis and creative writing.",
+      "Anthropic's best balance of intelligence and speed for complex tasks.",
     spec: "200k Context",
   },
   {
-    id: "meta-llama",
-    apiModelId: "meta-llama-3.1",
-    name: "meta/llama-3.1",
+    id: "meta-llama-3.1-70b",
+    apiModelId: "meta-llama/llama-3.1-70b",
+    name: "meta-llama/llama-3.1-70b",
     icon: (
       <svg
         width="16"
@@ -140,16 +132,130 @@ const MODELS: Model[] = [
         <rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
       </svg>
     ),
-    price: "Free",
-    costCents: 0,
+    price: "$0.01/req",
+    costCents: 1,
     priceColor: "text-emerald-500 dark:text-emerald-400",
     category: "AUTOMATION",
     badgeLabel: "OPEN SOURCE",
     badgeColor:
       "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/30",
     description:
-      "The world's leading open weights model for broad language tasks.",
-    spec: "405B Params",
+      "Meta's leading open weights model for broad language tasks.",
+    spec: "70B Params",
+  },
+  {
+    id: "mistralai-mistral-large",
+    apiModelId: "mistralai/mistral-large",
+    name: "mistralai/mistral-large",
+    icon: (
+      <span className="text-[13px] font-bold text-muted-foreground tracking-tight">
+        M.
+      </span>
+    ),
+    price: "$0.04/req",
+    costCents: 4,
+    priceColor: "text-primary",
+    category: "DATA ANALYSIS",
+    badgeLabel: "MULTILINGUAL",
+    badgeColor:
+      "bg-orange-500/20 text-orange-600 dark:text-orange-400 border-orange-500/30",
+    description:
+      "Mistral's flagship model with strong multilingual and coding capabilities.",
+    spec: "128k Context",
+  },
+  {
+    id: "deepseek-chat",
+    apiModelId: "deepseek/deepseek-chat",
+    name: "deepseek/deepseek-chat",
+    icon: (
+      <span className="text-[13px] font-bold text-muted-foreground tracking-tight">
+        DS
+      </span>
+    ),
+    price: "$0.01/req",
+    costCents: 1,
+    priceColor: "text-emerald-500 dark:text-emerald-400",
+    category: "AUTOMATION",
+    badgeLabel: "VALUE",
+    badgeColor:
+      "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/30",
+    description:
+      "High-performance model with excellent reasoning at very low cost.",
+    spec: "128k Context",
+  },
+  {
+    id: "openai-gpt-4o",
+    apiModelId: "openai/gpt-4o",
+    name: "openai/gpt-4o",
+    icon: <span className="text-base text-muted-foreground">◉</span>,
+    price: "$0.08/req",
+    costCents: 8,
+    priceColor: "text-primary",
+    category: "DATA ANALYSIS",
+    badgeLabel: "FLAGSHIP",
+    badgeColor:
+      "bg-purple-500/20 text-purple-500 dark:text-purple-400 border-purple-500/30",
+    description:
+      "OpenAI's most capable multimodal model for complex reasoning tasks.",
+    spec: "128k Context",
+  },
+  {
+    id: "anthropic-claude-3-opus",
+    apiModelId: "anthropic/claude-3-opus",
+    name: "anthropic/claude-3-opus",
+    icon: (
+      <span className="text-[13px] font-bold text-muted-foreground tracking-tight">
+        A.
+      </span>
+    ),
+    price: "$0.10/req",
+    costCents: 10,
+    priceColor: "text-primary",
+    category: "DATA ANALYSIS",
+    badgeLabel: "PREMIUM",
+    badgeColor: "bg-primary/20 text-primary border-primary/30",
+    description:
+      "Anthropic's most powerful model for complex analysis and creative work.",
+    spec: "200k Context",
+  },
+  {
+    id: "google-gemini-pro-1.5",
+    apiModelId: "google/gemini-pro-1.5",
+    name: "google/gemini-pro-1.5",
+    icon: (
+      <span className="text-[13px] font-bold text-muted-foreground tracking-tight">
+        G.
+      </span>
+    ),
+    price: "$0.03/req",
+    costCents: 3,
+    priceColor: "text-primary",
+    category: "TEXT-TO-VIDEO",
+    badgeLabel: "LONG CONTEXT",
+    badgeColor: "bg-primary/20 text-primary border-primary/30",
+    description:
+      "Google's model optimized for long context understanding up to 2M tokens.",
+    spec: "2M Context",
+  },
+  {
+    id: "qwen-2.5-72b",
+    apiModelId: "qwen/qwen-2.5-72b",
+    name: "qwen/qwen-2.5-72b",
+    icon: (
+      <span className="text-[13px] font-bold text-muted-foreground tracking-tight">
+        Q.
+      </span>
+    ),
+    price: "$0.01/req",
+    costCents: 1,
+    priceColor: "text-emerald-500 dark:text-emerald-400",
+    category: "AUTOMATION",
+    badgeLabel: "OPEN SOURCE",
+    badgeColor:
+      "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/30",
+    description:
+      "Alibaba's powerful open model with strong coding and math abilities.",
+    spec: "72B Params",
   },
 ];
 

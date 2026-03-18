@@ -36,4 +36,15 @@ export const marketplaceModule = new Elysia({
     const result = await MarketplaceService.balance(request);
     set.status = result.statusCode;
     return result.body;
+  })
+  .get("/models", () => {
+    const models = Object.entries(MarketplaceModel.MODELS).map(
+      ([id, { costCents, label }]) => ({
+        id,
+        label,
+        costCents,
+        price: costCents === 0 ? "Free" : `$${(costCents / 100).toFixed(2)}/req`,
+      })
+    );
+    return { models };
   });
