@@ -9,9 +9,9 @@ const envSchema = z.object({
   GITHUB_CLIENT_ID: z.string().min(1),
   GITHUB_CLIENT_SECRET: z.string().min(1),
   SOLANA_RPC_URL: z.url().default("https://api.devnet.solana.com"),
-  OPENAI_API_KEY: z.string().min(1),
   RESEND_API_KEY: z.string().min(1),
   OPENROUTER_API_KEY: z.string().min(1),
+  EXA_API_KEY: z.string().min(1),
 });
 
 export const env = envSchema.parse({
@@ -26,7 +26,7 @@ export const env = envSchema.parse({
   GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
   GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
   SOLANA_RPC_URL: process.env.SOLANA_RPC_URL,
-  OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   RESEND_API_KEY: process.env.RESEND_API_KEY,
   OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
+  EXA_API_KEY: process.env.EXA_API_KEY,
 });
