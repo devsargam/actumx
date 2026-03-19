@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { Space_Grotesk } from "next/font/google";
 import { Check, Copy } from "lucide-react";
 import { LandingNavbar } from "@/components/landing-navbar";
@@ -87,12 +86,11 @@ export default function HomePage() {
 
       {/* Footer */}
       <div className="py-6 text-center">
-        <Link
-          href="/login"
-          className="text-xs font-bold tracking-[0.2em] text-white/40 hover:text-white/70 transition-colors uppercase"
+        <span
+          className="text-xs font-bold tracking-[0.2em] text-white/40 hover:text-white/70 transition-colors uppercase cursor-pointer"
         >
           Enter Agentic Mode
-        </Link>
+        </span>
       </div>
     </main>
   );
