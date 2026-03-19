@@ -15,7 +15,7 @@ export default function ToolsPage() {
       <LandingNavbar />
       <div className="flex-1 flex items-center justify-center px-5">
         <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
-          The best tools for AI agents.
+          Available tools for AI agents.
         </h1>
       </div>
     </main>
